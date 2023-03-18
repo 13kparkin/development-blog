@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // backend/bin/www
+const config = require('../config/database.js');
 
 // Import environment variables
 require('dotenv').config();
@@ -14,6 +15,7 @@ db.sequelize
   .authenticate()
   .then(() => {
     console.log('Database connection success! Sequelize is ready to use...');
+    console.log(db.sequelize.options);
 
     // Start listening for connections
     app.listen(port, () => console.log(`Listening on port ${port}...`));

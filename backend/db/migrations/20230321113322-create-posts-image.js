@@ -13,10 +13,19 @@ module.exports = {
         type: Sequelize.STRING
       },
       postId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Posts',
+          key: 'id'
+        }
       },
       draftId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Drafts',
+          key: 'id'
+        }
+        
       },
       createdAt: {
         allowNull: false,

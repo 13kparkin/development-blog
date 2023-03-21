@@ -42,9 +42,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
-    });
+    },
+    options
+    )
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Drafts");
+    options.tableName = "Drafts";
+    return queryInterface.dropTable(options);
   },
 };

@@ -44,9 +44,10 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       // define association here
-      // User to group through membership 
-      
-
+      // User to group through membership
+      User.hasMany(models.Draft, { foreignKey: 'userId' })
+      User.hasMany(models.Post, { foreignKey: 'userId' })
+      User.hasMany(models.Search, { foreignKey: 'userId' })
     }
   }
 

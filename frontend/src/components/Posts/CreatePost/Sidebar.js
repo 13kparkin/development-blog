@@ -25,23 +25,24 @@ const Sidebar = ({
           <button onClick={onAddDraft}>Create Article</button>
         </div>
         <div className="app-sidebar-posts">
-          {sortedDrafts?.map(({ id, title, body, lastModified }, i) => (
+          {sortedDrafts?.map(({ id, title, body, updatedAt }, i) => (
             <div
               className={`app-sidebar-posts ${id === activePosts && "active"}`}
               onClick={() => setActiveDrafts(id)}
             >
               <div className="sidebar-posts-title">
-                <strong>{title}</strong>
+                <strong>{title && title.substr(0,20) + "..."}</strong>
                 <button onClick={(e) => onDeleteDrafts(id)}>Delete</button>
               </div>
   
-              <p>{body && body.substr(0, 100) + "..."}</p>
+              <p>{body && body.substr(0, 50) + "..."}</p>
               <small className="posts-meta">
                 Last Modified{" "}
-                {new Date(lastModified).toLocaleDateString("en-US", {
+                {new Date(updatedAt).toLocaleDateString("en-US", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
+                {console.log(updatedAt)}
               </small>
             </div>
           ))}

@@ -81,9 +81,8 @@ function CreatePosts() {
     return deletePosts;
   };
 
-
+  let timer;
   const onUpdateDrafts = async (updatedDraft) => {
-    let timer;
     clearTimeout(timer);
     timer = setTimeout(async () => {
     const updateDraft = {
@@ -97,7 +96,7 @@ function CreatePosts() {
     const drafts = await dispatch(getAllDraftsByUser(userId));
     setDrafts(drafts)
     return updateDrafts;
-    }, 5000);
+    }, 3000);
   };
 
   const getActivePosts = () => {

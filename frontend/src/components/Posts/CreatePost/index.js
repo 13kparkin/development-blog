@@ -1,57 +1,142 @@
 import { useEffect, useState } from "react";
-import uuid from "react-uuid";
-import "./createPosts.css";
+import "./CreatePost.css";
 import Main from "./Main";
 import Sidebar from "./Sidebar";
-import { createPost, deletePost, editPost } from "../../../store/posts";
+import {
+  createPost,
+  deletePost,
+  editPost,
+  getSinglePost,
+  getAllPostsByUser,
+} from "../../../store/posts";
+import { createDraft, getAllDraftsByUser, deleteDraft, editDraft, getSingleDraft} from "../../../store/drafts";
 import { useDispatch, useSelector } from "react-redux";
 
 function CreatePosts() {
   const dispatch = useDispatch();
   const currentPost = useSelector((state) => state.posts.singlePost);
   const [posts, setPosts] = useState([]);
+  const [drafts, setDrafts] = useState([]);
   const [activePosts, setActivePosts] = useState(false);
+  const [activeDrafts, setActiveDrafts] = useState(false);
+  const user = useSelector((state) => state.session.user);
+  const userId = user.id;
+  const postObj = useSelector((state) => state.posts.singlePost);
+  const draftObj = useSelector((state) => state.drafts.singleDraft);
+  const postsByUserId = useSelector((state) => state.posts.allPostsByUser);
 
   useEffect(() => {
-    setPosts(currentPost);
+    const getPostsById = async () => {
+      const posts = await dispatch(getAllPostsByUser(userId));
+      setPosts(posts);
+    };
+    getPostsById();
+    const getDraftsById = async () => {
+      const drafts = await dispatch(getAllDraftsByUser(userId));
+      setDrafts(drafts);
+    };
+    getDraftsById();
   }, [currentPost]);
 
 
-  const onAddPost = () => {
-    const newPost = {
-      id: uuid(),
+  const onAddDraft = async () => {
+    const newDraft = {
       title: "Untitled Article",
+      description: "",
       body: "",
-      updatedAt: Date.now(),
+      userId,
     };
-    dispatch(createPost(newPost));
+    const newDrafts = await dispatch(createDraft(newDraft));
+    const drafts = await dispatch(getAllDraftsByUser(userId));
+    setDrafts(drafts);
+    return newDrafts;
   };
 
-  const onDeletePost = (postId) => {
-    dispatch(deletePost(postId));
+
+
+  const onAddPost = async () => {
+    const drafts = await dispatch(getAllDraftsByUser(userId));
+    const draftById = drafts.drafts.find(({ id }) => id === activeDrafts);
+    const newPost = {
+      title: draftById.title,
+      description: draftById.description,
+      body: draftById.body,
+      userId,
+    };
+    const newPosts = await dispatch(createPost(newPost));
+    return newPosts;
   };
 
-  const onUpdatePost = (updatedPost) => {
-    const updatePosts = {
-        ...posts,
-    }
-    dispatch(editPost(updatePosts));
+  const onDeleteDrafts = async (draftId) => {
+    const deleteDrafts = await dispatch(deleteDraft(draftId));
+    const drafts = await dispatch(getAllDraftsByUser(userId));
+    setDrafts(drafts)
+   
+    return deleteDrafts;
+  };
+
+  const onDeletePosts = async (postId) => {
+    const deletePosts = await dispatch(deletePost(postId));
+    setPosts(posts)
+    return deletePosts;
+  };
+
+
+  const onUpdateDrafts = async (updatedDraft) => {
+    let timer;
+    clearTimeout(timer);
+    timer = setTimeout(async () => {
+    const updateDraft = {
+      title: updatedDraft.title,
+      description: updatedDraft.description,
+      body: updatedDraft.body,
+      updatedAt: updatedDraft.updatedAt,
+      userId,
+    };
+    const updateDrafts = await dispatch(editDraft(updatedDraft));
+    const drafts = await dispatch(getAllDraftsByUser(userId));
+    setDrafts(drafts)
+    return updateDrafts;
+    }, 5000);
   };
 
   const getActivePosts = () => {
-    return posts.find(({ id }) => id === activeNote);
+    let finalPosts;
+    let finalDrafts;
+    if (posts.posts?.length > 0) {
+      finalPosts = posts.find(({ id }) => id === activePosts);
+    }
+    if (drafts.drafts?.length > 0) {
+      finalDrafts = drafts.find(({ id }) => id === activeDrafts);
+    }
+    return finalPosts
   };
+
+  const getActiveDrafts = () => {
+    let finalDrafts;
+    if (drafts.drafts?.length > 0) {
+      finalDrafts = drafts.drafts.find(({ id }) => id === activeDrafts);
+    }
+    return finalDrafts;
+  };
+
+
 
   return (
     <div className="create-posts">
       <Sidebar
-        notes={notes}
-        onAddNote={onAddPosts}
-        onDeleteNote={onDeletePosts}
-        activeNote={activePosts}
-        setActiveNote={setActivePosts}
+        posts={posts.posts}
+        drafts={drafts.drafts}
+        onAddDraft={onAddDraft}
+        onAddPost={onAddPost}
+        onDeleteDrafts={onDeleteDrafts}
+        onDeletePosts={onDeletePosts}
+        activeDrafts={activeDrafts}
+        activePosts={activePosts}
+        setActiveDrafts={setActiveDrafts}
+        setActivePosts={setActivePosts}
       />
-      <Main activeNote={getActivePosts()} onUpdateNote={onUpdatePosts} />
+      <Main activeDrafts={getActiveDrafts()} onUpdateDrafts={onUpdateDrafts} />
     </div>
   );
 }

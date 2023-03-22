@@ -64,6 +64,7 @@ export const getAllPostsByUser = (id) => async (dispatch) => {
 // Create post /api/posts/
 export const createPost = (posts) => async (dispatch) => {
     const {title, body, userId, description} = posts;
+    console.log(posts)
     const response = await csrfFetch('/api/posts/', {
         method: 'POST',
         headers: {
@@ -79,6 +80,7 @@ export const createPost = (posts) => async (dispatch) => {
     const data = await response.json();
     if (response.ok) {
         dispatch(setSinglePost(data));
+        dispatch(setAllPostsByUser(data));
         return data;
     }
     else {
@@ -94,6 +96,8 @@ export const deletePost = (id) => async (dispatch) => {
     const data = await response.json();
     if (response.ok) {
         dispatch(removePost());
+        dispatch(setAllPostsByUser(data));
+        dispatch(setSinglePost(data));
         return data;
     }
     else {
@@ -103,7 +107,7 @@ export const deletePost = (id) => async (dispatch) => {
 
 // Edit posts /api/posts/:id
 export const editPost = (posts) => async (dispatch) => {
-    const {title, body, userId, description, id} = posts;
+    const {title, body, userId, description, id, updatedAt} = posts;
     const response = await csrfFetch(`/api/posts/${id}`, {
         method: 'PUT',
         headers: {
@@ -120,6 +124,7 @@ export const editPost = (posts) => async (dispatch) => {
     const data = await response.json();
     if (response.ok) {
         dispatch(setSinglePost(data));
+        dispatch(setAllPostsByUser(data));
         return data;
     }
     else {

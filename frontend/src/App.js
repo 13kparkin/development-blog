@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Switch } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
-import CreatePosts from "./components/Posts/CreatePosts";
+import CreatePosts from "./components/Posts/CreatePost";
 
 function App() {
   const dispatch = useDispatch();

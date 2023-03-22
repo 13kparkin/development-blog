@@ -1,15 +1,44 @@
 import ReactMarkdown from "react-markdown";
+import { useState, useEffect } from "react";
 
-const Main = ({ activePosts, onUpdatePosts }) => {
+
+const Main = ({ activeDrafts, onUpdateDrafts }) => {
   const onEditField = (field, value) => {
-    onUpdatePosts({
-      ...activePosts,
+    onUpdateDrafts({
+      ...activeDrafts,
       [field]: value,
-      lastModified: Date.now(),
+      updatedAt: Date.now(),
     });
   };
 
-  if (!activePosts) return <div className="no-active-note">No Active Articles</div>;
+  let [title, setTitle] = useState("");
+  let [body, setBody] = useState("");
+
+
+  useEffect(() => {
+
+      setTitle(activeDrafts?.title);
+      setBody(activeDrafts?.body);
+    
+  }, [activeDrafts]);
+
+  
+
+
+  if (!activeDrafts) return <div className="no-active-posts">No Active Articles</div>;
+
+
+
+
+
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+    onEditField("title", e.target.value);
+  };
+  const handleBodyChange = (e) => {
+    setBody(e.target.value);
+    onEditField("body", e.target.value);
+  };
 
   return (
     <div className="posts-main">
@@ -18,21 +47,21 @@ const Main = ({ activePosts, onUpdatePosts }) => {
           type="text"
           id="title"
           placeholder="Article Title"
-          value={activePosts.title}
-          onChange={(e) => onEditField("title", e.target.value)}
+          value={title}
+          onChange={handleTitleChange}
           autoFocus
         />
         <textarea
           id="body"
           placeholder="Write your article here..."
-          value={activePosts.body}
-          onChange={(e) => onEditField("body", e.target.value)}
+          value={body}
+          onChange={handleBodyChange}
         />
       </div>
       <div className="posts-main-preview">
-        <h1 className="preview-title">{activePosts.title}</h1>
+        <h1 className="preview-title">{activeDrafts.title}</h1>
         <ReactMarkdown className="markdown-preview">
-          {activePosts.body}
+          {activeDrafts.body}
         </ReactMarkdown>
       </div>
     </div>

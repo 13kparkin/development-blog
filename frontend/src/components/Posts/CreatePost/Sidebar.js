@@ -17,16 +17,24 @@ const Sidebar = ({
   const sortedDrafts = drafts?.sort((a, b) => b.lastModified - a.lastModified);
 
   const [pushed, setPushed] = useState(false);
+  const [pushedDarft, setPushedDraft] = useState(false);
+  const [pushedPublished, setPushedPublished] = useState(false);
+  const [pushedDelete, setPushedDelete] = useState({});
 
   const handleDraftButtonClick = () => {
-    setPushed(true);
-    setTimeout(() => setPushed(false), 200);
+    setPushedDraft(true);
+    setTimeout(() => setPushedDraft(false), 200);
     onAddDraft();
   };
   const handlePublishButtonClick = () => {
-    setPushed(true);
-    setTimeout(() => setPushed(false), 200);
+    setPushedPublished(true);
+    setTimeout(() => setPushedPublished(false), 200);
     onAddPosts();
+  };
+  const onDeleteButton = (id) => {
+    setPushedDelete((prevState) => ({ ...prevState, [id]: true }));
+  setTimeout(() => setPushedDelete((prevState) => ({ ...prevState, [id]: false })), 200);
+  onDeleteDrafts(id);
   };
 
   
@@ -36,12 +44,13 @@ const Sidebar = ({
       <div className="app-sidebar-header">
         <h1>Articles</h1>
         {activeDrafts && (
-          <button onClick={() => onAddPosts(handlePublishButtonClick)}>Publish</button>
+          <button className={pushedPublished ? "pushed" : ""} onClick={() => onAddPosts(handlePublishButtonClick)}>Publish</button>
         )}
-        <button className={pushed ? "pushed" : ""} onClick={handleDraftButtonClick}>Create Article</button>
+        <button className={pushedDarft ? "pushed" : ""} onClick={handleDraftButtonClick}>Create Article</button>
       </div>
       <div className="app-sidebar-posts">
         {sortedDrafts?.map(({ id, title, body, updatedAt }, i) => (
+          <>
           <div
             key={i}
             className={`app-sidebar-posts ${id === activePosts && "active"}`}
@@ -49,8 +58,8 @@ const Sidebar = ({
           >
             <div className="sidebar-posts-title">
               <strong>{title && title.substr(0, 20) + "..."}</strong>
-              <button onClick={(e) => onDeleteDrafts(id)}>Delete</button>
             </div>
+            
 
             <p>{body && body.substr(0, 50) + "..."}</p>
             <small className="posts-meta">
@@ -60,7 +69,10 @@ const Sidebar = ({
                 minute: "2-digit",
               })}
             </small>
+            
           </div>
+          <button className={pushedDelete[id] ? "pushed delete-button" : "delete-button"} onClick={(e) => onDeleteButton(id)}>Delete</button>
+          </>
         ))}
       </div>
     </div>

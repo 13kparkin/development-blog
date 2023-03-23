@@ -13,17 +13,19 @@
 }
 
 .app-sidebar-header h1 {
-  margin-left: -2rem;
+  margin-left: -3rem;
+  padding-right: 1rem;
+}
+
+.app-sidebar-posts {
+    margin-left: .5rem;
 }
 
 ::-webkit-scrollbar {
-    display: none;
-  }
+  display: none;
+}
 
-
-
-
-/* SideBar buttons */
+/* SideBar buttons (Create Article Button)*/
 
 .app-sidebar-header button {
   font-size: 1.1em;
@@ -43,24 +45,57 @@
 }
 .app-sidebar-header button:hover {
   color: var(--Green);
-    box-shadow: 0 0 0 2px var(--LightSlate);
+  box-shadow: 1px 1px 0.8rem 1px var(--Slate);
   text-decoration: none;
-  border: 1px solid var(--Green);
+  border: 2px solid var(--Green);
   cursor: pointer;
 }
 
+.delete-button {
+    font-size: 1.1em;
+    color: var(--Green);
+    font-size: small;
+    padding: 0.5rem 1rem;
+    margin-top: 1.8rem;
+    border-radius: 10px;
+    position: relative;
+    top: -1.5rem;
+    margin-left: .45rem;
+    background-color: var(--PurpleGradient);
+    text-decoration: none;
+    font-weight: bold;
+    border: 2px solid var(--Green);
+    transition: 0.05s ease;
+  }
+  .delete-button:hover {
+    color: var(--Green);
+    box-shadow: 1px 1px 0.8rem 1px var(--Slate);
+    text-decoration: none;
+    border: 2px solid var(--Green);
+    cursor: pointer;
+  }
+
+
+
+
+/* Animations */
+
+/* Pushed Button Animations */
+
 @keyframes push-animation {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(0.95);
-    }
-    100% {
-      transform: scale(1);
-    }
+  0% {
+    transform: scale(1);
   }
-  
-  .pushed {
-    animation: push-animation 0.06s;
+  50% {
+    transform: scale(0.95);
   }
+  100% {
+    transform: scale(1);
+  }
+}
+ 
+.pushed {
+  animation: push-animation 0.06s;
+}
+
+

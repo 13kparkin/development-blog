@@ -1,8 +1,8 @@
 import ReactMarkdown from "react-markdown";
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-
-const Main = ({ activeDrafts, onUpdateDrafts }) => {
+const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
   const onEditField = (field, value) => {
     onUpdateDrafts({
       ...activeDrafts,
@@ -10,26 +10,29 @@ const Main = ({ activeDrafts, onUpdateDrafts }) => {
       updatedAt: Date.now(),
     });
   };
+  const onEditImage = (field, value) => {
+    onUpdateImage({
+      [field]: value,
+      draftId: activeDrafts.id,
+    });
+  };
 
+
+  const user = useSelector((state) => state.session.user);
+  const userId = user?.id;
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [url, setUrl] = useState("");
+
 
 
   useEffect(() => {
-
-      setTitle(activeDrafts?.title);
-      setBody(activeDrafts?.body);
-    
+    setTitle(activeDrafts?.title);
+    setBody(activeDrafts?.body);
   }, [activeDrafts]);
 
-  
-
-
-  if (!activeDrafts) return <div className="no-active-posts">No Active Articles</div>;
-
-
-
-
+  if (!activeDrafts)
+    return <div className="no-active-posts">No Active Articles</div>;
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -39,10 +42,22 @@ const Main = ({ activeDrafts, onUpdateDrafts }) => {
     setBody(e.target.value);
     onEditField("body", e.target.value);
   };
+  const handleUrlChange = (e) => {
+    setUrl(e.target.value);
+    onEditImage("img", e.target.value);
+  };
 
   return (
     <div className="posts-main">
       <div className="posts-main-edit">
+      <input
+          type="text"
+          id="img"
+          placeholder="Cover Image"
+          value={url}
+          onChange={handleUrlChange}
+          autoFocus
+        />
         <input
           type="text"
           id="title"
@@ -59,6 +74,8 @@ const Main = ({ activeDrafts, onUpdateDrafts }) => {
         />
       </div>
       <div className="posts-main-preview">
+         <div className="img-url">{activeDrafts && activeDrafts.PostsImages?.url}</div> 
+        <div className="preview-user">{user?.username}</div>
         <h1 className="preview-title">{activeDrafts.title}</h1>
         <ReactMarkdown className="markdown-preview">
           {activeDrafts.body}

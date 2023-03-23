@@ -1,6 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import './Main.css'
 
 const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
   const onEditField = (field, value) => {
@@ -48,8 +49,8 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
   };
 
   return (
-    <div className="posts-main">
-      <div className="posts-main-edit">
+    <div className="app-main">
+      <div className="app-main-posts-edit">
       <input
           type="text"
           id="img"
@@ -73,7 +74,7 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
           onChange={handleBodyChange}
         />
       </div>
-      <div className="posts-main-preview">
+      <div className="app-main-posts-preview">
          <div className="img-url">{activeDrafts && activeDrafts.PostsImages?.url}</div> 
         <div className="preview-user">{user?.username}</div>
         <h1 className="preview-title">{activeDrafts.title}</h1>

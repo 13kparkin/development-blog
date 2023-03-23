@@ -1,1 +1,56 @@
 /* TODO Add site wide styles */
+
+:root {
+    --Navy: #110b30;
+    --LightNavy: #112240;
+    --LightestNavy: #233554;
+    --Slate: #8892b0;
+    --LightSlate: #a8b2d1;
+    --LightestSlate: #ccd6f6;
+    --White: #e6f1ff;
+    --Green: #64ffed;
+    --Blue: #08c;
+    --DarkPurple: #181220;
+    /* typography */
+    --fs-base: 0.85rem;
+    --fs-1: 1.6rem;
+    --fs-2: 1.3rem;
+    --fs-3: 1.0rem;
+    --fs-4: 0.8rem;
+    --fs-5: 0.7rem;
+    --consolas: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    /* Spacing */
+    --py: 5rem;
+}
+* {
+    box-sizing: border-box;
+  }
+
+.App {
+    display: flex;
+  }
+
+body,
+.App {
+    background-color: var(--Navy);
+    color: var(--LightestSlate);
+    font-family: var(--consolas);
+    font-size: var(--fs-base);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+button {
+    background: none;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+    cursor: pointer;
+    color: var(--Blue)
+  }
+  button:hover {
+    color: var(--Green);
+  }
+
+

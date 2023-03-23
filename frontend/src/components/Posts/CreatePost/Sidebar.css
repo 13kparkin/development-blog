@@ -1,0 +1,12 @@
+.app-sidebar {
+  width: 20rem;
+  height: 100vh;
+  border-right: 1px solid var(--LightSlate);
+}
+
+.app-sidebar-header {
+  display: flex;
+  padding: .3rem 4.0rem;
+  padding-right: 1rem;
+  font-size: 0.9rem;
+}

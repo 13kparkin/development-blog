@@ -71,8 +71,8 @@ function CreatePosts() {
   const onDeleteDrafts = async (draftId) => {
     const deleteDrafts = await dispatch(deleteDraft(draftId));
     const drafts = await dispatch(getAllDraftsByUser(userId));
+    setActiveDrafts(false)
     setDrafts(drafts)
-   
     return deleteDrafts;
   };
 

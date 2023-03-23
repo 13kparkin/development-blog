@@ -16,12 +16,17 @@ const Sidebar = ({
 
 
     const sortedDrafts = drafts?.sort((a, b) => b.lastModified - a.lastModified);
+
+
+    console.log(activeDrafts)
   
     return (
       <div className="app-sidebar">
         <div className="app-sidebar-header">
           <h1>Articles</h1>
-          <button onClick={onAddPosts}>Publish</button>
+          {activeDrafts && (
+            <button onClick={() => onAddPosts(activeDrafts)}>Publish</button>
+          )}
           <button onClick={onAddDraft}>Create Article</button>
         </div>
         <div className="app-sidebar-posts">
@@ -52,3 +57,7 @@ const Sidebar = ({
   };
   
   export default Sidebar;
+
+
+
+  

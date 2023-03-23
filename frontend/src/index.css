@@ -1,4 +1,5 @@
 /* TODO Add site wide styles */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 :root {
     --Navy: #110b30;
@@ -11,6 +12,8 @@
     --Green: #64ffed;
     --Blue: #08c;
     --DarkPurple: #181220;
+    --PurpleGradient: linear-gradient(97deg, rgba(11,17,46,1) 0%, rgba(33,0,75,1) 100%);
+    --ButtonGradient: linear-gradient(to right, #2b5876 0%, #4e4376  51%, #2b5876  100%);
     /* typography */
     --fs-base: 0.85rem;
     --fs-1: 1.6rem;
@@ -18,39 +21,20 @@
     --fs-3: 1.0rem;
     --fs-4: 0.8rem;
     --fs-5: 0.7rem;
-    --consolas: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --consolas: "Poppins", sans-serif;
     /* Spacing */
     --py: 5rem;
 }
-* {
-    box-sizing: border-box;
-  }
 
-.App {
-    display: flex;
-  }
 
-body,
-.App {
-    background-color: var(--Navy);
+body {
+    background-image: var(--PurpleGradient);
     color: var(--LightestSlate);
     font-family: var(--consolas);
     font-size: var(--fs-base);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
 }
-button {
-    background: none;
-    border: 0;
-    margin: 0;
-    padding: 0;
-    font-size: inherit;
-    font-family: inherit;
-    cursor: pointer;
-    color: var(--Blue)
-  }
-  button:hover {
-    color: var(--Green);
-  }
+
 
 

@@ -1,7 +1,13 @@
 import ReactMarkdown from "react-markdown";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createDraft, getAllDraftsByUser, deleteDraft, editDraft, getSingleDraft} from "../../../store/drafts";
+import {
+  createDraft,
+  getAllDraftsByUser,
+  deleteDraft,
+  editDraft,
+  getSingleDraft,
+} from "../../../store/drafts";
 import "./Main.css";
 
 const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
@@ -27,18 +33,12 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
   const [url, setUrl] = useState("");
   const dispatch = useDispatch();
   const error = {};
-  const newImageUrl = imageUrl.singleDraft?.draft?.PostsImages[0].url;
-
-
-
-
-
+  let newImageUrl = imageUrl.singleDraft?.draft?.PostsImages?.[0].url;
 
   useEffect(() => {
-
     const getDraftsById = async () => {
       const drafts = await dispatch(getSingleDraft(activeDrafts.id));
-    
+
       setUrl(newImageUrl);
 
       return drafts;
@@ -51,13 +51,13 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
   if (!activeDrafts)
     return <div className="no-active-posts">No Active Articles</div>;
 
-    const convertImageUrlToMarkdown = (url) => {
-      if (url.match(/\.(jpeg|jpg|gif|png)(\?.*)?$/i) != null) {
-        return `![Image](${url})`;
-      } else {
-        return error.error = "Please enter a valid image URL";
-      }
-    };
+  const convertImageUrlToMarkdown = (url) => {
+    if (url.match(/\.(jpeg|jpg|gif|png)(\?.*)?$/i) != null) {
+      return `![Image](${url})`;
+    } else {
+      return (error.error = "Please enter a valid image URL");
+    }
+  };
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -76,11 +76,8 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
     if (error.error) {
       return;
     } else {
-    
-    onEditImage("img", markdown);
+      onEditImage("img", markdown);
     }
-
-    
   };
 
   return (

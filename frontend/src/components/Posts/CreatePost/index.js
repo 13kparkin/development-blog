@@ -9,6 +9,7 @@ import {
   getSinglePost,
   getAllPostsByUser,
 } from "../../../store/posts";
+import { createSingleImage } from "../../../store/images";
 import { createDraft, getAllDraftsByUser, deleteDraft, editDraft, getSingleDraft} from "../../../store/drafts";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -20,7 +21,7 @@ function CreatePosts() {
   const [activePosts, setActivePosts] = useState(false);
   const [activeDrafts, setActiveDrafts] = useState(false);
   const user = useSelector((state) => state.session.user);
-  const userId = user.id;
+  const userId = user?.id;
   const postObj = useSelector((state) => state.posts.singlePost);
   const draftObj = useSelector((state) => state.drafts.singleDraft);
   const postsByUserId = useSelector((state) => state.posts.allPostsByUser);
@@ -99,6 +100,21 @@ function CreatePosts() {
     }, 3000);
   };
 
+  const onUpdateImage = async (updatedImage) => {
+    clearTimeout(timer);
+    timer = setTimeout(async () => {
+    const updateImage = {
+      draftId: updatedImage.draftId,
+      url: updatedImage.url,
+    };
+    console.log(updatedImage)
+    const updateImages = await dispatch(createSingleImage(updatedImage.draftId, updatedImage));
+    const drafts = await dispatch(getAllDraftsByUser(userId));
+    setDrafts(drafts)
+    return updateImages;
+    }, 3000);
+  };
+
   const getActivePosts = () => {
     let finalPosts;
     let finalDrafts;
@@ -119,8 +135,6 @@ function CreatePosts() {
     return finalDrafts;
   };
 
-
-
   return (
     <div className="create-posts">
       <Sidebar
@@ -135,7 +149,7 @@ function CreatePosts() {
         setActiveDrafts={setActiveDrafts}
         setActivePosts={setActivePosts}
       />
-      <Main activeDrafts={getActiveDrafts()} onUpdateDrafts={onUpdateDrafts} />
+      <Main activeDrafts={getActiveDrafts()} onUpdateDrafts={onUpdateDrafts} onUpdateImage={onUpdateImage} />
     </div>
   );
 }

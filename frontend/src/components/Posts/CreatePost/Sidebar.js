@@ -27,6 +27,7 @@ const Sidebar = ({
         <div className="app-sidebar-posts">
           {sortedDrafts?.map(({ id, title, body, updatedAt }, i) => (
             <div
+              key={i}
               className={`app-sidebar-posts ${id === activePosts && "active"}`}
               onClick={() => setActiveDrafts(id)}
             >
@@ -35,14 +36,13 @@ const Sidebar = ({
                 <button onClick={(e) => onDeleteDrafts(id)}>Delete</button>
               </div>
   
-              <p>{body && body.substr(0, 50) + "..."}</p>
+              <p >{body && body.substr(0, 50) + "..."}</p>
               <small className="posts-meta">
                 Last Modified{" "}
                 {new Date(updatedAt).toLocaleDateString("en-US", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
-                {console.log(updatedAt)}
               </small>
             </div>
           ))}

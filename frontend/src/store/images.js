@@ -9,14 +9,14 @@ const setSingleImage = (image) => ({
 
 // create single image /api/images/:id
 export const createSingleImage = (id, image) => async (dispatch) => {
-    const { url, postId, draftId } = image;
+    const { img, postId, draftId } = image;
     const response = await csrfFetch(`/api/drafts/${id}/images`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            url,
+            url: img,
             postId,
             draftId,        
         }),

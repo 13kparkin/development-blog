@@ -22,7 +22,6 @@ function CreatePosts() {
   const [activeDrafts, setActiveDrafts] = useState(false);
   const user = useSelector((state) => state.session.user);
   const userId = user?.id;
-  const postObj = useSelector((state) => state.posts.singlePost);
   const draftObj = useSelector((state) => state.drafts.singleDraft);
   const postsByUserId = useSelector((state) => state.posts.allPostsByUser);
 
@@ -107,7 +106,6 @@ function CreatePosts() {
       draftId: updatedImage.draftId,
       url: updatedImage.url,
     };
-    console.log(updatedImage)
     const updateImages = await dispatch(createSingleImage(updatedImage.draftId, updatedImage));
     const drafts = await dispatch(getAllDraftsByUser(userId));
     setDrafts(drafts)

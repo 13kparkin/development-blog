@@ -17,8 +17,16 @@
   padding-right: 1rem;
 }
 
-.app-sidebar-posts {
-    margin-left: .5rem;
+.app-sidebar-posts-container {
+  margin-left: 0.5rem;
+}
+
+.app-sidebar-posts:hover {
+  cursor: pointer;
+  color: var(--Green);
+  box-shadow: 1px 1px 0.8rem 1px var(--Slate);
+  text-decoration: none;
+  border: 2px solid var(--Green);
 }
 
 ::-webkit-scrollbar {
@@ -52,31 +60,28 @@
 }
 
 .delete-button {
-    font-size: 1.1em;
-    color: var(--Green);
-    font-size: small;
-    padding: 0.5rem 1rem;
-    margin-top: 1.8rem;
-    border-radius: 10px;
-    position: relative;
-    top: -1.5rem;
-    margin-left: .45rem;
-    background-color: var(--PurpleGradient);
-    text-decoration: none;
-    font-weight: bold;
-    border: 2px solid var(--Green);
-    transition: 0.05s ease;
-  }
-  .delete-button:hover {
-    color: var(--Green);
-    box-shadow: 1px 1px 0.8rem 1px var(--Slate);
-    text-decoration: none;
-    border: 2px solid var(--Green);
-    cursor: pointer;
-  }
-
-
-
+  font-size: 1.1em;
+  color: var(--Green);
+  font-size: small;
+  padding: 0.5rem 1rem;
+  margin-top: 1.8rem;
+  border-radius: 10px;
+  position: relative;
+  top: -1.5rem;
+  margin-left: 0.45rem;
+  background-color: var(--PurpleGradient);
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid var(--Green);
+  transition: 0.05s ease;
+}
+.delete-button:hover {
+  color: var(--Green);
+  box-shadow: 1px 1px 0.8rem 1px var(--Slate);
+  text-decoration: none;
+  border: 2px solid var(--Green);
+  cursor: pointer;
+}
 
 /* Animations */
 
@@ -93,9 +98,11 @@
     transform: scale(1);
   }
 }
- 
+
 .pushed {
   animation: push-animation 0.06s;
 }
 
 
+
+/* Todo: add the push animation to the article cards */

@@ -1,0 +1,61 @@
+.app-main {
+    width: 40rem;
+    height: 100vh;
+  }
+
+  .app-main-posts-edit .body input,
+  textarea {
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    margin-bottom: 10rem;
+    width: 30rem;
+    height: 10rem;
+    padding: 1rem;
+    resize: none;
+    font-size: inherit;
+    font-family: inherit;
+  }
+
+  .img-url {
+    display: flex;
+    position: absolute;
+    top: 6rem;
+    left: 22rem;
+    width: 30rem;
+  }
+
+  .title {
+    display: flex;
+    position: absolute;
+    top: 9rem;
+    left: 22rem;
+    width: 30rem;
+  }
+
+
+
+  .app-main-posts-edit input {
+    display: block;
+    height: 2rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+  }
+  
+  /* Preview */
+  .app-main-posts-preview {
+    border-top: 1px solid #ddd;
+    overflow-y: scroll;
+    background: rgba(0, 0, 0, 0.02);
+  }
+  
+  .preview-title {
+    padding: 25px 25px 0 25px;
+    margin: 0;
+  }
+  
+  .markdown-preview {
+    padding: 0 25px 25px 25px;
+    font-size: 1rem;
+    line-height: 2rem;
+  }

@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import CreatePosts from "./components/Posts/CreatePost";
+import "./index.css"
 
 function App() {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ function App() {
 
   return (
     <>
+    
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>

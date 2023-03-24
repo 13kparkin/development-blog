@@ -34,7 +34,7 @@ export const getAllDrafts = () => async (dispatch) => {
 };
 
 // Get single draft /api/drafts/:id
-export const getSingleƒDraft = (id) => async (dispatch) => {
+export const getSingleDraft = (id) => async (dispatch) => {
   const response = await csrfFetch(`/api/drafts/${id}`);
   const data = await response.json();
   if (response.ok) {

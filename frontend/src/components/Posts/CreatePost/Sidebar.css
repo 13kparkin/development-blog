@@ -1,0 +1,119 @@
+.app-sidebar {
+  width: 22rem;
+  height: 30rem;
+  border-right: 1px solid var(--LightSlate);
+  overflow-y: auto;
+}
+
+.app-sidebar-header {
+  display: flex;
+  padding: 0.3rem 4rem;
+  padding-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.app-sidebar-header h1 {
+  margin-left: -3rem;
+  padding-right: 1rem;
+}
+
+.app-sidebar-posts-container {
+  margin-left: 0.7rem;
+  margin-right: 1.3rem;
+}
+
+.app-sidebar-posts {
+  text-decoration: none;
+  border: 2px solid var(--Green);
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+}
+
+.app-sidebar-posts:hover {
+  cursor: pointer;
+  color: var(--Green);
+  box-shadow: 1px 1px 0.8rem 1px var(--Slate);
+  text-decoration: none;
+  border: 2px solid var(--Green);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* SideBar buttons (Create Article Button)*/
+
+.app-sidebar-header button {
+  font-size: 1.1em;
+  color: var(--Green);
+  font-size: small;
+  padding: 0.5rem 1rem;
+  margin-top: 3rem;
+  border-radius: 10px;
+  position: relative;
+  top: -1.5rem;
+  margin-left: 1rem;
+  background-color: var(--PurpleGradient);
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid var(--Green);
+  transition: 0.05s ease;
+}
+.app-sidebar-header button:hover {
+  color: var(--Green);
+  box-shadow: 1px 1px 0.8rem 1px var(--Slate);
+  text-decoration: none;
+  border: 2px solid var(--Green);
+  cursor: pointer;
+}
+
+.delete-button {
+  font-size: 1.1em;
+  color: var(--Green);
+  font-size: small;
+  padding: 0.5rem 1rem;
+  margin-top: 2rem;
+  border-radius: 10px;
+  position: relative;
+  top: -1.5rem;
+  margin-left: 0.02rem;
+  background-color: var(--PurpleGradient);
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid var(--Green);
+  transition: 0.05s ease;
+}
+.delete-button:hover {
+  color: var(--Green);
+  box-shadow: 1px 1px 0.8rem 1px var(--Slate);
+  text-decoration: none;
+  border: 2px solid var(--Green);
+  cursor: pointer;
+}
+
+
+
+/* Animations */
+
+/* Pushed Button Animations */
+
+@keyframes push-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pushed {
+  animation: push-animation 0.06s;
+}
+
+
+
+/* Todo: add the push animation to the article cards */

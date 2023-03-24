@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@900&display=swap');
+
 .app-main {
     width: 40rem;
-    height: 100vh;
+    /* height: 100vh; */
+    overflow-x: auto;
   }
 
   .app-main-posts-edit .body input,
@@ -10,27 +13,43 @@
     border-radius: 0.5rem;
     margin-bottom: 10rem;
     width: 30rem;
-    height: 10rem;
+    height: 20rem;
     padding: 1rem;
     resize: none;
     font-size: inherit;
     font-family: inherit;
   }
 
-  .img-url {
+  .img-url{
     display: flex;
     position: absolute;
     top: 6rem;
-    left: 22rem;
+    left: 26rem;
     width: 30rem;
+    background-image: var(--PurpleGradient);
+    color: var(--LightestSlate);
+    border: 1px solid #ddd;
   }
 
   .title {
     display: flex;
     position: absolute;
     top: 9rem;
-    left: 22rem;
+    left: 26rem;
     width: 30rem;
+    background-image: var(--PurpleGradient);
+    color: var(--LightestSlate);
+    border: 1px solid #ddd;
+  }
+
+  .body {
+    display: flex;
+    position: absolute;
+    top: 12.2rem;
+    left: 26rem;
+    width: 30rem;
+    background-image: var(--PurpleGradient);
+    color: var(--LightestSlate);
   }
 
 
@@ -44,18 +63,76 @@
   
   /* Preview */
   .app-main-posts-preview {
-    border-top: 1px solid #ddd;
+    position: absolute;
+    top: 37rem;
+    left: 26rem;
+    width: 30rem;
+    border: 1px solid var(--LightestSlate);
+    border-radius: 10px;
     overflow-y: scroll;
     background: rgba(0, 0, 0, 0.02);
   }
+
+  .app-main-posts-preview img {
+    width: 35rem;
+    height: 13.4rem;
+    border-radius: 10px;
+    margin-top: -1rem;
+    margin-left: -1rem;
+  }
+
+  .preview-user {
+    display: flex;
+    padding: 0 2rem 0 2rem;
+    margin-top: 1rem;
+  }
+
+  .saved-date {
+    display: flex;
+    padding: 0 1rem 0 2.2rem;
+    margin-top: -0.2rem;
+    font-size: 10px;
+  }
   
   .preview-title {
-    padding: 25px 25px 0 25px;
-    margin: 0;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    padding: 2rem 2rem 0 2rem;
+    margin-top: -.5rem;
   }
+
   
   .markdown-preview {
-    padding: 0 25px 25px 25px;
-    font-size: 1rem;
-    line-height: 2rem;
+    padding: 0 1rem 0 2rem;
+    word-wrap: break-word;
+    line-height: 13px;
+    font-size: 11px;
+    padding-bottom: 1rem;
   }
+
+  .app-main-posts-preview button {
+  font-size: 1.1em;
+  color: var(--Green);
+  font-size: small;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  border-radius: 10px;
+  position: relative;
+  top: -1.5rem;
+  margin-left: 23rem;
+  background-color: var(--PurpleGradient);
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid var(--Green);
+  transition: 0.05s ease;
+  }
+
+  .app-main-posts-preview button:hover {
+    color: var(--Green);
+    box-shadow: 1px 1px 0.8rem 1px var(--Slate);
+    text-decoration: none;
+    border: 2px solid var(--Green);
+    cursor: pointer;
+  }
+
+
+  /* todo: add media query to move preview to the far right of the screen for larger screens */

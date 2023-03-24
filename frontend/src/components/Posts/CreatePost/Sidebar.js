@@ -1,6 +1,7 @@
 import React from "react";
 import "./Sidebar.css";
 import { useState } from "react";
+import { wordWrap } from "../../../utils/wrapping";
 
 const Sidebar = ({
   posts,
@@ -16,9 +17,9 @@ const Sidebar = ({
 }) => {
   const sortedDrafts = drafts?.sort((a, b) => b.lastModified - a.lastModified);
 
-  const [pushed, setPushed] = useState(false);
+
   const [pushedDarft, setPushedDraft] = useState(false);
-  const [pushedPublished, setPushedPublished] = useState(false);
+  const [pushed, setPushed] = useState(false);
   const [pushedDelete, setPushedDelete] = useState({});
 
   const handleDraftButtonClick = () => {
@@ -26,11 +27,7 @@ const Sidebar = ({
     setTimeout(() => setPushedDraft(false), 200);
     onAddDraft();
   };
-  const handlePublishButtonClick = () => {
-    setPushedPublished(true);
-    setTimeout(() => setPushedPublished(false), 200);
-    onAddPosts();
-  };
+  
   const onDeleteButton = (id) => {
     setPushedDelete((prevState) => ({ ...prevState, [id]: true }));
     setTimeout(
@@ -39,7 +36,6 @@ const Sidebar = ({
     );
     onDeleteDrafts(id);
   };
-
   const pushedPosts = (id) => {
     setPushed(true);
     setTimeout(() => setPushed(false), 200);
@@ -50,14 +46,6 @@ const Sidebar = ({
     <div className="app-sidebar">
       <div className="app-sidebar-header">
         <h1>Articles</h1>
-        {activeDrafts && (
-          <button
-            className={pushedPublished ? "pushed" : ""}
-            onClick={() => onAddPosts(handlePublishButtonClick)}
-          >
-            Publish
-          </button>
-        )}
         <button
           className={pushedDarft ? "pushed" : ""}
           onClick={handleDraftButtonClick}
@@ -77,7 +65,7 @@ const Sidebar = ({
                 <strong>{title && title.substr(0, 20) + "..."}</strong>
               </span>
 
-              <p>{body && body.substr(0, 50) + "..."}</p>
+              <p>{wordWrap(body, 15) && wordWrap(body, 15).substr(0, 50) + "..."}</p>
               <small className="posts-meta">
                 Last Modified{" "}
                 {new Date(updatedAt).toLocaleDateString("en-US", {

@@ -9,8 +9,9 @@ import {
   getSingleDraft,
 } from "../../../store/drafts";
 import "./Main.css";
+import { wordWrap } from "../../../utils/wrapping";
 
-const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
+const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage, onAddPost }) => {
   const onEditField = (field, value) => {
     onUpdateDrafts({
       ...activeDrafts,
@@ -25,6 +26,8 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
     });
   };
 
+  
+  const [pushedPublished, setPushedPublished] = useState(false);
   const user = useSelector((state) => state.session.user);
   const imageUrl = useSelector((state) => state.drafts);
   const userId = user?.id;
@@ -47,6 +50,14 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
     setTitle(activeDrafts?.title);
     setBody(activeDrafts?.body);
   }, [activeDrafts, newImageUrl]);
+
+  
+
+  const handlePublishButtonClick = () => {
+    setPushedPublished(true);
+    setTimeout(() => setPushedPublished(false), 200);
+    onAddPost();
+  };
 
   if (!activeDrafts)
     return <div className="no-active-posts">No Active Articles</div>;
@@ -73,12 +84,21 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
     const markdown = convertImageUrlToMarkdown(imageUrl);
     setUrl(imageUrl);
 
+    console.log("markdown: ", markdown);
+
     if (error.error) {
       return;
     } else {
       onEditImage("img", markdown);
     }
   };
+
+  const date = new Date(activeDrafts.updatedAt);
+  const month = date.toLocaleString("default", { month: "long" });
+  const day = date.getDate();
+
+  
+
 
   return (
     <div className="app-main">
@@ -90,7 +110,6 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
           placeholder="Cover Image"
           value={url}
           onChange={handleUrlChange}
-          autoFocus
         />
         <input
           type="text"
@@ -110,14 +129,21 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage }) => {
         />
       </div>
       <div className="app-main-posts-preview">
-        <div className="img-url">
-          {activeDrafts && activeDrafts.PostsImages?.url}
-        </div>
+      <ReactMarkdown className="preview-image">
+          {url}
+      </ReactMarkdown>
         <div className="preview-user">{user?.username}</div>
+        <div className="saved-date">{`Updated on ${month}, ${day}`}</div>
         <h1 className="preview-title">{activeDrafts.title}</h1>
         <ReactMarkdown className="markdown-preview">
           {activeDrafts.body}
         </ReactMarkdown>
+        <button
+            className={pushedPublished ? "pushed" : ""}
+            onClick={() => onAddPost(handlePublishButtonClick)}
+          >
+            Publish
+          </button>
       </div>
     </div>
   );

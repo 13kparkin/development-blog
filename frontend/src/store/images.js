@@ -9,16 +9,39 @@ const setSingleImage = (image) => ({
 
 // create single image /api/images/:id
 export const createSingleImage = (id, image) => async (dispatch) => {
-    const { img, postId, draftId } = image;
+    const { url, postId, draftId } = image;
     const response = await csrfFetch(`/api/drafts/${id}/images`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            url: img,
+            url,
             postId,
-            draftId,        
+            draftId,      
+        }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+        dispatch(setSingleImage(data));
+        return data;
+    } else {
+        console.log("error", data);
+    }
+}
+
+// update single image /api/images/:id
+export const updateSingleImage = (id, image) => async (dispatch) => {
+    const { url, postId, draftId } = image;
+    const response = await csrfFetch(`/api/images/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            url,
+            postId,
+            draftId,
         }),
     });
     const data = await response.json();

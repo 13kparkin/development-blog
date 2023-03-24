@@ -9,7 +9,7 @@ import {
   getSinglePost,
   getAllPostsByUser,
 } from "../../../store/posts";
-import { createSingleImage } from "../../../store/images";
+import { createSingleImage, updateSingleImage } from "../../../store/images";
 import { createDraft, getAllDraftsByUser, deleteDraft, editDraft, getSingleDraft} from "../../../store/drafts";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -46,7 +46,14 @@ function CreatePosts() {
       body: "",
       userId,
     };
+    
     const newDrafts = await dispatch(createDraft(newDraft));
+    const newImage = {
+      draftId: newDrafts.newDraft.id,
+      url: "",
+    };
+    console.log(newImage)
+    const newImages = await dispatch(createSingleImage(newDrafts.newDraft.id,newImage));
     const drafts = await dispatch(getAllDraftsByUser(userId));
     setDrafts(drafts);
     return newDrafts;
@@ -104,9 +111,11 @@ function CreatePosts() {
     timer = setTimeout(async () => {
     const updateImage = {
       draftId: updatedImage.draftId,
-      url: updatedImage.url,
+      url: updatedImage.img,
     };
-    const updateImages = await dispatch(createSingleImage(updatedImage.draftId, updatedImage));
+
+    const updateImages = await dispatch(updateSingleImage(updatedImage.draftId, updateImage));
+    
     const drafts = await dispatch(getAllDraftsByUser(userId));
     setDrafts(drafts)
     return updateImages;
@@ -147,7 +156,11 @@ function CreatePosts() {
         setActiveDrafts={setActiveDrafts}
         setActivePosts={setActivePosts}
       />
-      <Main activeDrafts={getActiveDrafts()} onUpdateDrafts={onUpdateDrafts} onUpdateImage={onUpdateImage} />
+      <Main 
+      activeDrafts={getActiveDrafts()}
+      onUpdateDrafts={onUpdateDrafts} 
+      onUpdateImage={onUpdateImage} 
+      onAddPost={onAddPost} />
     </div>
   );
 }

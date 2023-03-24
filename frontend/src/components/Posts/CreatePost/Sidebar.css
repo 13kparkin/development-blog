@@ -1,6 +1,6 @@
 .app-sidebar {
-  width: 20rem;
-  height: 100vh;
+  width: 22rem;
+  height: 30rem;
   border-right: 1px solid var(--LightSlate);
   overflow-y: auto;
 }
@@ -18,7 +18,15 @@
 }
 
 .app-sidebar-posts-container {
-  margin-left: 0.5rem;
+  margin-left: 0.7rem;
+  margin-right: 1.3rem;
+}
+
+.app-sidebar-posts {
+  text-decoration: none;
+  border: 2px solid var(--Green);
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
 }
 
 .app-sidebar-posts:hover {
@@ -27,6 +35,7 @@
   box-shadow: 1px 1px 0.8rem 1px var(--Slate);
   text-decoration: none;
   border: 2px solid var(--Green);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar {
@@ -64,11 +73,11 @@
   color: var(--Green);
   font-size: small;
   padding: 0.5rem 1rem;
-  margin-top: 1.8rem;
+  margin-top: 2rem;
   border-radius: 10px;
   position: relative;
   top: -1.5rem;
-  margin-left: 0.45rem;
+  margin-left: 0.02rem;
   background-color: var(--PurpleGradient);
   text-decoration: none;
   font-weight: bold;
@@ -82,6 +91,8 @@
   border: 2px solid var(--Green);
   cursor: pointer;
 }
+
+
 
 /* Animations */
 

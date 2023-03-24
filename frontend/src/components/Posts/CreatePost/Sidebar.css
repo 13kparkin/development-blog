@@ -1,8 +1,8 @@
 .app-sidebar {
   width: 22rem;
   height: 30rem;
-  border-right: 1px solid var(--LightSlate);
   overflow-y: auto;
+  margin-top: 4rem;
 }
 
 .app-sidebar-header {

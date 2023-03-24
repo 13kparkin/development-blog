@@ -70,7 +70,7 @@
     border: 1px solid var(--LightestSlate);
     border-radius: 10px;
     overflow-y: scroll;
-    background: rgba(0, 0, 0, 0.02);
+    background-color: #10193c;
   }
 
   .app-main-posts-preview img {

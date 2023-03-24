@@ -9,12 +9,13 @@
     --LightSlate: #a8b2d1;
     --LightestSlate: #ccd6f6;
     --White: #e0e4e8;
-    --Green: #64ffed;
+    --Green: #41ead4;
     --Blue: #08c;
     --DarkPurple: #181220;
     --PurpleGradient: linear-gradient(97deg, rgba(11,17,46,1) 0%, rgba(33,0,75,1) 100%);
     --ButtonGradient: linear-gradient(to right, #2b5876 0%, #4e4376  51%, #2b5876  100%);
     --DarkGrey: #14111d;
+    --ProfileDropDown: rgba(35, 39, 65, 1);
     /* typography */
     --fs-base: 0.85rem;
     --fs-1: 1.6rem;
@@ -25,13 +26,40 @@
     --consolas: "Poppins", sans-serif;
     /* Spacing */
     --py: 5rem;
+    
+
+
 }
+
+button {
+    font-size: 1.1em;
+    color: var(--Green);
+    font-size: small;
+    padding: 0.5rem 1rem;
+    /* margin-top: 1rem; */
+    border-radius: 10px;
+    position: relative;
+    /* top: -1.5rem; */
+    margin-left: 1rem;
+    background-color: var(--PurpleGradient);
+    text-decoration: none;
+    font-weight: bold;
+    border: 2px solid var(--Green);
+    transition: 0.05s ease;
+  }
+  button:hover {
+    color: var(--Green);
+    box-shadow: 1px 1px 0.8rem 1px var(--Slate);
+    text-decoration: none;
+    border: 2px solid var(--Green);
+    cursor: pointer;
+  }
 
 
 body {
-    background-image: var(--PurpleGradient);
-    color: var(--White);
-    font-family: var(--consolas);
+    background-image:  linear-gradient(97deg, rgba(25, 29, 55, 1) 0%, rgba(49, 15, 110, 1) 100%);
+    color: #e0e0e0;
+    font-family: "Helvetica";
     font-size: var(--fs-base);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -39,3 +67,21 @@ body {
 
 
 
+/* animations */
+
+
+@keyframes push-animation {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.95);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .pushed {
+    animation: push-animation 0.06s;
+  }

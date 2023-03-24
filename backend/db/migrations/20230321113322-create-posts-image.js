@@ -20,10 +20,6 @@ module.exports = {
       },
       postId: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Posts",
-          key: "id",
-        },
       },
       draftId: {
         type: Sequelize.INTEGER,

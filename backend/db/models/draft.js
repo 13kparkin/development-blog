@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Draft.belongsTo(models.User, { foreignKey: 'userId' })
-      Draft.hasMany(models.PostsImage, { foreignKey: 'draftId' })
+      Draft.hasMany(models.PostsImage, { foreignKey: 'draftId', onDelete: 'CASCADE' })
+      Draft.hasMany(models.Post, { foreignKey: 'draftId', onDelete: 'CASCADE'  })
     }
   }
   Draft.init({

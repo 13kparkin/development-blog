@@ -62,13 +62,18 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage, onAddPost }) => {
   if (!activeDrafts)
     return <div className="no-active-posts">No Active Articles</div>;
 
-  const convertImageUrlToMarkdown = (url) => {
-    if (url.match(/\.(jpeg|jpg|gif|png)(\?.*)?$/i) != null) {
-      return `![Image](${url})`;
-    } else {
-      return (error.error = "Please enter a valid image URL");
-    }
-  };
+    const convertImageUrlToMarkdown = (url) => {
+      // Check if the URL is already in Markdown format
+      if (url.match(/^!\[.*\]\(.*\.(jpeg|jpg|gif|png)(\?.*)?\)$/i) != null) {
+        return url;
+        // Check if the URL is a valid image URL
+      } else if (url.match(/\.(jpeg|jpg|gif|png)(\?.*)?$/i) != null) {
+        return `![Image](${url})`;
+        // If the URL is not a valid image URL or not in markdown, return an error
+      } else {
+        return (error.error = "Please enter a valid image URL");
+      }
+    };
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);

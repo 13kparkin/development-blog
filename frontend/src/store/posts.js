@@ -4,6 +4,7 @@ const SET_SINGLE_POST = 'posts/setSinglePost';
 const SET_ALL_POSTS = 'posts/setAllPosts';
 const REMOVE_POST = 'posts/removePost';
 const SET_ALL_POSTS_BY_USER = 'posts/setAllPostsByUser';
+const SET_POSTS_BY_DRAFT_ID = 'posts/setPostsByDraftId';
 
 const setAllPosts = (posts) => ({
     type: SET_ALL_POSTS,
@@ -11,6 +12,10 @@ const setAllPosts = (posts) => ({
 });
 const setSinglePost = (post) => ({
     type: SET_SINGLE_POST,
+    payload: post,
+});
+const setPostsByDraftId = (post) => ({
+    type: SET_POSTS_BY_DRAFT_ID,
     payload: post,
 });
 const removePost = () => ({
@@ -48,6 +53,19 @@ export const getSinglePost = (id) => async (dispatch) => {
     }
 };
 
+// Get all posts by draft id /api/posts/draft/:id
+export const getPostsByDraftId = (id) => async (dispatch) => {
+    const response = await csrfFetch(`/api/posts/draft/${id}`);
+    const data = await response.json();
+    if (response.ok) {
+        dispatch(setPostsByDraftId(data));
+        return data;
+    }
+    else {
+        console.log('error', data)
+    }
+};
+
 // Get all posts by user /api/posts/user/:id
 export const getAllPostsByUser = (id) => async (dispatch) => {
     const response = await csrfFetch(`/api/posts/user/${id}`);
@@ -63,8 +81,7 @@ export const getAllPostsByUser = (id) => async (dispatch) => {
 
 // Create post /api/posts/
 export const createPost = (posts) => async (dispatch) => {
-    const {title, body, userId, description} = posts;
-    console.log(posts)
+    const {title, body, userId, description, updatedAt, draftId} = posts;
     const response = await csrfFetch('/api/posts/', {
         method: 'POST',
         headers: {
@@ -74,7 +91,9 @@ export const createPost = (posts) => async (dispatch) => {
             title,
             body,
             userId,
-            description
+            description,
+            updatedAt,
+            draftId,
         }),
     });
     const data = await response.json();
@@ -137,7 +156,7 @@ export const editPost = (posts) => async (dispatch) => {
 
 
 
-const initialState = { allPosts: {}, singlePost: {}, allPostsByUser: {} };
+const initialState = { allPosts: {}, singlePost: {}, allPostsByUser: {}, postsByDraftId: {} };
 
 const postsReducer = (state = {}, action) => {
     switch (action.type) {
@@ -145,6 +164,8 @@ const postsReducer = (state = {}, action) => {
             return { ...state, allPosts: action.payload };
         case SET_SINGLE_POST:
             return { ...state, singlePost: action.payload };
+        case SET_POSTS_BY_DRAFT_ID:
+            return { ...state, postsByDarftId: action.payload };
         case SET_ALL_POSTS_BY_USER:
             return { ...state, allPostsByUser: action.payload };
         case REMOVE_POST:

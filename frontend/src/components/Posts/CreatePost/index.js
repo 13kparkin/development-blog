@@ -27,12 +27,13 @@ function CreatePosts() {
   const [drafts, setDrafts] = useState([]);
   const [activePosts, setActivePosts] = useState(false);
   const [activeDrafts, setActiveDrafts] = useState(false);
-  const [postsByDraftId, setPostsByDraftId] = useState(false);
+  const [postsByDraftId, setPostsByDraftId] = useState([]);
   const user = useSelector((state) => state.session.user);
   const userId = user?.id;
   const draftObj = useSelector((state) => state.drafts.singleDraft);
   const postsByUserId = useSelector((state) => state.posts.allPostsByUser);
   const postByDraftId = useSelector((state) => state.posts.postsByDraftId);
+
 
 
   useEffect(() => {
@@ -41,12 +42,19 @@ function CreatePosts() {
       setPosts(posts);
     };
     getPostsById();
+    if (activeDrafts) {
+      const getPostsbyDraftIdData = async () => {
+        const postsByDraftIds = await dispatch(getPostsByDraftId(activeDrafts));
+        setPostsByDraftId(postsByDraftIds);
+      };
+      getPostsbyDraftIdData();
+    }
     const getDraftsById = async () => {
       const drafts = await dispatch(getAllDraftsByUser(userId));
       setDrafts(drafts);
     };
     getDraftsById();
-  }, [currentPost]);
+  }, [currentPost, activeDrafts]);
 
   const onAddDraft = async () => {
     const newDraft = {
@@ -75,8 +83,21 @@ function CreatePosts() {
 
     const postByDraftIds = await dispatch(getPostsByDraftId(draftById.id));
 
-    if (Object.values(postByDraftIds).length > 0) {
-      return;
+    setPostsByDraftId(postByDraftIds || []);
+
+
+    if (postByDraftIds.postByDraftId.length > 0) {
+      const newPost = {
+        id: postByDraftIds.postByDraftId[0].id,
+        title: draftById.title,
+        description: draftById.description,
+        body: draftById.body,
+        userId,
+        updatedAt: draftById.updatedAt,
+        draftId: draftById.id,
+      };
+      const editPosts = await dispatch(editPost(newPost));
+      return editPosts;
     } else {
       const newPost = {
         title: draftById.title,
@@ -100,7 +121,10 @@ function CreatePosts() {
   };
 
   const onDeletePosts = async (postId) => {
+    console.log(postId)
     const deletePosts = await dispatch(deletePost(postId));
+
+    
     setPosts(posts);
     return deletePosts;
   };
@@ -176,10 +200,12 @@ function CreatePosts() {
         setActivePosts={setActivePosts}
       />
       <Main
+        postByDraftId={postByDraftId}
         activeDrafts={getActiveDrafts()}
         onUpdateDrafts={onUpdateDrafts}
         onUpdateImage={onUpdateImage}
         onAddPost={onAddPost}
+        onDeletePosts={onDeletePosts}
       />
     </div>
   );

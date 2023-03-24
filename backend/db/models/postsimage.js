@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      PostsImage.belongsTo(models.Post, { foreignKey: 'postId' })
-      PostsImage.belongsTo(models.Draft, { foreignKey: 'draftId' })
+      PostsImage.belongsTo(models.Post, { foreignKey: 'postId', onDelete: 'CASCADE' })
+      PostsImage.belongsTo(models.Draft, { foreignKey: 'draftId', onDelete: 'CASCADE' })
     }
   }
   PostsImage.init({
@@ -28,11 +28,21 @@ module.exports = (sequelize, DataTypes) => {
     },
     postId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      references: {
+        model: 'Posts',
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     draftId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      references: {
+        model: 'Drafts',
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
   }, {
     sequelize,

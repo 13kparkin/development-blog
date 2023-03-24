@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Post.belongsTo(models.User, { foreignKey: 'userId' })
-      Post.hasMany(models.PostsImage, { foreignKey: 'postId' })
+      Post.hasMany(models.PostsImage, { foreignKey: 'postId', onDelete: 'CASCADE' })
+      Post.belongsTo(models.Draft, { foreignKey: 'draftId', onDelete: 'CASCADE' })
     }
   }
   Post.init({
@@ -27,10 +28,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: false,
     },
     title: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    draftId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     userId: {

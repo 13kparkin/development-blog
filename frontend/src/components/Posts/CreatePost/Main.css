@@ -65,8 +65,8 @@
   .app-main-posts-preview {
     position: absolute;
     top: 37rem;
-    left: 26rem;
-    width: 30rem;
+    left: 9rem;
+    width: 40rem;
     border: 1px solid var(--LightestSlate);
     border-radius: 10px;
     overflow-y: scroll;
@@ -74,8 +74,8 @@
   }
 
   .app-main-posts-preview img {
-    width: 35rem;
-    height: 13.4rem;
+    width: 42rem;
+    height: 16rem;
     border-radius: 10px;
     margin-top: -1rem;
     margin-left: -1rem;
@@ -109,6 +109,10 @@
     padding-bottom: 1rem;
   }
 
+
+
+  /* main publish button styling */
+
   .app-main-posts-preview button {
   font-size: 1.1em;
   color: var(--Green);
@@ -118,7 +122,7 @@
   border-radius: 10px;
   position: relative;
   top: -1.5rem;
-  margin-left: 23rem;
+  margin-left: 33rem;
   background-color: var(--PurpleGradient);
   text-decoration: none;
   font-weight: bold;

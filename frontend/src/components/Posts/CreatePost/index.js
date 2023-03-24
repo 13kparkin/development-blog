@@ -8,9 +8,16 @@ import {
   editPost,
   getSinglePost,
   getAllPostsByUser,
+  getPostsByDraftId,
 } from "../../../store/posts";
 import { createSingleImage, updateSingleImage } from "../../../store/images";
-import { createDraft, getAllDraftsByUser, deleteDraft, editDraft, getSingleDraft} from "../../../store/drafts";
+import {
+  createDraft,
+  getAllDraftsByUser,
+  deleteDraft,
+  editDraft,
+  getSingleDraft,
+} from "../../../store/drafts";
 import { useDispatch, useSelector } from "react-redux";
 
 function CreatePosts() {
@@ -20,10 +27,13 @@ function CreatePosts() {
   const [drafts, setDrafts] = useState([]);
   const [activePosts, setActivePosts] = useState(false);
   const [activeDrafts, setActiveDrafts] = useState(false);
+  const [postsByDraftId, setPostsByDraftId] = useState(false);
   const user = useSelector((state) => state.session.user);
   const userId = user?.id;
   const draftObj = useSelector((state) => state.drafts.singleDraft);
   const postsByUserId = useSelector((state) => state.posts.allPostsByUser);
+  const postByDraftId = useSelector((state) => state.posts.postsByDraftId);
+
 
   useEffect(() => {
     const getPostsById = async () => {
@@ -38,7 +48,6 @@ function CreatePosts() {
     getDraftsById();
   }, [currentPost]);
 
-
   const onAddDraft = async () => {
     const newDraft = {
       title: "Untitled Article",
@@ -46,45 +55,53 @@ function CreatePosts() {
       body: "",
       userId,
     };
-    
+
     const newDrafts = await dispatch(createDraft(newDraft));
     const newImage = {
       draftId: newDrafts.newDraft.id,
       url: "",
     };
-    console.log(newImage)
-    const newImages = await dispatch(createSingleImage(newDrafts.newDraft.id,newImage));
+    const newImages = await dispatch(
+      createSingleImage(newDrafts.newDraft.id, newImage)
+    );
     const drafts = await dispatch(getAllDraftsByUser(userId));
     setDrafts(drafts);
     return newDrafts;
   };
 
-
-
   const onAddPost = async () => {
     const drafts = await dispatch(getAllDraftsByUser(userId));
     const draftById = drafts.drafts.find(({ id }) => id === activeDrafts);
-    const newPost = {
-      title: draftById.title,
-      description: draftById.description,
-      body: draftById.body,
-      userId,
-    };
-    const newPosts = await dispatch(createPost(newPost));
-    return newPosts;
+
+    const postByDraftIds = await dispatch(getPostsByDraftId(draftById.id));
+
+    if (Object.values(postByDraftIds).length > 0) {
+      return;
+    } else {
+      const newPost = {
+        title: draftById.title,
+        description: draftById.description,
+        body: draftById.body,
+        userId,
+        updatedAt: draftById.updatedAt,
+        draftId: draftById.id,
+      };
+      const newPosts = await dispatch(createPost(newPost));
+      return newPosts;
+    }
   };
 
   const onDeleteDrafts = async (draftId) => {
     const deleteDrafts = await dispatch(deleteDraft(draftId));
     const drafts = await dispatch(getAllDraftsByUser(userId));
-    setActiveDrafts(false)
-    setDrafts(drafts)
+    setActiveDrafts(false);
+    setDrafts(drafts);
     return deleteDrafts;
   };
 
   const onDeletePosts = async (postId) => {
     const deletePosts = await dispatch(deletePost(postId));
-    setPosts(posts)
+    setPosts(posts);
     return deletePosts;
   };
 
@@ -92,33 +109,35 @@ function CreatePosts() {
   const onUpdateDrafts = async (updatedDraft) => {
     clearTimeout(timer);
     timer = setTimeout(async () => {
-    const updateDraft = {
-      title: updatedDraft.title,
-      description: updatedDraft.description,
-      body: updatedDraft.body,
-      updatedAt: updatedDraft.updatedAt,
-      userId,
-    };
-    const updateDrafts = await dispatch(editDraft(updatedDraft));
-    const drafts = await dispatch(getAllDraftsByUser(userId));
-    setDrafts(drafts)
-    return updateDrafts;
+      const updateDraft = {
+        title: updatedDraft.title,
+        description: updatedDraft.description,
+        body: updatedDraft.body,
+        updatedAt: updatedDraft.updatedAt,
+        userId,
+      };
+      const updateDrafts = await dispatch(editDraft(updatedDraft));
+      const drafts = await dispatch(getAllDraftsByUser(userId));
+      setDrafts(drafts);
+      return updateDrafts;
     }, 3000);
   };
 
   const onUpdateImage = async (updatedImage) => {
     clearTimeout(timer);
     timer = setTimeout(async () => {
-    const updateImage = {
-      draftId: updatedImage.draftId,
-      url: updatedImage.img,
-    };
+      const updateImage = {
+        draftId: updatedImage.draftId,
+        url: updatedImage.img,
+      };
 
-    const updateImages = await dispatch(updateSingleImage(updatedImage.draftId, updateImage));
-    
-    const drafts = await dispatch(getAllDraftsByUser(userId));
-    setDrafts(drafts)
-    return updateImages;
+      const updateImages = await dispatch(
+        updateSingleImage(updatedImage.draftId, updateImage)
+      );
+
+      const drafts = await dispatch(getAllDraftsByUser(userId));
+      setDrafts(drafts);
+      return updateImages;
     }, 3000);
   };
 
@@ -131,7 +150,7 @@ function CreatePosts() {
     if (drafts.drafts?.length > 0) {
       finalDrafts = drafts.find(({ id }) => id === activeDrafts);
     }
-    return finalPosts
+    return finalPosts;
   };
 
   const getActiveDrafts = () => {
@@ -156,11 +175,12 @@ function CreatePosts() {
         setActiveDrafts={setActiveDrafts}
         setActivePosts={setActivePosts}
       />
-      <Main 
-      activeDrafts={getActiveDrafts()}
-      onUpdateDrafts={onUpdateDrafts} 
-      onUpdateImage={onUpdateImage} 
-      onAddPost={onAddPost} />
+      <Main
+        activeDrafts={getActiveDrafts()}
+        onUpdateDrafts={onUpdateDrafts}
+        onUpdateImage={onUpdateImage}
+        onAddPost={onAddPost}
+      />
     </div>
   );
 }

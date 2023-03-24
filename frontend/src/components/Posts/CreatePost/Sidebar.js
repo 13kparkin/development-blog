@@ -42,6 +42,8 @@ const Sidebar = ({
     setActiveDrafts(id)
   };
 
+  
+
   return (
     <div className="app-sidebar">
       <div className="app-sidebar-header">

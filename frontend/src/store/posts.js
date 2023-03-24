@@ -165,7 +165,7 @@ const postsReducer = (state = {}, action) => {
         case SET_SINGLE_POST:
             return { ...state, singlePost: action.payload };
         case SET_POSTS_BY_DRAFT_ID:
-            return { ...state, postsByDarftId: action.payload };
+            return { ...state, postsByDraftId: action.payload };
         case SET_ALL_POSTS_BY_USER:
             return { ...state, allPostsByUser: action.payload };
         case REMOVE_POST:

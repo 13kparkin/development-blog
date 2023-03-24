@@ -11,7 +11,14 @@ import {
 import "./Main.css";
 import { wordWrap } from "../../../utils/wrapping";
 
-const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage, onAddPost }) => {
+const Main = ({
+  activeDrafts,
+  onUpdateDrafts,
+  onUpdateImage,
+  onAddPost,
+  postByDraftId,
+  onDeletePosts
+}) => {
   const onEditField = (field, value) => {
     onUpdateDrafts({
       ...activeDrafts,
@@ -26,8 +33,11 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage, onAddPost }) => {
     });
   };
 
-  
+  // console.log(Object.values(postsByDraftId).length);
+
   const [pushedPublished, setPushedPublished] = useState(false);
+  const [pushedPublishedWithDelete, setPushedPublishedWithDelete] = useState(false);
+  const [pushedDelete, setPushedDelete] = useState({});
   const user = useSelector((state) => state.session.user);
   const imageUrl = useSelector((state) => state.drafts);
   const userId = user?.id;
@@ -37,6 +47,7 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage, onAddPost }) => {
   const dispatch = useDispatch();
   const error = {};
   let newImageUrl = imageUrl.singleDraft?.draft?.PostsImages?.[0].url;
+  const postId = postByDraftId?.postByDraftId?.[0]?.id
 
   useEffect(() => {
     const getDraftsById = async () => {
@@ -51,29 +62,36 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage, onAddPost }) => {
     setBody(activeDrafts?.body);
   }, [activeDrafts, newImageUrl]);
 
-  
-
   const handlePublishButtonClick = () => {
     setPushedPublished(true);
     setTimeout(() => setPushedPublished(false), 200);
     onAddPost();
   };
 
+  const onDeletePostsButton = (id) => {
+    setPushedDelete((prevState) => ({ ...prevState, [id]: true }));
+    setTimeout(
+      () => setPushedDelete((prevState) => ({ ...prevState, [id]: false })),
+      200
+    );
+    onDeletePosts(id);
+  };
+
   if (!activeDrafts)
     return <div className="no-active-posts">No Active Articles</div>;
 
-    const convertImageUrlToMarkdown = (url) => {
-      // Check if the URL is already in Markdown format
-      if (url.match(/^!\[.*\]\(.*\.(jpeg|jpg|gif|png)(\?.*)?\)$/i) != null) {
-        return url;
-        // Check if the URL is a valid image URL
-      } else if (url.match(/\.(jpeg|jpg|gif|png)(\?.*)?$/i) != null) {
-        return `![Image](${url})`;
-        // If the URL is not a valid image URL or not in markdown, return an error
-      } else {
-        return (error.error = "Please enter a valid image URL");
-      }
-    };
+  const convertImageUrlToMarkdown = (url) => {
+    // Check if the URL is already in Markdown format
+    if (url.match(/^!\[.*\]\(.*\.(jpeg|jpg|gif|png)(\?.*)?\)$/i) != null) {
+      return url;
+      // Check if the URL is a valid image URL
+    } else if (url.match(/\.(jpeg|jpg|gif|png)(\?.*)?$/i) != null) {
+      return `![Image](${url})`;
+      // If the URL is not a valid image URL or not in markdown, return an error
+    } else {
+      return (error.error = "Please enter a valid image URL");
+    }
+  };
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -89,7 +107,6 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage, onAddPost }) => {
     const markdown = convertImageUrlToMarkdown(imageUrl);
     setUrl(imageUrl);
 
-    console.log("markdown: ", markdown);
 
     if (error.error) {
       return;
@@ -101,9 +118,6 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage, onAddPost }) => {
   const date = new Date(activeDrafts.updatedAt);
   const month = date.toLocaleString("default", { month: "long" });
   const day = date.getDate();
-
-  
-
 
   return (
     <div className="app-main">
@@ -134,21 +148,40 @@ const Main = ({ activeDrafts, onUpdateDrafts, onUpdateImage, onAddPost }) => {
         />
       </div>
       <div className="app-main-posts-preview">
-      <ReactMarkdown className="preview-image">
-          {url}
-      </ReactMarkdown>
+        <ReactMarkdown className="preview-image">{url}</ReactMarkdown>
         <div className="preview-user">{user?.username}</div>
         <div className="saved-date">{`Updated on ${month}, ${day}`}</div>
         <h1 className="preview-title">{activeDrafts.title}</h1>
         <ReactMarkdown className="markdown-preview">
           {activeDrafts.body}
         </ReactMarkdown>
-        <button
-            className={pushedPublished ? "pushed" : ""}
-            onClick={() => onAddPost(handlePublishButtonClick)}
-          >
-            Publish
-          </button>
+        <>
+          {postByDraftId?.postByDraftId?.length < 1 && (
+            <button
+              className={pushedPublished ? "pushed" : ""}
+              onClick={() => onAddPost(handlePublishButtonClick)}
+            >
+              Publish
+            </button>
+          )}
+          {postByDraftId?.postByDraftId?.length > 0 && (
+            <>
+              <button
+                className={pushedPublished ? "pushed" : ""}
+                onClick={() => onDeletePostsButton(postId)}
+              >
+                Delete
+              </button>
+
+              <button
+                className={pushedPublishedWithDelete ? "pushed" : ""}
+                onClick={() => onAddPost(handlePublishButtonClick)}
+              >
+                Publish
+              </button>
+            </>
+          )}
+        </>
       </div>
     </div>
   );

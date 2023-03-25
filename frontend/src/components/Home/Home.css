@@ -33,7 +33,7 @@
   border: 1px solid var(--Green);
   font-weight: 600;
   padding: 0.75rem 1rem;
-  width: 25rem;
+  width: 28rem;
   position: relative;
   margin-left: 4rem;
 }
@@ -57,24 +57,86 @@
     color: var(--White);
     line-height: 1.625;
     display: none;
-    height: 40rem;
+    height: 35rem;
     transform: translateY(60%);
     border: 2px solid #33323e;
     box-sizing: border-box;
     z-index: 1;
-    margin-top: -36rem;
-    margin-left: 45rem;
+    margin-top: -30.2rem;
+    margin-left: 47.6rem;
     width: 40rem;
-    background-color: #0e193c;
-    box-shadow: -13px -4px 15px 1px #0a11104b
+    background-color: #0e193cca;
+    box-shadow: -13px -4px 15px 1px #0a11104b;
+    overflow: scroll;
   }
 
   .top-section-right-card:hover{
-    box-shadow: -13px -4px 15px 1px #64cabc4b;
+    box-shadow: -13px -4px 15px 1px var(--LightUp);
     cursor: pointer;
   }
+
+  .home-top-right-section-card-content {
+    display: flex; 
+    flex-direction: column;
+  }
+
+  .home-content-card-box {
+    border: 1px solid #2e2d3997;
+    box-shadow: 0px 0px 10px 1px #64cabc21;
+    background-color: var(--NavBarColor);
+    width: 30rem;
+    height: auto;
+    margin-top: 3rem;
+    margin-left: 5rem;   
+
+  }
   
+  .home-preview-image img {
+    width: 30rem;
+    height: 13rem;
+    margin-top: -.9rem;
+  }
+
+  .home-preview-user {
+    display: flex;
+    padding: 0 2rem 0 2.5rem;
+    margin-top: 1rem;
+  }
+
+  .home-saved-date {
+    display: flex;
+    padding: 0 2rem 0 2.5rem;
+    margin-top: -0.2rem;
+    font-size: 10px;
+  }
   
+  .home-preview-title {
+    font-family: var(--Font);
+    padding: 0 2rem 0 2.5rem;
+    margin-top: 1rem;
+    font-weight: 900;
+    font-size: 2.2rem;
+
+  }
+
+  
+  .home-markdown-preview {
+    padding: 0 2rem 0 2.5rem;
+    width: 26rem;
+    word-wrap: break-word;
+    line-height: 1rem;
+    font-size: .8rem;
+    padding-bottom: 1rem;
+  }
+
+  .home-markdown-preview img {
+    width: 25rem;
+    height: 18rem;
+    padding-top: 2rem;
+  }
+
+
+  /*  media queries and responsiveness */
   @media (min-width: 1000px) {
     .top-section-right-card {
       display: block;
@@ -90,4 +152,9 @@
   }
   
 
-  
+  /* @media (max-width: 1260px) { todo: do something for  screen sizes greater than 1260px
+    .top-section-right-card {
+      height: 88vh;
+      left: 50%;
+    }
+  } */

@@ -1,6 +1,8 @@
 /* TODO Add site wide styles */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
+
+
 :root {
     --Navy: #110b30;
     --LightNavy: #112240;
@@ -8,15 +10,18 @@
     --Slate: #8892b0;
     --LightSlate: #a8b2d1;
     --LightestSlate: #ccd6f6;
-    --White: #e0e0e0;
+    --White: #FAFAFA;
     --Green: #41ead4;
     --Blue: #08c;
     --DarkPurple: #181220;
+    --NavBarColor: rgba(15, 25, 60, 1);
     --PurpleGradient: linear-gradient(97deg, rgba(11,17,46,1) 0%, rgba(33,0,75,1) 100%);
     --ButtonGradient: linear-gradient(to right, #2b5876 0%, #4e4376  51%, #2b5876  100%);
     --DarkGrey: #14111d;
     --ProfileDropDown: rgba(35, 39, 65, 1);
+    --LightUp: #64cabc4b;
     /* typography */
+    --Font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --fs-base: 0.85rem;
     --fs-1: 1.6rem;
     --fs-2: 1.3rem;
@@ -59,7 +64,7 @@ button {
 body {
     background-image:  linear-gradient(97deg, rgba(25, 29, 55, 1) 0%, rgba(49, 15, 110, 1) 100%);
     color: var(--White);
-    font-family: "Helvetica";
+    font-family: var(--Font);
     font-size: var(--fs-base);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;

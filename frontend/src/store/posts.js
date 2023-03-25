@@ -126,7 +126,7 @@ export const deletePost = (id) => async (dispatch) => {
 
 // Edit posts /api/posts/:id
 export const editPost = (posts) => async (dispatch) => {
-    const {title, body, userId, description, id, updatedAt} = posts;
+    const {title, body, userId, description, id, updatedAt, draftId} = posts;
     const response = await csrfFetch(`/api/posts/${id}`, {
         method: 'PUT',
         headers: {
@@ -137,7 +137,8 @@ export const editPost = (posts) => async (dispatch) => {
             body,
             userId,
             description,
-            updatedAt
+            updatedAt,
+            draftId
         }),
     });
     const data = await response.json();

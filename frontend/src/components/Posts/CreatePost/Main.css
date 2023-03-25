@@ -106,9 +106,10 @@
   .markdown-preview {
     padding: 0 1rem 0 2.2rem;
     word-wrap: break-word;
-    line-height: 13px;
-    font-size: 11px;
+    line-height: 1rem;
+    font-size: .8rem;
     padding-bottom: 1rem;
+    font-weight: var(--FontWeightBody);
   }
 
   .markdown-preview img{

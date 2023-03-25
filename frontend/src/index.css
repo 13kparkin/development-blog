@@ -19,7 +19,8 @@
     --ButtonGradient: linear-gradient(to right, #2b5876 0%, #4e4376  51%, #2b5876  100%);
     --DarkGrey: #14111d;
     --ProfileDropDown: rgba(35, 39, 65, 1);
-    --LightUp: #64cabc4b;
+    --LowLightUp: #76d4c7a0;
+    --FontWeightBody: 400;
     /* typography */
     --Font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --fs-base: 0.85rem;

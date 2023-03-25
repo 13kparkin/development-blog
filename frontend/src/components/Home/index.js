@@ -9,6 +9,8 @@ import "./Home.css";
 const Home = () => {
   const [search, setSearch] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
+  const [newLimitedArray, setNewLimitedArray] = useState([]);
+  const [counter, setCounter] = useState(0);
   const dispatch = useDispatch();
   const allPostsArray = useSelector((state) => state.posts.allPosts?.posts);
   const history = useHistory();
@@ -37,14 +39,19 @@ const Home = () => {
       const posts = await dispatch(getAllPosts());
     };
     getAllPostsData();
+    
+
   }, [search]);
 
   const handleArticleClick = () => {
     return history.push(`/posts/${newestPost?.id}`);
   };
-    
 
-  console.log(newestPost) // This is the newest post in the database. delete when done developping/debugging.
+  const handleArticleCardClick = (id) => {
+    return history.push(`/posts/${id}`);
+  };
+
+  console.log(newestPost); // This is the newest post in the database. delete when done developping/debugging.
 
   const date = new Date(newestPost?.updatedAt);
   const month = date.toLocaleString("default", { month: "long" });
@@ -54,9 +61,28 @@ const Home = () => {
     return null;
   }
 
+  if (allPostsArray?.length > 6) {
+    const newPostArray = allPostsArray?.slice(0, 6);
+    setNewLimitedArray(...newPostArray);
+  }
+
+  const newPostArrayLength = newLimitedArray?.length;
+  const limitedPostsView = newLimitedArray?.length + 6;
+
+  // This function handles the click event for the "More Posts" button. It will slice the allPostsArray and return the next 6 posts.
+  function handleMorePostsClick() {
+    const newPostArray = allPostsArray?.slice(newPostArrayLength, limitedPostsView);
+    setNewLimitedArray(newPostArray, ...newPostArray);
+  }
+  
+  if (newLimitedArray?.length === 0 && counter < 5) {
+    setNewLimitedArray(allPostsArray)
+    setCounter(counter + 1)
+  }
+
   return (
     <div className="home">
-      <div className="top-section">
+      <div id="top" className="top-section">
         <div className="top-section-left">
           <div className="top-section-left-header">
             <h1>
@@ -85,28 +111,58 @@ const Home = () => {
           </div>
         </div>
         <div className="top-section-right">
-          <div className="top-section-right-card" onClick={handleArticleClick}>
+          <div className="top-section-right-card" onClick={(e) => handleArticleClick}>
             <div className="home-top-right-section-card-content">
-            <div className="home-content-card-box">
-            <div className="home-preview-image">
-            <ReactMarkdown className="home-preview-image">{newestPost?.PostsImages?.[0]?.url}</ReactMarkdown>
-            </div>
-            <div className="home-preview-user">{newestPost?.User?.username}</div>
-            <div className="home-saved-date">{`Updated on ${month}, ${day}`}</div>
-            <h1 className="home-preview-title">{newestPost.title}</h1>
-            <div className="home-markdown-preview-body">
-            <ReactMarkdown className="home-markdown-preview">{newestPost.body}</ReactMarkdown>
-            </div>
-            </div>
+              <div className="home-content-card-box">
+                <div className="home-preview-image">
+                  <ReactMarkdown className="home-preview-image">
+                    {newestPost?.PostsImages?.[0]?.url}
+                  </ReactMarkdown>
+                </div>
+                <div className="home-preview-user">
+                  {newestPost?.User?.username}
+                </div>
+                <div className="home-saved-date">{`Updated on ${month}, ${day}`}</div>
+                <h1 className="home-preview-title">{newestPost.title}</h1>
+                <div className="home-markdown-preview-body">
+                  <ReactMarkdown className="home-markdown-preview">
+                    {newestPost.body}
+                  </ReactMarkdown>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="bottom-section">
-        <div className="bottom-section-cards"></div>
+      <div id="bottom" className="bottom-section">
+        <div id="articles" className="bottom-section-card-header">
+          <h1>Articles</h1>
+        </div>
+        <div className="bottom-section-cards">
+          {newLimitedArray?.map((post) => (
+            <div key={post.id} onClick={(e) => handleArticleCardClick(post.id)} className="bottom-section-card">
+              <div className="bottom-section-card-img">
+                <ReactMarkdown>
+                {post?.PostsImages?.[0]?.url}
+                </ReactMarkdown>
+              </div>
+              <div className="bottom-section-card-title">
+                <h1>{post.title}</h1>
+              </div>
+              <div className="bottom-section-card-body">
+              <ReactMarkdown>{post.body}</ReactMarkdown>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
 export default Home;
+
+
+
+
+

@@ -8,7 +8,7 @@
     --Slate: #8892b0;
     --LightSlate: #a8b2d1;
     --LightestSlate: #ccd6f6;
-    --White: #e0e4e8;
+    --White: #e0e0e0;
     --Green: #41ead4;
     --Blue: #08c;
     --DarkPurple: #181220;
@@ -58,7 +58,7 @@ button {
 
 body {
     background-image:  linear-gradient(97deg, rgba(25, 29, 55, 1) 0%, rgba(49, 15, 110, 1) 100%);
-    color: #e0e0e0;
+    color: var(--White);
     font-family: "Helvetica";
     font-size: var(--fs-base);
     line-height: 1.5;

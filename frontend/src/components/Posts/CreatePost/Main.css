@@ -96,19 +96,26 @@
   
   .preview-title {
     font-family: 'M PLUS Rounded 1c', sans-serif;
-    padding: 2rem 2rem 0 2rem;
+    padding: 2rem 2rem 0 4.5rem;
     margin-top: -.5rem;
   }
 
   
   .markdown-preview {
-    padding: 0 1rem 0 2rem;
+    padding: 0 2rem 0 4.5rem;
     word-wrap: break-word;
     line-height: 13px;
     font-size: 11px;
     padding-bottom: 1rem;
   }
 
+  .markdown-preview img{
+    margin-top: 1rem;
+    margin-left: .1rem;
+    width: 30rem;
+    height: 15rem;
+
+  }
 
 
   /* main publish button styling */

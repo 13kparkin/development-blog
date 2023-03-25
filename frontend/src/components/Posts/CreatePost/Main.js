@@ -151,9 +151,9 @@ const Main = ({
         <ReactMarkdown className="preview-image">{url}</ReactMarkdown>
         <div className="preview-user">{user?.username}</div>
         <div className="saved-date">{`Updated on ${month}, ${day}`}</div>
-        <h1 className="preview-title">{activeDrafts.title}</h1>
+        <h1 className="preview-title">{title}</h1>
         <ReactMarkdown className="markdown-preview">
-          {activeDrafts.body}
+          {body}
         </ReactMarkdown>
         <>
           {postByDraftId?.postByDraftId?.length < 1 && (

@@ -9,6 +9,8 @@ function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
+  const [pushedButton, setPushedButton] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const openMenu = () => {
     if (showMenu) return;
@@ -16,6 +18,9 @@ function ProfileButton({ user }) {
   };
 
   useEffect(() => {
+    if (user) {
+      setLoggedIn(true);
+    }
     if (!showMenu) return;
 
     const closeMenu = (e) => {
@@ -27,7 +32,7 @@ function ProfileButton({ user }) {
     document.addEventListener('click', closeMenu);
 
     return () => document.removeEventListener("click", closeMenu);
-  }, [showMenu]);
+  }, [showMenu, user]);
 
   const closeMenu = () => setShowMenu(false);
 
@@ -37,14 +42,43 @@ function ProfileButton({ user }) {
     closeMenu();
   };
 
+  const loggedInonButtonClick = () => {
+    setPushedButton(true);
+    setTimeout(() => setPushedButton(false), 200);
+    openMenu();
+  };
+
+  const loggedOutonButtonClick = () => {
+    setPushedButton(true);
+    setTimeout(() => setPushedButton(false), 100);
+    // openMenu();
+  };
+
+
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
   return (
     <>
-      <button onClick={openMenu}>
-        <i className="fas fa-user-circle" />
-      </button>
-      <ul className={ulClassName} ref={ulRef}>
+      {loggedIn && (
+        <button className={pushedButton ? "pushed" : ""} onClick={loggedInonButtonClick}>
+          {user?.profilePicture ? (
+            <img className="profile-picture" src={user.profilePicture} alt="Profile" />
+          ) : (
+            <i className="fas fa-user-circle"></i>
+          )}
+        </button>
+      )}
+      {!loggedIn && (
+        <button className={pushedButton ? "pushed" : ""} onClick={loggedOutonButtonClick}>
+          <OpenModalMenuItem
+            itemText="Log In"
+            onItemClick={closeMenu}
+            modalComponent={<LoginFormModal />}
+          />
+        </button>
+      )}
+      
+      <div className={ulClassName} ref={ulRef}>
         {user ? (
           <>
             {user.username} <br/>
@@ -68,7 +102,7 @@ function ProfileButton({ user }) {
             />
           </>
         )}
-      </ul>
+      </div>
     </>
   );
 }

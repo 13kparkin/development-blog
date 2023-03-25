@@ -66,11 +66,11 @@
     position: absolute;
     top: 37rem;
     left: 9rem;
-    width: 40rem;
+    width: 38rem;
     border: 1px solid var(--LightestSlate);
     border-radius: 10px;
     overflow-y: scroll;
-    background: rgba(0, 0, 0, 0.02);
+    background-color: #10193c;
   }
 
   .app-main-posts-preview img {
@@ -83,7 +83,7 @@
 
   .preview-user {
     display: flex;
-    padding: 0 2rem 0 2rem;
+    padding: 0 1rem 0 2.2rem;
     margin-top: 1rem;
   }
 
@@ -92,23 +92,32 @@
     padding: 0 1rem 0 2.2rem;
     margin-top: -0.2rem;
     font-size: 10px;
+    padding-bottom: 2rem;
   }
   
   .preview-title {
-    font-family: 'M PLUS Rounded 1c', sans-serif;
-    padding: 2rem 2rem 0 2rem;
+    font-family: var(--Font);
+    padding: 0 1rem 0 2.2rem;
     margin-top: -.5rem;
+    padding-bottom: 2rem;
   }
 
   
   .markdown-preview {
-    padding: 0 1rem 0 2rem;
+    padding: 0 1rem 0 2.2rem;
     word-wrap: break-word;
     line-height: 13px;
     font-size: 11px;
     padding-bottom: 1rem;
   }
 
+  .markdown-preview img{
+    margin-top: 1rem;
+    margin-left: .1rem;
+    width: 33rem;
+    height: 20rem;
+
+  }
 
 
   /* main publish button styling */
@@ -122,7 +131,7 @@
   border-radius: 10px;
   position: relative;
   top: -1.5rem;
-  margin-left: 33rem;
+  margin-left: 30rem;
   background-color: var(--PurpleGradient);
   text-decoration: none;
   font-weight: bold;

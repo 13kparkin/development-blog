@@ -19,6 +19,7 @@ import {
   getSingleDraft,
 } from "../../../store/drafts";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 function CreatePosts() {
   const dispatch = useDispatch();
@@ -33,8 +34,12 @@ function CreatePosts() {
   const draftObj = useSelector((state) => state.drafts.singleDraft);
   const postsByUserId = useSelector((state) => state.posts.allPostsByUser);
   const postByDraftId = useSelector((state) => state.posts.postsByDraftId);
+  const history = useHistory();
 
 
+  if (!user) {
+    history.push("/");
+  }
 
   useEffect(() => {
     const getPostsById = async () => {
@@ -144,7 +149,7 @@ function CreatePosts() {
       const drafts = await dispatch(getAllDraftsByUser(userId));
       setDrafts(drafts);
       return updateDrafts;
-    }, 3000);
+    }, 2000);
   };
 
   const onUpdateImage = async (updatedImage) => {
@@ -162,7 +167,7 @@ function CreatePosts() {
       const drafts = await dispatch(getAllDraftsByUser(userId));
       setDrafts(drafts);
       return updateImages;
-    }, 3000);
+    }, 2000);
   };
 
   const getActivePosts = () => {

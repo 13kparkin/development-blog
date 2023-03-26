@@ -5,6 +5,7 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import CreatePosts from "./components/Posts/CreatePost";
 import Home from "./components/Home";
+import SinglePost from "./components/Posts/SinglePost";
 import "./index.css"
 
 function App() {
@@ -25,6 +26,9 @@ function App() {
           </Route>
           <Route path="/posts/new">
             <CreatePosts />
+          </Route>
+          <Route path="/posts/:postId">
+            <SinglePost />
           </Route>
         </Switch>
       )}

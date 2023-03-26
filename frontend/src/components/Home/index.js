@@ -44,6 +44,7 @@ const Home = () => {
   }, [search]);
 
   const handleArticleClick = () => {
+    console.log("trigger")
     return history.push(`/posts/${newestPost?.id}`);
   };
 
@@ -51,7 +52,6 @@ const Home = () => {
     return history.push(`/posts/${id}`);
   };
 
-  console.log(newestPost); // This is the newest post in the database. delete when done developping/debugging.
 
   const date = new Date(newestPost?.updatedAt);
   const month = date.toLocaleString("default", { month: "long" });
@@ -111,9 +111,9 @@ const Home = () => {
           </div>
         </div>
         <div className="top-section-right">
-          <div className="top-section-right-card" onClick={(e) => handleArticleClick}>
-            <div className="home-top-right-section-card-content">
-              <div className="home-content-card-box">
+          <div className="top-section-right-card">
+            <div className="home-top-right-section-card-content" onClick={(e) => handleArticleClick()}>
+              <div className="home-content-card-box" >
                 <div className="home-preview-image">
                   <ReactMarkdown className="home-preview-image">
                     {newestPost?.PostsImages?.[0]?.url}

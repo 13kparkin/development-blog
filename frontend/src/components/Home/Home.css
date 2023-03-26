@@ -1,4 +1,4 @@
-
+/* Top Section */
 .top-section-left {
     display: flex;
     flex-direction: column;
@@ -71,7 +71,7 @@
   }
 
   .top-section-right-card:hover{
-    box-shadow: -13px -4px 15px 1px var(--LightUp);
+    box-shadow: -13px -4px 15px 1px var(--LowLightUp);
     cursor: pointer;
   }
 
@@ -112,6 +112,7 @@
   
   .home-preview-title {
     font-family: var(--Font);
+    line-height: 2.5rem;
     padding: 0 2rem 0 2.5rem;
     margin-top: 1rem;
     font-weight: 900;
@@ -126,6 +127,7 @@
     word-wrap: break-word;
     line-height: 1rem;
     font-size: .8rem;
+    font-weight: 400;
     padding-bottom: 1rem;
   }
 
@@ -133,6 +135,65 @@
     width: 25rem;
     height: 18rem;
     padding-top: 2rem;
+  }
+
+
+  /* Bottom Section */
+
+  .bottom-section {
+    margin-top: 30rem;
+    padding-bottom: 16rem;
+  }
+  .bottom-section-card-header h1 {
+    margin-left: 5rem;
+
+  }
+
+  .bottom-section-cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: 4rem;
+    position: relative;
+  }
+
+  .bottom-section-card {
+    display: flex;
+    flex-direction: column;
+    width: 17rem;
+    height: 20rem;
+    border: 1px solid black;
+    margin: 1rem;
+    padding: 1rem;
+    margin-right: 5rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    background-color: var(--ProfileDropDown);
+    overflow: scroll;
+  }
+
+  .bottom-section-card:hover {
+    box-shadow: 0px 0px 16px 0px  var(--LowLightUp);
+    cursor: pointer;
+  }
+  
+  .bottom-section-card-img img {
+    width: 100%;
+    height: 7rem;
+    border-radius: 10px;
+  }
+  
+  .bottom-section-card-title h1 {
+    margin-top: .5rem;
+    font-size: 1.2rem;
+  }
+  
+  
+
+  .bottom-section-card-body img {
+    width: 100%;
+    height: 10rem;
+    border-radius: 10px;
   }
 
 

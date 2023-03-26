@@ -4,6 +4,7 @@ import sessionReducer from './session';
 import postsReducer from './posts';
 import draftsReducer from './drafts';
 import imagesReducer from './images';
+import gptReducer from './gpt';
 
 
 const rootReducer = combineReducers({
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   posts: postsReducer,
   drafts: draftsReducer,
   images: imagesReducer,
+  getGptMessages: gptReducer,
 });
 
 let enhancer;

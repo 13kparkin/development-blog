@@ -5,6 +5,7 @@ const SET_ALL_POSTS = 'posts/setAllPosts';
 const REMOVE_POST = 'posts/removePost';
 const SET_ALL_POSTS_BY_USER = 'posts/setAllPostsByUser';
 const SET_POSTS_BY_DRAFT_ID = 'posts/setPostsByDraftId';
+const SET_POSTS_BY_SEARCH = 'posts/setPostsBySearch';
 
 const setAllPosts = (posts) => ({
     type: SET_ALL_POSTS,
@@ -23,6 +24,11 @@ const removePost = () => ({
 });
 const setAllPostsByUser = (posts) => ({
     type: SET_ALL_POSTS_BY_USER,
+    payload: posts,
+});
+
+const setPostsBySearch = (posts) => ({
+    type: SET_POSTS_BY_SEARCH,
     payload: posts,
 });
 
@@ -153,11 +159,24 @@ export const editPost = (posts) => async (dispatch) => {
 };
 
 
+export async function searchPosts(search, dispatch) {
+    const response = await csrfFetch(`/api/posts/search?q=${search}`);
+    const results = await response.json();
+    if (response.ok) {
+        dispatch(setPostsBySearch(results));
+        return results;
+    }
+    else {
+        console.log('error', results)
+    }
+}
 
 
 
 
-const initialState = { allPosts: {}, singlePost: {}, allPostsByUser: {}, postsByDraftId: {} };
+
+
+const initialState = { allPosts: {}, singlePost: {}, allPostsByUser: {}, postsByDraftId: {}, postsBySearch: {} };
 
 const postsReducer = (state = {}, action) => {
     switch (action.type) {
@@ -169,6 +188,8 @@ const postsReducer = (state = {}, action) => {
             return { ...state, postsByDraftId: action.payload };
         case SET_ALL_POSTS_BY_USER:
             return { ...state, allPostsByUser: action.payload };
+        case SET_POSTS_BY_SEARCH:
+            return { ...state, postsBySearch: action.payload };
         case REMOVE_POST:
             return { ...state, singlePost: {} };
         default:

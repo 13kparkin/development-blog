@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
 import { getSinglePost, getAllPosts } from "../../store/posts";
 import { useHistory } from "react-router-dom";
+import SearchResults from "../Search";
 
 import "./Home.css";
 
@@ -14,6 +15,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const allPostsArray = useSelector((state) => state.posts.allPosts?.posts);
   const history = useHistory();
+  let timer;
 
   // This function sorts the posts in the allPostsArray by the date they were updated, newest to oldest and returns the first post in the array.
   function newestPostFunction() {
@@ -26,8 +28,9 @@ const Home = () => {
 
   const newestPost = newestPostFunction();
 
-  const handleChange = (e) => {
+  const handleSearchChange = (e) => {
     setSearch(e.target.value);
+
   };
 
   useEffect(() => {
@@ -96,19 +99,23 @@ const Home = () => {
               Parkin, and much more.
             </p>
           </div>
-          <div className="search-box">
+          <form className="search-box">
             <input
               type="text"
               placeholder="Search"
               value={search}
-              onChange={handleChange}
+              onChange={handleSearchChange}
             />
             <div className="search-history">
               {searchHistory.map((result) => (
                 <div className="search-history">{result}</div>
               ))}
             </div>
-          </div>
+            <div 
+            className="searchResults">
+
+            </div>
+          </form>
         </div>
         <div className="top-section-right">
           <div className="top-section-right-card">

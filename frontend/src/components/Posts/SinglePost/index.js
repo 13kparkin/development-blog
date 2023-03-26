@@ -31,11 +31,12 @@ const SinglePost = () => {
 
   const chatSendPushed = async (e) => {
     e.preventDefault();
+    setError([]);
     setPushed(true);
     setIsLoading(true);
     setTimeout(() => setPushed(false), 200);
     setQuestion(question);
-    const articleString = ` ${singlePostObj?.title} \n ${singlePostObj?.body}`;
+    const articleString = ` ${singlePostObj?.title} \n ${singlePostObj?.body} \n ${singlePostObj?.User?.username}`;
 
     // Timeout for lagged server
     const timer = setTimeout(() => {
@@ -47,8 +48,9 @@ const SinglePost = () => {
     }, 15000);
     const answers = await getGptMessagesData(articleString, question);
     setGptAnswers(answers);
-    if (answers.ok) {
-      clearTimeout(timer);
+    clearTimeout(timer);
+    if (answers?.final?.everythingFound.length === 0) {
+      setError(["No answer found. Please try again."]);
     }
     // Update message history state with new question and answer
     const newMessage = { question, answer: answers?.final?.everythingFound };

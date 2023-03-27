@@ -1,45 +1,43 @@
-"use strict";
+'use strict';
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
 
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Searches", {
+    await queryInterface.createTable('Tags', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
-      history: {
-        type: Sequelize.STRING,
+      tag: {
+        type: Sequelize.TEXT
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "id",
-        },
+      postId: {
+        type: Sequelize.INTEGER
+      },
+      draftId: {
+        type: Sequelize.INTEGER 
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-      },
-    },
-    options
+        type: Sequelize.DATE
+      }
+    }, options
     );
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = "Searches";
+    options.tableName = "Tags";
     return queryInterface.dropTable(options);
-  },
+  }
 };

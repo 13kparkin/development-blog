@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { Post, User, Draft, PostImage, Search } = require("../../db/models");
+const { Post, User, Draft, PostsImage, Search } = require("../../db/models");
+const Sequelize = require('sequelize');
 
 // Seed posts route
 router.get("/seed", async (req, res) => {
@@ -33,13 +34,14 @@ router.get("/", async (req, res) => {
           attributes: ["id", "username", "firstName", "lastName"],
         },
         {
-          model: PostImage
+          model: PostsImage
         },
       ],
     });
 
     return res.status(200).json({ posts });
   } catch (err) {
+    console.log(err.message);
     return res.status(500).json({ message: err.message });
   }
 });
@@ -77,7 +79,7 @@ router.get("/draft/:id", async (req, res) => {
 
             
 
-// Get post by id route
+// Get post by id route /api/posts/:id
 router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id, {
@@ -87,7 +89,7 @@ router.get("/:id", async (req, res) => {
           attributes: ["id", "username", "firstName", "lastName"],
         },
         {
-          model: PostImage,
+          model: PostsImage,
         },
       ],
     });
@@ -112,6 +114,20 @@ router.post("/", async (req, res) => {
         draftId,
         updatedAt
         });
+
+        const imageId = await Draft.findByPk(draftId, {
+          include: [
+            {
+              model: PostsImage,
+              attributes: ["id"],
+            },
+          ],
+        });
+
+
+        const image = await PostsImage.findByPk(imageId.dataValues.PostsImages[0].id);
+        await image.update({ postId: newPost.id });
+
     
         return res.status(200).json({ newPost });
     } catch (err) {
@@ -125,10 +141,23 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id);
-    const {title, body, description } = req.body;
-   const updatedPost = await post.update({ title, body, description });
+    const {title, body, description, draftId, updatedAt } = req.body;
+   const updatedPost = await post.update({ title, body, description, updatedAt });
+
+   const imageId = await Draft.findByPk(draftId, {
+    include: [
+      {
+        model: PostsImage,
+        attributes: ["id"],
+      },
+    ],
+  });
+
+  const image = await PostsImage.findByPk(imageId.dataValues.PostsImages[0].id);
+  await image.update({ postId: updatedPost.id });
     return res.status(200).json({ updatedPost });
   } catch (err) {
+    console.log(err.message)
     return res.status(500).json({ message: err.message });
   }
 });
@@ -144,6 +173,51 @@ router.delete("/:id", async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 });
+
+// Search posts by title and body api/posts/search/:id
+router.get('/search/:id', async (req, res) => {
+  
+
+  try {
+    const Op = Sequelize.Op;
+    const search = req.params.id;
+    const results = await Post.findAll({
+      where: {
+        [Op.or]: [
+          { title: { [Op.iLike]: `%${search}%` } },
+          { body: { [Op.iLike]: `%${search}%` } },
+        ]
+      },
+    });
+    // get images by post id
+    const postsImages = await PostsImage.findAll({
+      where: {
+        postId: results.map((post) => post.id),
+      },
+    });
+
+    const finalImageUrl = postsImages;
+
+    // map through results and add image url to each post
+    results.map((post) => {
+      post.dataValues.imageUrl = finalImageUrl.filter(
+        (image) => image.postId === post.id
+      )[0].url;
+    });
+
+    console.log(results)
+
+    
+
+    
+    return res.status(200).json({ results });
+  } catch (err) {
+    console.log(err.message)
+    return res.status(500).json({ message: err.message });
+  }
+});
+
+
 
 
 module.exports = router;

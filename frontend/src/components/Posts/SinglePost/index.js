@@ -12,7 +12,7 @@ const SinglePost = () => {
   const singlePostObj = useSelector((state) => state.posts?.singlePost?.post);
   const history = useHistory();
   const { postId } = useParams();
-  const [pushed, setPushed] = useState(false);
+  const [gptPushed, setgptPushed] = useState(false);
   const [question, setQuestion] = useState("");
   const [gptMessageHistory, setGptMessageHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,11 +31,12 @@ const SinglePost = () => {
 
   const chatSendPushed = async (e) => {
     e.preventDefault();
-    setPushed(true);
+    setError([]);
+    setgptPushed(true);
     setIsLoading(true);
-    setTimeout(() => setPushed(false), 200);
+    setTimeout(() => setgptPushed(false), 200);
     setQuestion(question);
-    const articleString = ` ${singlePostObj?.title} \n ${singlePostObj?.body}`;
+    const articleString = ` ${singlePostObj?.title} \n ${singlePostObj?.body} \n ${singlePostObj?.User?.username}`;
 
     // Timeout for lagged server
     const timer = setTimeout(() => {
@@ -47,8 +48,9 @@ const SinglePost = () => {
     }, 15000);
     const answers = await getGptMessagesData(articleString, question);
     setGptAnswers(answers);
-    if (answers.ok) {
-      clearTimeout(timer);
+    clearTimeout(timer);
+    if (answers?.final?.everythingFound.length === 0) {
+      setError(["No answer found. Please try again."]);
     }
     // Update message history state with new question and answer
     const newMessage = { question, answer: answers?.final?.everythingFound };
@@ -82,9 +84,9 @@ const SinglePost = () => {
               onChange={handleFieldChange}
             />
             <button
-              className={pushed ? "pushed" : ""}
+              className={gptPushed ? "gptPushed" : ""}
               onClick={chatSendPushed}
-              disabled={pushed}
+              disabled={gptPushed}
             >
               {isLoading ? <span className="loader"></span> : "Send"}
             </button>

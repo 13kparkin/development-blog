@@ -42,7 +42,6 @@ const Home = () => {
   }, []);
 
   const handleArticleClick = () => {
-    console.log("trigger")
     return history.push(`/posts/${newestPost?.id}`);
   };
 

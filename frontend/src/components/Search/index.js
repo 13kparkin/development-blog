@@ -9,6 +9,11 @@ import './Search.css';
 function SearchResults({ searchTerm }) {
     const [results, setResults] = useState([]);
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    const handleArticleCardClick = (id) => {
+      return history.push(`/posts/${id}`);
+    };
     
     useEffect(() => {
       let timerId;
@@ -39,7 +44,7 @@ function SearchResults({ searchTerm }) {
         <div className="search-results-cards">
         {results?.map(result => (
           <>
-          <div className="search-results-card">
+          <div className="search-results-card" onClick={(e) => handleArticleCardClick(result?.id)}>
           <div className="search-results-card-img">
             <ReactMarkdown>
               {`${result?.imageUrl}`}

@@ -24,7 +24,7 @@ module.exports = {
         allowNull: false,
       },
       title: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       userId: {

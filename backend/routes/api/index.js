@@ -5,6 +5,8 @@ const usersRouter = require("./users.js");
 const postsRouter = require("./posts.js");
 const draftsRouter = require("./drafts.js");
 const imagesRouter = require("./images.js");
+const digitalBrainRouter = require("./DigitalBrainApi.js");
+const searchesRouter = require("./searches.js");
 const { restoreUser } = require("../../utils/auth.js");
 
 // Connect restoreUser middleware to the API router
@@ -18,6 +20,8 @@ router.use("/users", usersRouter);
 router.use("/posts", postsRouter);
 router.use("/drafts", draftsRouter);
 router.use("/images", imagesRouter);
+router.use("/digitalBrain", digitalBrainRouter);
+router.use("/searches", searchesRouter);
 
 router.post("/test", (req, res) => {
   res.json({ requestBody: req.body });

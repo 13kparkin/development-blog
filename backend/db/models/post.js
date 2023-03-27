@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       Post.belongsTo(models.User, { foreignKey: 'userId' })
       Post.hasMany(models.PostsImage, { foreignKey: 'postId', onDelete: 'CASCADE' })
       Post.belongsTo(models.Draft, { foreignKey: 'draftId', onDelete: 'CASCADE' })
+      Tag.hasMany(models.Tag, { foreignKey: 'draftId', onDelete: 'CASCADE' })
     }
   }
   Post.init({
@@ -30,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
     },
     title: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     draftId: {

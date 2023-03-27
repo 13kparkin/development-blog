@@ -3,45 +3,39 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Draft extends Model {
+  class Tag extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Draft.belongsTo(models.User, { foreignKey: 'userId' })
-      Draft.hasMany(models.PostsImage, { foreignKey: 'draftId', onDelete: 'CASCADE' })
-      Draft.hasMany(models.Post, { foreignKey: 'draftId', onDelete: 'CASCADE'  })
-      Tag.hasMany(models.Tag, { foreignKey: 'draftId', onDelete: 'CASCADE'  })
+      // define association here
+      Tag.belongsTo(models.Post, { foreignKey: 'postId', onDelete: 'CASCADE' })
+      Tag.belongsTo(models.Draft, { foreignKey: 'draftId', onDelete: 'CASCADE' })
     }
   }
-  Draft.init({
+  Tag.init({
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    body: {
+    tag: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true
     },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: false,
+    draftId: {
+      type: DataTypes.INTEGER
     },
-    title: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    userId: {
+    postId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
     },
   }, {
     sequelize,
-    modelName: 'Draft',
+    modelName: 'Tag',
   });
-  return Draft;
+  return Tag;
 };

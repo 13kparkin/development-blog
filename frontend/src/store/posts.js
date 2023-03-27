@@ -159,9 +159,11 @@ export const editPost = (posts) => async (dispatch) => {
 };
 
 
-export async function searchPosts(search, dispatch) {
-    const response = await csrfFetch(`/api/posts/search?q=${search}`);
+export const searchPosts = (search)  => async (dispatch) => {
+
+    const response = await csrfFetch(`/api/posts/search/${search}`);
     const results = await response.json();
+
     if (response.ok) {
         dispatch(setPostsBySearch(results));
         return results;

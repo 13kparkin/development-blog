@@ -1,17 +1,12 @@
 import { csrfFetch } from "./csrf";
 
 const SET_SEARCH_HISTORY = "searches/setSearchHistory";
-const ADD_SEARCH = "searches/addSearch";
 
 const setSearchHistory = (searchHistory) => ({
     type: SET_SEARCH_HISTORY,
     payload: searchHistory,
 });
 
-const addSearch = (search) => ({
-    type: ADD_SEARCH,
-    payload: search,
-});
 
 export const getSearchHistory = () => async (dispatch) => {
     const response = await csrfFetch("/api/searches");
@@ -28,7 +23,7 @@ export const createSearch = (search) => async (dispatch) => {
         body: JSON.stringify({ search }),
     });
     const newSearch = await response.json();
-    dispatch(addSearch(newSearch));
+    dispatch(setSearchHistory(newSearch));
 }
 
 const initialState = { searchHistory: {} };
@@ -37,13 +32,7 @@ const searchesReducer = (state = initialState, action) => {
     let newState;
     switch (action.type) {
         case SET_SEARCH_HISTORY:
-            newState = Object.assign({}, state);
-            newState.searchHistory = action.payload;
-            return newState;
-        case ADD_SEARCH:
-            newState = Object.assign({}, state);
-            newState.searchHistory = action.payload;
-            return newState;
+            return { ...state, searchHistory: action.payload };
         default:
             return state;
     }

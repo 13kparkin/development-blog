@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       Draft.belongsTo(models.User, { foreignKey: 'userId' })
       Draft.hasMany(models.PostsImage, { foreignKey: 'draftId', onDelete: 'CASCADE' })
       Draft.hasMany(models.Post, { foreignKey: 'draftId', onDelete: 'CASCADE'  })
-      Tag.hasMany(models.Tag, { foreignKey: 'draftId', onDelete: 'CASCADE'  })
+      Draft.hasMany(models.Tag, { foreignKey: 'draftId', onDelete: 'CASCADE'  })
     }
   }
   Draft.init({

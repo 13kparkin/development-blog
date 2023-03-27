@@ -12,7 +12,7 @@ const SinglePost = () => {
   const singlePostObj = useSelector((state) => state.posts?.singlePost?.post);
   const history = useHistory();
   const { postId } = useParams();
-  const [pushed, setPushed] = useState(false);
+  const [gptPushed, setgptPushed] = useState(false);
   const [question, setQuestion] = useState("");
   const [gptMessageHistory, setGptMessageHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,9 +32,9 @@ const SinglePost = () => {
   const chatSendPushed = async (e) => {
     e.preventDefault();
     setError([]);
-    setPushed(true);
+    setgptPushed(true);
     setIsLoading(true);
-    setTimeout(() => setPushed(false), 200);
+    setTimeout(() => setgptPushed(false), 200);
     setQuestion(question);
     const articleString = ` ${singlePostObj?.title} \n ${singlePostObj?.body} \n ${singlePostObj?.User?.username}`;
 
@@ -84,9 +84,9 @@ const SinglePost = () => {
               onChange={handleFieldChange}
             />
             <button
-              className={pushed ? "pushed" : ""}
+              className={gptPushed ? "gptPushed" : ""}
               onClick={chatSendPushed}
-              disabled={pushed}
+              disabled={gptPushed}
             >
               {isLoading ? <span className="loader"></span> : "Send"}
             </button>

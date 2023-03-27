@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Post, User, Draft, PostsImage, Search } = require("../../db/models");
+const Sequelize = require('sequelize');
 
 // Seed posts route
 router.get("/seed", async (req, res) => {
@@ -173,14 +174,42 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Search posts by title and body api/posts/search
-router.get('/search', async (req, res) => {
+// Search posts by title and body api/posts/search/:id
+router.get('/search/:id', async (req, res) => {
+  
+
   try {
-    const { search } = req.query.q;
+    const Op = Sequelize.Op;
+    const search = req.params.id;
     const results = await Post.findAll({
-      where:
-        sequelize.literal(`to_tsvector('english', title || ' ' || body) @@ to_tsquery('english', '${search}')`),
+      where: {
+        [Op.or]: [
+          { title: { [Op.iLike]: `%${search}%` } },
+          { body: { [Op.iLike]: `%${search}%` } },
+        ]
+      },
     });
+    // get images by post id
+    const postsImages = await PostsImage.findAll({
+      where: {
+        postId: results.map((post) => post.id),
+      },
+    });
+
+    const finalImageUrl = postsImages;
+
+    // map through results and add image url to each post
+    results.map((post) => {
+      post.dataValues.imageUrl = finalImageUrl.filter(
+        (image) => image.postId === post.id
+      )[0].url;
+    });
+
+    console.log(results)
+
+    
+
+    
     return res.status(200).json({ results });
   } catch (err) {
     console.log(err.message)

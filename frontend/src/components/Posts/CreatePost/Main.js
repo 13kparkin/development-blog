@@ -51,7 +51,7 @@ const Main = ({
 
   useEffect(() => {
     const getDraftsById = async () => {
-      const drafts = await dispatch(getSingleDraft(activeDrafts.id));
+      const drafts = await dispatch(getSingleDraft(activeDrafts?.id));
 
       setUrl(newImageUrl);
 

@@ -149,7 +149,7 @@ function CreatePosts() {
       const drafts = await dispatch(getAllDraftsByUser(userId));
       setDrafts(drafts);
       return updateDrafts;
-    }, 2000);
+    }, 5000);
   };
 
   const onUpdateImage = async (updatedImage) => {
@@ -167,7 +167,7 @@ function CreatePosts() {
       const drafts = await dispatch(getAllDraftsByUser(userId));
       setDrafts(drafts);
       return updateImages;
-    }, 2000);
+    }, 5000);
   };
 
   const getActivePosts = () => {

@@ -41,6 +41,8 @@ function ProfileButton({ user }) {
   useEffect(() => {
     if (user) {
       setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
     }
     if (!showMenu) return;
 
@@ -60,20 +62,16 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
+    setLoggedIn(false);
     closeMenu();
   };
 
-  const loggedInonButtonClick = () => {
-    setPushedButton(true);
-    setTimeout(() => setPushedButton(false), 200);
-    openMenu();
-  };
 
-  const loggedOutonButtonClick = () => {
+  const loggedOutonButtonClick = (e) => {
     setPushedButton(true);
-    setLoggedIn(false);
+    logout(e);
     setTimeout(() => setPushedButton(false), 100);
-    // openMenu();
+    
   };
 
   const handleNewArticle = () => {
@@ -81,6 +79,7 @@ function ProfileButton({ user }) {
   }
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+
 
   return (
     <>
@@ -119,8 +118,7 @@ function ProfileButton({ user }) {
             {user.firstName} {user.lastName} <br/>
             {user.email} <br/>
             <button onClick={handleNewArticle}>New Article</button>
-            
-            <button onClick={logout}>Log Out</button>
+            <button onClick={loggedOutonButtonClick}>Log Out</button>
             
           </>
         ) : (

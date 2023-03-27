@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { searchPosts } from '../../store/posts';
 import ReactMarkdown from 'react-markdown';
+
 import './Search.css';
 
 function SearchResults({ searchTerm }) {
@@ -21,13 +22,20 @@ function SearchResults({ searchTerm }) {
           fetchData();
         }, 2000);
       }
+      if (searchTerm.length === 0) {
+        setResults([]);
+      }
       return () => {
         clearTimeout(timerId);
       };
+
+      
     }, [searchTerm, dispatch]);
 
     return (
       <>
+      {results?.length > 0 && ( 
+      <div className={"search-results-box"}>
         <div className="search-results-cards">
         {results?.map(result => (
           <>
@@ -51,6 +59,8 @@ function SearchResults({ searchTerm }) {
           </>
         ))}
         </div>
+      </div>
+      )}
       </>
     );
   }

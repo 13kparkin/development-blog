@@ -10,6 +10,7 @@ function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
+  
   const [pushedButton, setPushedButton] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [profilePushed, setProfilePushed] = useState(false);

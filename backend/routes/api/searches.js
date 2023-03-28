@@ -20,8 +20,10 @@ router.get("/", async (req, res) => {
 
 // Post a new search api/searches
 router.post("/", async (req, res) => {
-    const { search } = req.body;
-    const newSearch = await Search.create({ search });
+    const { searchHistory, userId } = req.body;
+    const newSearch = await Search.create({ 
+        history: searchHistory, 
+        userId });
     return res.json(newSearch);
 });
 

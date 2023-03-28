@@ -1,19 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
 import { getSinglePost, getAllPosts } from "../../store/posts";
+import { createSearch, getSearchHistory } from "../../store/searches";
 import { useHistory } from "react-router-dom";
 import SearchResults from "../Search";
 
 import "./Home.css";
 
 const Home = () => {
+  const wrapperRef = useRef(null);
   const [search, setSearch] = useState("");
-  const [searchHistory, setSearchHistory] = useState([]);
   const [newLimitedArray, setNewLimitedArray] = useState([]);
   const [counter, setCounter] = useState(0);
+  const [searchHistoryActive, setSearchHistoryActive] = useState(false);
+  const [searchesActive, setSearchesActive] = useState(false);
   const dispatch = useDispatch();
   const allPostsArray = useSelector((state) => state.posts.allPosts?.posts);
+  const searchHistoryArray = useSelector((state) => state.searches.searchHistory);
+  const user = useSelector((state) => state.session.user);
   const history = useHistory();
   let timer;
 
@@ -37,17 +42,49 @@ const Home = () => {
       const posts = await dispatch(getAllPosts());
     };
     getAllPostsData();
+
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        searchHistoryActiveFalse()
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
     
 
-  }, []);
+  }, [wrapperRef]);
 
   const handleArticleClick = () => {
-    console.log("trigger")
     return history.push(`/posts/${newestPost?.id}`);
   };
 
   const handleArticleCardClick = (id) => {
     return history.push(`/posts/${id}`);
+  };
+
+  const handleClickSearch = (e) => {
+    e.preventDefault();
+    setSearchHistoryActive(true)
+    setSearchesActive(true)
+    dispatch(getSearchHistory());
+  };
+  function searchHistoryActiveFalse() {
+    setSearchHistoryActive(false)
+  }
+
+  const handleSearchCreate = (e) => {
+    e.preventDefault();
+    if (!user) {
+      return;
+    }
+    const searchObj = {
+      searchHistory: search,
+      userId: user.id
+    }
+    dispatch(createSearch(searchObj));
   };
 
 
@@ -67,7 +104,7 @@ const Home = () => {
   const newPostArrayLength = newLimitedArray?.length;
   const limitedPostsView = newLimitedArray?.length + 6;
 
-  // This function handles the click event for the "More Posts" button. It will slice the allPostsArray and return the next 6 posts.
+  // This function handles the click event for the "More Posts" button. It will slice the allPostsArray and return the next 6 posts. todo: need to add this
   function handleMorePostsClick() {
     const newPostArray = allPostsArray?.slice(newPostArrayLength, limitedPostsView);
     setNewLimitedArray(newPostArray, ...newPostArray);
@@ -77,6 +114,15 @@ const Home = () => {
     setNewLimitedArray(allPostsArray)
     setCounter(counter + 1)
   }
+
+  function handSearchHistoryOnclick(result) {
+    return () => {
+      setSearch(result)
+    }
+  }
+
+
+
 
   return (
     <div className="home">
@@ -94,21 +140,25 @@ const Home = () => {
               Parkin, and much more.
             </p>
           </div>
-          <form className="search-box">
+          <form onSubmit={(e) => handleSearchCreate(e)} className="search-box">
             <input
               type="text"
               placeholder="Search"
               value={search}
               onChange={handleSearchChange}
+              onClick={(e) =>  handleClickSearch(e)}
+              
             />
-            <div className="search-history">
-              {searchHistory.map((result) => (
-                <div className="search-history">{result}</div>
+            {searchHistoryActive && (
+            <div ref={wrapperRef} className="search-history-container">
+              {Object.values(searchHistoryArray)?.map((result) => (
+                <div key={`${result?.id}`} onClick={handSearchHistoryOnclick(result?.history)}className="search-history">{result?.history}</div>
               ))}
             </div>
+            )}
             <div 
             className="searchResults">
-              <SearchResults searchTerm={search} />
+              <SearchResults setSearchesActive={setSearchesActive} searchesActive={searchesActive}  searchTerm={search} />
 
             </div>
           </form>

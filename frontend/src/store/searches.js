@@ -15,12 +15,17 @@ export const getSearchHistory = () => async (dispatch) => {
 }
 
 export const createSearch = (search) => async (dispatch) => {
+    const { userId, searchHistory } = search;
+
     const response = await csrfFetch("/api/searches", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ search }),
+        body: JSON.stringify({ 
+            userId,
+            searchHistory
+        }),
     });
     const newSearch = await response.json();
     dispatch(setSearchHistory(newSearch));

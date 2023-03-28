@@ -12,11 +12,13 @@
     --LightestSlate: #ccd6f6;
     --White: #FAFAFA;
     --Green: #41ead4;
+    --Red: #ec3921;
     --Blue: #08c;
     --DarkPurple: #181220;
     --NavBarColor: rgba(15, 25, 60, 1);
     --PurpleGradient: linear-gradient(97deg, rgba(11,17,46,1) 0%, rgba(33,0,75,1) 100%);
     --ButtonGradient: linear-gradient(to right, #2b5876 0%, #4e4376  51%, #2b5876  100%);
+    --BackgroundColor: linear-gradient(97deg, rgba(25, 29, 55, 1) 0%, rgba(49, 15, 110, 1) 100%);
     --DarkGrey: #14111d;
     --ProfileDropDown: rgba(35, 39, 65, 1);
     --LowLightUp: #76d4c7a0;
@@ -63,13 +65,15 @@ button {
 
 
 body {
-    background-image:  linear-gradient(97deg, rgba(25, 29, 55, 1) 0%, rgba(49, 15, 110, 1) 100%);
+    background-image:  var(--BackgroundColor);
     color: var(--White);
     font-family: var(--Font);
     font-size: var(--fs-base);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
 }
+
+
 
 
 
@@ -91,3 +95,5 @@ body {
   .pushed {
     animation: push-animation 0.06s;
   }
+
+

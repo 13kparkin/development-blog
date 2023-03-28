@@ -24,17 +24,25 @@ function LoginFormModal() {
       );
   };
 
+  function demoLogin(e) {
+    e.preventDefault();
+    setErrors([]);
+    setCredential('demo@user.io');
+    setPassword('password');
+  }
+
   return (
     <>
+      <div className="login-form-container">
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
-        <ul>
+
           {errors.map((error, idx) => (
-            <li key={idx}>{error}</li>
+            <div className="login-form-errors" key={idx}>{error}</div>
           ))}
-        </ul>
-        <label>
-          Username or Email
+
+        <label className="username">
+          <div className="email-text"> Email </div>
           <input
             type="text"
             value={credential}
@@ -42,8 +50,8 @@ function LoginFormModal() {
             required
           />
         </label>
-        <label>
-          Password
+        <label className="password">
+        <div className="password-text"> Password </div>
           <input
             type="password"
             value={password}
@@ -51,8 +59,12 @@ function LoginFormModal() {
             required
           />
         </label>
+        <div className="login-form-buttons">
         <button type="submit">Log In</button>
+        <button className="demo-login" type="submit" onClick={demoLogin}>Demo Log In</button>
+        </div>
       </form>
+      </div>
     </>
   );
 }

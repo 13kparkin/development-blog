@@ -31,13 +31,14 @@ function SignupFormModal() {
 
   return (
     <>
+    <div className="signup-form-container">
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
-        <ul>
-          {errors.map((error, idx) => <li key={idx}>{error}</li>)}
-        </ul>
-        <label>
-          Email
+        <div className="signup-form-errors">
+          {errors.map((error, idx) => <div className="signup-form-errors" key={idx}>{error}</div>)}
+        </div>
+        <label className="signup-form-email">
+        <div className="signup-form-email-text"> Email </div>
           <input
             type="text"
             value={email}
@@ -45,8 +46,8 @@ function SignupFormModal() {
             required
           />
         </label>
-        <label>
-          Username
+        <label className="signup-form-username">
+        <div className="signup-form-username-text"> Username </div>
           <input
             type="text"
             value={username}
@@ -54,8 +55,8 @@ function SignupFormModal() {
             required
           />
         </label>
-        <label>
-          First Name
+        <label className="signup-form-first-name">
+        <div className="first-name-text"> First Name </div>
           <input
             type="text"
             value={firstName}
@@ -63,8 +64,8 @@ function SignupFormModal() {
             required
           />
         </label>
-        <label>
-          Last Name
+        <label className="signup-form-last-name">
+        <div className="last-name-text"> Last Name </div>
           <input
             type="text"
             value={lastName}
@@ -72,8 +73,8 @@ function SignupFormModal() {
             required
           />
         </label>
-        <label>
-          Password
+        <label className="signup-form-password">
+        <div className="signup-form-passord-text"> Password </div>
           <input
             type="password"
             value={password}
@@ -81,8 +82,8 @@ function SignupFormModal() {
             required
           />
         </label>
-        <label>
-          Confirm Password
+        <label className="signup-form-confirm-password">
+        <div className="confirm-password-text"> Confrim Password </div>
           <input
             type="password"
             value={confirmPassword}
@@ -92,6 +93,8 @@ function SignupFormModal() {
         </label>
         <button type="submit">Sign Up</button>
       </form>
+      </div>
+      
     </>
   );
 }

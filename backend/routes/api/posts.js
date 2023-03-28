@@ -205,8 +205,6 @@ router.get('/search/:id', async (req, res) => {
       )[0].url;
     });
 
-    console.log(results)
-
     
 
     

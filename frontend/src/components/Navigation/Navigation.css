@@ -35,6 +35,8 @@
 
 .profilePushed {
   animation: push-animation 0.06s;
+  position: absolute;
+  right: 1rem;
 }
 
 .loggedInPushed {
@@ -46,9 +48,13 @@
 .signupPushed {
 animation: push-animation 0.06s;
 }
+.profile {
+  position: absolute;
+  right: 1rem;
+}
 
 /* Profile dropdown */
-.profile-dropdown {
+.profile-dropdown-container {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -62,6 +68,7 @@ animation: push-animation 0.06s;
   border-radius: 2px;
   z-index: 1;
 }
+
 
 .profile-dropdown-name{
   font-size: .8rem;
@@ -110,7 +117,6 @@ animation: push-animation 0.06s;
   text-align: left;
   margin-top: .1rem;
   margin-left: 1.5rem;
-  /* margin-bottom: .5rem; */
 }
 
 .profile-dropdown-logout button{

@@ -155,7 +155,7 @@ const Home = () => {
               onChange={handleSearchChange}
               onClick={(e) => handleClickSearch(e)}
             />
-            {searchHistoryActive && loggedIn && Object.values(searchHistoryArray)?.[0].history && (
+            {searchHistoryActive && loggedIn && Object.values(searchHistoryArray)?.[0]?.history && (
               <div ref={wrapperRef} className="search-history-container">
                 {Object.values(searchHistoryArray)?.map((result) => (
                   

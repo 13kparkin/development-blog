@@ -15,6 +15,7 @@ const Home = () => {
   const [counter, setCounter] = useState(0);
   const [searchHistoryActive, setSearchHistoryActive] = useState(false);
   const [searchesActive, setSearchesActive] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const dispatch = useDispatch();
   const allPostsArray = useSelector((state) => state.posts.allPosts?.posts);
   const searchHistoryArray = useSelector((state) => state.searches.searchHistory);
@@ -48,6 +49,11 @@ const Home = () => {
         searchHistoryActiveFalse()
       }
     }
+    if (user) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -55,7 +61,7 @@ const Home = () => {
     };
     
 
-  }, [wrapperRef]);
+  }, [wrapperRef, dispatch, user]);
 
   const handleArticleClick = () => {
     return history.push(`/posts/${newestPost?.id}`);
@@ -149,7 +155,7 @@ const Home = () => {
               onClick={(e) =>  handleClickSearch(e)}
               
             />
-            {searchHistoryActive && (
+            {searchHistoryActive && loggedIn && (
             <div ref={wrapperRef} className="search-history-container">
               {Object.values(searchHistoryArray)?.map((result) => (
                 <div key={`${result?.id}`} onClick={handSearchHistoryOnclick(result?.history)}className="search-history">{result?.history}</div>

@@ -87,6 +87,7 @@ const Main = ({
       () => setPushedDelete((prevState) => ({ ...prevState, [id]: false })),
       200
     );
+    setTimeout(() => setPushedDelete(false), 200);
     onDeletePosts(id);
   };
 
@@ -260,7 +261,7 @@ const Main = ({
         <>
           {postByDraftId?.postByDraftId?.length < 1 && (
             <button
-              className={pushedPublished ? "pushed" : ""}
+              className={pushedPublished ? "preview-publish-button-pushed" : "preview-publish-button-non-pushed"}
               onClick={() => onAddPost(handlePublishButtonClick)}
             >
               Publish
@@ -269,15 +270,15 @@ const Main = ({
           {postByDraftId?.postByDraftId?.length > 0 && (
             <>
               <button
-                className={pushedPublished ? "pushed" : ""}
+                className={pushedDelete ? "preview-delete-button-pushed" : "preview-delete-button-non-pushed"}
                 onClick={() => onDeletePostsButton(postId)}
               >
                 Delete
               </button>
 
               <button
-                className={pushedPublishedWithDelete ? "pushed" : ""}
-                onClick={() => onAddPost(handlePublishButtonClick)}
+                className={pushedPublished ? "preview-publish-button-pushed" : "preview-publish-button-non-pushed"}
+                onClick={handlePublishButtonClick}
               >
                 Publish
               </button>

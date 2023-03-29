@@ -72,9 +72,7 @@ function CreatePosts() {
       userId,
     };
 
-    setTimeout(() => {
-      setCreateArticleButtonPushed(false);
-    }, 2000);
+   
 
     const newDrafts = await dispatch(createDraft(newDraft));
     const newImage = {
@@ -85,6 +83,7 @@ function CreatePosts() {
       createSingleImage(newDrafts.newDraft.id, newImage)
     );
     const drafts = await dispatch(getAllDraftsByUser(userId));
+    setCreateArticleButtonPushed(false);
     setDrafts(drafts);
     return newDrafts;
   };

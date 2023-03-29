@@ -39,6 +39,61 @@
   right: 1rem;
 }
 
+.profile-dropdown-create-article-pushed {
+  animation: push-animation 0.06s;
+  width: 100%;
+  text-align: left;
+  margin-top: -1rem;
+  padding-left: .1rem;
+  border-bottom: 0.1px solid rgb(79, 79, 79);
+}
+
+.profile-dropdown-create-article-pushed:hover {
+  animation: push-animation 0.06s;
+  width: 100%;
+  text-align: left;
+  margin-top: -1rem;
+  padding-left: .1rem;
+  border-bottom: 0.1px solid rgb(79, 79, 79);
+  background-image: var(--BackgroundColor);
+}
+
+.profile-dropdown-create-article-pushed button{
+  font-size: .8rem;
+  text-align: left;
+  border: none;
+  margin: -2;
+  padding: 0.5rem;
+  margin-right: -1rem;
+ 
+}
+
+.profile-dropdown-logout-pushed{
+  animation: push-animation 0.06s;
+  width: 100%;
+  text-align: left;
+  margin-top: .1rem;
+  margin-left: 1.5rem;
+}
+
+.profile-dropdown-logout-pushed:hover{
+  animation: push-animation 0.06s;
+  width: 100%;
+  text-align: left;
+  margin-top: .1rem;
+  margin-left: 1.5rem;
+  background-image: var(--BackgroundColor);
+}
+
+.profile-dropdown-logout-pushed button{
+  font-size: .8rem;
+  text-align: left;
+  border: none;
+  margin: -2;
+  padding: 0.5rem;
+  margin-left: -1.5rem;
+}
+
 .loggedInPushed {
   animation: push-animation 0.06s;
   position: absolute;
@@ -48,6 +103,7 @@
 .signupPushed {
 animation: push-animation 0.06s;
 }
+
 .profile {
   position: absolute;
   right: 1rem;

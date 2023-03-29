@@ -17,16 +17,32 @@ function SignupFormModal() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
-      setErrors([]);
+    if (password !== confirmPassword) {
+      setErrors(['Confirm Password field must be the same as the Password field']);
+    }
+   
+    if (!email.includes('@') || !email.includes('.')) {
+      setErrors(['Email must be a valid email address']);
+    }
+    if (password.length < 6) {
+      setErrors(['Password must be at least 6 characters long']);
+    }
+    if (username.length < 4) {
+      setErrors(['Username must be at least 4 characters long']);
+    }
+    if (username.length < 2) {
+      setErrors(['username must be at least 2 characters long']);
+    }
+
+    setErrors([]);
       return dispatch(sessionActions.signup({ email, username, firstName, lastName, password }))
         .then(closeModal)
         .catch(async (res) => {
           const data = await res.json();
           if (data && data.errors) setErrors(data.errors);
         });
-    }
-    return setErrors(['Confirm Password field must be the same as the Password field']);
+
+    
   };
 
   return (

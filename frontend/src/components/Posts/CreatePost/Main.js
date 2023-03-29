@@ -24,6 +24,10 @@ const Main = ({
   setPushedSave,
   setSaving,
   saving,
+  publishedButtonState,
+  setPublishedButtonState,
+  setSavedButtonState,
+  savedButtonState,
 }) => {
   const onEditTitleField = (titleField, bodyField, { title, body }) => {
     onUpdateDrafts({
@@ -61,6 +65,8 @@ const Main = ({
   let invalidUrl = [];
   let newImageUrl = imageUrl.singleDraft?.draft?.PostsImages?.[0].url;
   const postId = postByDraftId?.postByDraftId?.[0]?.id;
+  let publishButtonText;
+  let saveButtonText;
 
   useEffect(() => {
     const getDraftsById = async () => {
@@ -75,10 +81,42 @@ const Main = ({
     setBody(activeDrafts?.body);
   }, [activeDrafts, newImageUrl]);
 
+  switch (publishedButtonState) {
+    case "unpublished":
+      publishButtonText = "Publish";
+      break;
+    case "publishing":
+      publishButtonText = "Publishing...";
+      break;
+    case "published":
+      publishButtonText = "Published";
+      break;
+    default:
+      publishButtonText = "Publish";
+  }
+
+  switch (savedButtonState) {
+    case "unsaved":
+      saveButtonText = "Save";
+      break;
+    case "saving":
+      saveButtonText = "Saving...";
+      break;
+    case "saved":
+      saveButtonText = "Saved";
+      break;
+    default:
+      saveButtonText = "Save";
+  }
+
   const handlePublishButtonClick = () => {
     setPushedPublished(true);
+    setPublishedButtonState("publishing");
     setTimeout(() => setPushedPublished(false), 200);
     onAddPost();
+
+    
+    
   };
 
   const onDeletePostsButton = (id) => {
@@ -96,6 +134,7 @@ const Main = ({
     setUrlError([]);
     if (imageUrl.startsWith("![Image](") && imageUrl.endsWith(")")) {
       setMarkdown(imageUrl);
+      setSavedButtonState("saving");
       setTitle(e.target.value);
       setBody(e.target.value);
       const savedDraft = {
@@ -108,10 +147,10 @@ const Main = ({
       setClickedSave(true);
       setTimeout(() => {
         setClickedSave(false);
-      }, 3000); 
+      }, 3000);
       onEditTitleField("title", "body", savedDraft);
       onEditImage("img", imageUrl);
-      
+
       return;
     }
     convertImageUrlToMarkdown(imageUrl, (markdown) => {
@@ -153,14 +192,20 @@ const Main = ({
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
     // onEditField("title", e.target.value);
+    setSavedButtonState("unsaved");
+    setPublishedButtonState("unpublished");
   };
   const handleBodyChange = (e) => {
     setBody(e.target.value);
     // onEditField("body", e.target.value);
+    setSavedButtonState("unsaved");
+    setPublishedButtonState("unpublished");
   };
 
   const handleUrlChange = (e) => {
     const imageUrl = e.target.value;
+    setSavedButtonState("unsaved");
+    setPublishedButtonState("unpublished");
     // const markdown = convertImageUrlToMarkdown(imageUrl);
     setUrl(imageUrl);
     // if (error.error) {
@@ -177,8 +222,6 @@ const Main = ({
   const date = new Date(activeDrafts.updatedAt);
   const month = date.toLocaleString("default", { month: "long" });
   const day = date.getDate();
-
-
 
   return (
     <div className="app-main">
@@ -221,18 +264,19 @@ const Main = ({
           autoFocus
         />
       </div>
-      
+
       <button
-      className={`save-button ${pushedSave ? "pushed-saved" : ""} ${
-        clickedSave ? "loading-save" : ""
-      }`}
-      onClick={handleSaveButtonClick}
-    >
-      <div className="save-button-loading">
-        {saving ? "Saving..." : "Save"}
-      </div>
-    </button>
-      
+        className={`save-button ${pushedSave ? "pushed-saved" : ""} ${
+          clickedSave ? "loading-save" : ""
+        }`}
+        onClick={handleSaveButtonClick}
+        disabled={saveButtonText === "Saving..." || "Saved"}
+      >
+        <div className="save-button-loading">
+          {saveButtonText}
+        </div>
+      </button>
+
       <div className="app-main-posts-preview">
         <ReactMarkdown className="preview-image">{url}</ReactMarkdown>
         <div className="preview-user">{user?.username}</div>
@@ -263,7 +307,11 @@ const Main = ({
         <>
           {postByDraftId?.postByDraftId?.length < 1 && (
             <button
-              className={pushedPublished ? "preview-publish-button-pushed" : "preview-publish-button-non-pushed"}
+              className={
+                pushedPublished
+                  ? "preview-publish-button-pushed"
+                  : "preview-publish-button-non-pushed"
+              }
               onClick={handlePublishButtonClick}
             >
               {pushedPublished ? "Publishing..." : "Publish"}
@@ -272,17 +320,26 @@ const Main = ({
           {postByDraftId?.postByDraftId?.length > 0 && (
             <>
               <button
-                className={pushedDelete ? "preview-delete-button-pushed" : "preview-delete-button-non-pushed"}
+                className={
+                  pushedDelete
+                    ? "preview-delete-button-pushed"
+                    : "preview-delete-button-non-pushed"
+                }
                 onClick={() => onDeletePostsButton(postId)}
               >
                 {pushedDelete ? "Deleting..." : "Delete"}
               </button>
 
               <button
-                className={pushedPublished ? "preview-publish-button-pushed" : "preview-publish-button-non-pushed"}
+                className={
+                  pushedPublished
+                    ? "preview-publish-button-pushed"
+                    : "preview-publish-button-non-pushed"
+                }
                 onClick={handlePublishButtonClick}
+                disabled={publishedButtonState === "publishing" || "published"}
               >
-                {pushedPublished ? "Publishing..." : "Publish"}
+                {publishButtonText}
               </button>
             </>
           )}

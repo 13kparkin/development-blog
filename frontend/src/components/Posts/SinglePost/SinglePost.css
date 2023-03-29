@@ -50,11 +50,11 @@
   .single-post-body {
     padding: 0 2%;
     width: 90%;
-    max-width: 80%;
+    max-width: 90%;
     font-size: 1em;
     font-weight: 400;
     padding-bottom: 1rem;
-    margin-left : 1rem;
+    margin-left : .7rem;
   }
   
   .single-post-body img {

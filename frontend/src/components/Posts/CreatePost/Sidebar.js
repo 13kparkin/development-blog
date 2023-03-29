@@ -14,6 +14,8 @@ const Sidebar = ({
   activePosts,
   setActiveDrafts,
   setActivePosts,
+  createArticleButtonPushed,
+  setCreateArticleButtonPushed
 }) => {
   const sortedDrafts = drafts?.sort((a, b) => b.lastModified - a.lastModified);
 
@@ -24,6 +26,7 @@ const Sidebar = ({
 
   const handleDraftButtonClick = () => {
     setPushedDraft(true);
+    setCreateArticleButtonPushed(true);
     setTimeout(() => setPushedDraft(false), 200);
     onAddDraft();
   };
@@ -52,7 +55,7 @@ const Sidebar = ({
           className={pushedDarft ? "pushed" : ""}
           onClick={handleDraftButtonClick}
         >
-          Create Article
+          {createArticleButtonPushed ? "Creating..." : "Create Article"}
         </button>
       </div>
       <div className="app-sidebar-posts-container">

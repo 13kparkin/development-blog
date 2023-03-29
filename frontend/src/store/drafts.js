@@ -126,7 +126,7 @@ export const editDraft = (drafts) => async (dispatch) => {
 
 const initialState = { allDrafts: {}, singleDrafts: {}, allDraftsByUser: {} };
 
-const draftsReducer = (state = {}, action) => {
+const draftsReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_ALL_DRAFTS:
       return { ...state, allDrafts: action.payload };

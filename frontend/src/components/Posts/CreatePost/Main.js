@@ -22,6 +22,8 @@ const Main = ({
   onDeletePosts,
   pushedSave,
   setPushedSave,
+  setSaving,
+  saving,
 }) => {
   const onEditTitleField = (titleField, bodyField, { title, body }) => {
     onUpdateDrafts({
@@ -44,6 +46,7 @@ const Main = ({
   const [pushedPublished, setPushedPublished] = useState(false);
   const [pushedPublishedWithDelete, setPushedPublishedWithDelete] =
     useState(false);
+  const [clickedSave, setClickedSave] = useState(false);
   const [pushedDelete, setPushedDelete] = useState(false);
   const [tag, setTag] = useState("");
   const user = useSelector((state) => state.session.user);
@@ -98,9 +101,15 @@ const Main = ({
         title,
         body,
       };
+      setSaving(true);
       setPushedSave(true);
+      setClickedSave(true);
+      setTimeout(() => {
+        setClickedSave(false);
+      }, 3000); 
       onEditTitleField("title", "body", savedDraft);
       onEditImage("img", imageUrl);
+      
       return;
     }
     convertImageUrlToMarkdown(imageUrl, (markdown) => {
@@ -112,6 +121,7 @@ const Main = ({
           title,
           body,
         };
+        setSaving(true);
         setPushedSave(true);
         onEditTitleField("title", "body", savedDraft);
         onEditImage("img", markdown);
@@ -165,6 +175,8 @@ const Main = ({
   const month = date.toLocaleString("default", { month: "long" });
   const day = date.getDate();
 
+
+
   return (
     <div className="app-main">
       <div className="app-main-posts-edit">
@@ -206,12 +218,18 @@ const Main = ({
           autoFocus
         />
       </div>
+      
       <button
-        className={pushedSave ? "pushed-saved" : "save-button"}
-        onClick={handleSaveButtonClick}
-      >
-        Save
-      </button>
+      className={`save-button ${pushedSave ? "pushed-saved" : ""} ${
+        clickedSave ? "loading-save" : ""
+      }`}
+      onClick={handleSaveButtonClick}
+    >
+      <div className="save-button-loading">
+        {saving ? "Saving..." : "Save"}
+      </div>
+    </button>
+      
       <div className="app-main-posts-preview">
         <ReactMarkdown className="preview-image">{url}</ReactMarkdown>
         <div className="preview-user">{user?.username}</div>

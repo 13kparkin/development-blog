@@ -180,7 +180,7 @@ export const searchPosts = (search)  => async (dispatch) => {
 
 const initialState = { allPosts: {}, singlePost: {}, allPostsByUser: {}, postsByDraftId: {}, postsBySearch: {} };
 
-const postsReducer = (state = {}, action) => {
+const postsReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_ALL_POSTS:
             return { ...state, allPosts: action.payload };

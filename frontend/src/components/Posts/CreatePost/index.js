@@ -38,6 +38,8 @@ function CreatePosts() {
   const postByDraftId = useSelector((state) => state.posts.postsByDraftId);
   const history = useHistory();
   const [ createArticleButtonPushed, setCreateArticleButtonPushed ] = useState(false);
+  const [ publishedButtonState, setPublishedButtonState ] = useState("unpublished");
+  const [ savedButtonState, setSavedButtonState ] = useState("unsaved");
 
 
   if (!user) {
@@ -109,6 +111,7 @@ function CreatePosts() {
       };
       const editPosts = await dispatch(editPost(newPost));
       setPosts(editPost);
+      setPublishedButtonState("published");
       return editPosts;
     } else {
       const newPost = {
@@ -121,6 +124,7 @@ function CreatePosts() {
       };
       const newPosts = await dispatch(createPost(newPost));
       setPosts(newPosts);
+      setPublishedButtonState("published")
       return newPosts;
     }
   };
@@ -164,6 +168,7 @@ let timer;
           const drafts = await dispatch(getAllDraftsByUser(userId));
           setTimeout(() => setSaving(false), 2000); 
           setDrafts(drafts);
+          setSavedButtonState("saved");
           return updatedDrafts;
     // }else { // Part of auto saving... TODO
     // clearTimeout(timer);
@@ -251,6 +256,10 @@ let timer;
         setPushedSave={setPushedSave}
         setSaving={setSaving}
         saving={saving}
+        publishedButtonState={publishedButtonState}
+        setPublishedButtonState={setPublishedButtonState}
+        savedButtonState={savedButtonState}
+        setSavedButtonState={setSavedButtonState}
       />
     </div>
   );

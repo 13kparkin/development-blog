@@ -43,7 +43,7 @@ const Home = () => {
       return new Date(b.updatedAt) - new Date(a.updatedAt);
     });
 
-    return newest5PostsArray?.slice(0, 5);
+    return newest5PostsArray?.slice(0, 6);
   }
 
   const newLimitedArray = newest5Posts();

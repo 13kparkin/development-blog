@@ -219,6 +219,76 @@ textarea {
   border: 2px solid var(--Green);
 }
 
+
+.save-button {
+  margin-left: 50rem;
+  margin-top: -1.2rem;
+  position: absolute;
+  background-color: var(--PurpleGradient);
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid var(--Green);
+}
+
+.save-button::after {
+  content: "";
+  display: block;
+  position: absolute;
+  margin-left: -1rem;
+  margin-top: -1.4rem;
+  border-radius: 5px;
+  width: 0;
+  height: 100%;
+  background: var(--Green);
+  animation: load 3s forwards;
+  overflow: hidden;
+}
+
+.save-button.loading-save::after {
+  animation-play-state: running;
+}
+
+
+@keyframes load {
+  0% {
+    width: 0;
+  }
+  10% {
+    width: 5%;
+  }
+  20% {
+    width: 15%;
+  }
+  30% {
+    width: 25%;
+  }
+  40% {
+    width: 30%;
+  }
+  50% {
+    width: 44%;
+  }
+  60% {
+    width: 50%;
+  }
+  70% {
+    width: 72%;
+  }
+  80% {
+    width: 84%;
+  }
+  90% {
+    width: 92%;
+  }
+  100% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+
 /* todo: add media query to move preview to the far right of the screen for larger screens */
 
 /* todo: add animation to pushing publish and delete buttons. Also can move the delete button to the side of publish instead of above */

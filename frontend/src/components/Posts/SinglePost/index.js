@@ -158,7 +158,7 @@ const SinglePost = () => {
           <div className="single-post-title">{singlePostObj?.title}</div>
           <div className="single-post-body">
             <ReactMarkdown
-                      className="home-markdown-preview"
+                      className="single-post-body"
                       children={singlePostObj?.body}
                       components={{
                         code({ node, inline, className, children, ...props }) {

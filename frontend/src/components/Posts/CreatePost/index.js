@@ -27,6 +27,7 @@ function CreatePosts() {
   const [pushedSave, setPushedSave] = useState(false);
   const [posts, setPosts] = useState([]);
   const [drafts, setDrafts] = useState([]);
+  const [saving, setSaving] = useState(false);
   const [activePosts, setActivePosts] = useState(false);
   const [activeDrafts, setActiveDrafts] = useState(false);
   const [postsByDraftId, setPostsByDraftId] = useState([]);
@@ -36,6 +37,7 @@ function CreatePosts() {
   const postsByUserId = useSelector((state) => state.posts.allPostsByUser);
   const postByDraftId = useSelector((state) => state.posts.postsByDraftId);
   const history = useHistory();
+  const [ createArticleButtonPushed, setCreateArticleButtonPushed ] = useState(false);
 
 
   if (!user) {
@@ -69,6 +71,10 @@ function CreatePosts() {
       body: "",
       userId,
     };
+
+    setTimeout(() => {
+      setCreateArticleButtonPushed(false);
+    }, 2000);
 
     const newDrafts = await dispatch(createDraft(newDraft));
     const newImage = {
@@ -157,6 +163,7 @@ let timer;
 
           const updatedDrafts = await dispatch(editDraft(updatedDraft));
           const drafts = await dispatch(getAllDraftsByUser(userId));
+          setTimeout(() => setSaving(false), 2000); 
           setDrafts(drafts);
           return updatedDrafts;
     // }else { // Part of auto saving... TODO
@@ -231,6 +238,8 @@ let timer;
         activePosts={activePosts}
         setActiveDrafts={setActiveDrafts}
         setActivePosts={setActivePosts}
+        createArticleButtonPushed={createArticleButtonPushed}
+        setCreateArticleButtonPushed={setCreateArticleButtonPushed}
       />
       <Main
         postByDraftId={postByDraftId}
@@ -241,6 +250,8 @@ let timer;
         onDeletePosts={onDeletePosts}
         pushedSave={pushedSave}
         setPushedSave={setPushedSave}
+        setSaving={setSaving}
+        saving={saving}
       />
     </div>
   );

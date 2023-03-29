@@ -52,7 +52,7 @@ const Main = ({
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [url, setUrl] = useState("");
-  const [markdown, setMarkdown] = useState('');
+  const [markdown, setMarkdown] = useState("");
   const dispatch = useDispatch();
   const error = {};
   let invalidUrl = [];
@@ -88,11 +88,10 @@ const Main = ({
   };
 
   const handleSaveButtonClick = async (e) => {
-    const imageUrl = url
-    convertImageUrlToMarkdown(imageUrl, (markdown) => {
-
-      setMarkdown(markdown);
-      setUrlError([]);
+    const imageUrl = url;
+    setUrlError([]);
+    if (imageUrl.startsWith("![Image](") && imageUrl.endsWith(")")) {
+      setMarkdown(imageUrl);
       setTitle(e.target.value);
       setBody(e.target.value);
       const savedDraft = {
@@ -100,29 +99,43 @@ const Main = ({
         body,
       };
       setPushedSave(true);
-      setUrlError([]);
       onEditTitleField("title", "body", savedDraft);
-      onEditImage("img", markdown);
-  });
+      onEditImage("img", imageUrl);
+      return;
+    }
+    convertImageUrlToMarkdown(imageUrl, (markdown) => {
+      if (urlError.length === 0) {
+        setMarkdown(markdown);
+        setTitle(e.target.value);
+        setBody(e.target.value);
+        const savedDraft = {
+          title,
+          body,
+        };
+        setPushedSave(true);
+        onEditTitleField("title", "body", savedDraft);
+        onEditImage("img", markdown);
+      }
+    });
   };
 
   if (!activeDrafts)
     return <div className="no-active-posts">No Active Articles</div>;
 
-    const convertImageUrlToMarkdown = (url, callback) => {
-      const img = new Image();
-      img.src = url;
-    
-      img.onload = () => {
-        const validUrl = `![Image](${url})`;
-        callback(validUrl);
-      };
-    
-      img.onerror = () => {
-        callback(url);
-        setUrlError(['Please enter a valid image URL']);
-      };
+  const convertImageUrlToMarkdown = (url, callback) => {
+    const img = new Image();
+    img.src = url;
+
+    img.onerror = () => {
+      callback(url);
+      setUrlError(["Please enter a valid image URL"]);
     };
+
+    img.onload = () => {
+      const validUrl = `![Image](${url})`;
+      callback(validUrl);
+    };
+  };
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -132,7 +145,6 @@ const Main = ({
     setBody(e.target.value);
     // onEditField("body", e.target.value);
   };
-
 
   const handleUrlChange = (e) => {
     const imageUrl = e.target.value;

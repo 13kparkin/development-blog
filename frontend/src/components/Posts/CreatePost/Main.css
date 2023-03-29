@@ -1,129 +1,187 @@
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@900&display=swap");
 
 .app-main {
-    width: 40rem;
-    /* height: 100vh; */
-    overflow-x: auto;
-  }
+  width: 40rem;
+  /* height: 100vh; */
+  overflow-x: auto;
+}
 
-  .app-main-posts-edit .body input,
-  textarea {
-    display: block;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    margin-bottom: 10rem;
-    width: 30rem;
-    height: 20rem;
-    padding: 1rem;
-    resize: none;
-    font-size: inherit;
-    font-family: inherit;
-  }
+.app-main-posts-edit .body input,
+textarea {
+  display: block;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  margin-bottom: 10rem;
+  width: 30rem;
+  height: 20rem;
+  padding: 1rem;
+  resize: none;
+  font-size: inherit;
+  font-family: inherit;
+}
 
-  .img-url{
-    display: flex;
-    position: absolute;
-    top: 6rem;
-    left: 26rem;
-    width: 30rem;
-    background-image: var(--PurpleGradient);
-    color: var(--LightestSlate);
-    border: 1px solid #ddd;
-  }
+.img-url {
+  display: flex;
+  position: absolute;
+  top: 6rem;
+  left: 26rem;
+  width: 30rem;
+  background-image: var(--PurpleGradient);
+  color: var(--LightestSlate);
+  border: 1px solid #ddd;
+}
 
-  .title {
-    display: flex;
-    position: absolute;
-    top: 9rem;
-    left: 26rem;
-    width: 30rem;
-    background-image: var(--PurpleGradient);
-    color: var(--LightestSlate);
-    border: 1px solid #ddd;
-  }
+.title {
+  display: flex;
+  position: absolute;
+  top: 9rem;
+  left: 26rem;
+  width: 30rem;
+  background-image: var(--PurpleGradient);
+  color: var(--LightestSlate);
+  border: 1px solid #ddd;
+}
 
-  .body {
-    display: flex;
-    position: absolute;
-    top: 12.2rem;
-    left: 26rem;
-    width: 30rem;
-    background-image: var(--PurpleGradient);
-    color: var(--LightestSlate);
-  }
+.body {
+  display: flex;
+  position: absolute;
+  top: 12.2rem;
+  left: 26rem;
+  width: 30rem;
+  background-image: var(--PurpleGradient);
+  color: var(--LightestSlate);
+}
+
+.tags {
+  display: flex;
+  position: absolute;
+  top: 33rem;
+  left: 26rem;
+  width: 15rem;
+  background-image: var(--PurpleGradient);
+  color: var(--LightestSlate);
+  border: 1px solid #ddd;
+}
+
+.tags:focus {
+  outline: none;
+}
+
+.title:focus {
+  outline: none;
+}
+
+.img-url:focus {
+  outline: none;
+}
+
+.body:focus {
+  outline: none;
+}
+
+.app-main-posts-edit input {
+  display: block;
+  height: 2rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+/* Preview */
+.app-main-posts-preview {
+  position: absolute;
+  top: 37rem;
+  left: 9rem;
+  width: 38rem;
+  border: 1px solid var(--LightestSlate);
+  border-radius: 10px;
+  overflow-y: scroll;
+  background-color: #10193c;
+}
+
+.app-main-posts-preview img {
+  width: 42rem;
+  height: 16rem;
+  border-radius: 10px;
+  margin-top: -1rem;
+  margin-left: -1rem;
+}
+
+.preview-user {
+  display: flex;
+  padding: 0 1rem 0 2.2rem;
+  margin-top: 1rem;
+}
+
+.saved-date {
+  display: flex;
+  padding: 0 1rem 0 2.2rem;
+  margin-top: -0.2rem;
+  font-size: 10px;
+  padding-bottom: 2rem;
+}
+
+.preview-title {
+  font-family: var(--Font);
+  padding: 0 1rem 0 2.2rem;
+  margin-top: -0.5rem;
+  padding-bottom: 2rem;
+}
+
+.markdown-preview {
+  padding: 0 1rem 0 2.2rem;
+  word-wrap: break-word;
+  line-height: 1rem;
+  font-size: 0.8rem;
+  padding-bottom: 1rem;
+  font-weight: var(--FontWeightBody);
+}
+
+.markdown-preview img {
+  margin-top: 1rem;
+  margin-left: 0.1rem;
+  width: 33rem;
+  height: 20rem;
+}
+
+.error-message-url{
+  color: rgb(240, 18, 18);
+  position: absolute;
+  top: 4.5rem;
+  left: 26rem;
+}
+
+.save-button {
+  margin-left: 50rem;
+  margin-top: -1.2rem;
+  position: absolute;
+  background-color: var(--PurpleGradient);
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid var(--Green);
+  transition: 0.05s ease;
+}
+
+.save-button:hover {
+  color: var(--Green);
+  box-shadow: 1px 1px 0.8rem 1px var(--Slate);
+  text-decoration: none;
+  border: 2px solid var(--Green);
+  cursor: pointer;
+}
+
+.no-active-posts{
+  color: var(--White);
+  font-size: 1.2rem;
+  position: absolute;
+  top: 15rem;
+  left: 33rem;
+
+}
 
 
+/* main publish button styling */
 
-  .app-main-posts-edit input {
-    display: block;
-    height: 2rem;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-  }
-  
-  /* Preview */
-  .app-main-posts-preview {
-    position: absolute;
-    top: 37rem;
-    left: 9rem;
-    width: 38rem;
-    border: 1px solid var(--LightestSlate);
-    border-radius: 10px;
-    overflow-y: scroll;
-    background-color: #10193c;
-  }
-
-  .app-main-posts-preview img {
-    width: 42rem;
-    height: 16rem;
-    border-radius: 10px;
-    margin-top: -1rem;
-    margin-left: -1rem;
-  }
-
-  .preview-user {
-    display: flex;
-    padding: 0 1rem 0 2.2rem;
-    margin-top: 1rem;
-  }
-
-  .saved-date {
-    display: flex;
-    padding: 0 1rem 0 2.2rem;
-    margin-top: -0.2rem;
-    font-size: 10px;
-    padding-bottom: 2rem;
-  }
-  
-  .preview-title {
-    font-family: var(--Font);
-    padding: 0 1rem 0 2.2rem;
-    margin-top: -.5rem;
-    padding-bottom: 2rem;
-  }
-
-  
-  .markdown-preview {
-    padding: 0 1rem 0 2.2rem;
-    word-wrap: break-word;
-    line-height: 1rem;
-    font-size: .8rem;
-    padding-bottom: 1rem;
-    font-weight: var(--FontWeightBody);
-  }
-
-  .markdown-preview img{
-    margin-top: 1rem;
-    margin-left: .1rem;
-    width: 33rem;
-    height: 20rem;
-
-  }
-
-
-  /* main publish button styling */
-
-  .app-main-posts-preview button {
+.app-main-posts-preview button {
   font-size: 1.1em;
   color: var(--Green);
   font-size: small;
@@ -138,17 +196,29 @@
   font-weight: bold;
   border: 2px solid var(--Green);
   transition: 0.05s ease;
-  }
+}
 
-  .app-main-posts-preview button:hover {
-    color: var(--Green);
-    box-shadow: 1px 1px 0.8rem 1px var(--Slate);
-    text-decoration: none;
-    border: 2px solid var(--Green);
-    cursor: pointer;
-  }
+.app-main-posts-preview button:hover {
+  color: var(--Green);
+  box-shadow: 1px 1px 0.8rem 1px var(--Slate);
+  text-decoration: none;
+  border: 2px solid var(--Green);
+  cursor: pointer;
+}
 
+/* animations */
 
-  /* todo: add media query to move preview to the far right of the screen for larger screens */
+.pushed-saved {
+  animation: push-animation 0.06s;
+  margin-left: 50rem;
+  margin-top: -1.2rem;
+  position: absolute;
+  background-color: var(--PurpleGradient);
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid var(--Green);
+}
 
-  /* todo: add animation to pushing publish and delete buttons. Also can move the delete button to the side of publish instead of above */
+/* todo: add media query to move preview to the far right of the screen for larger screens */
+
+/* todo: add animation to pushing publish and delete buttons. Also can move the delete button to the side of publish instead of above */

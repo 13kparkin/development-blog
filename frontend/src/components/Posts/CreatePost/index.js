@@ -24,6 +24,7 @@ import { useHistory } from "react-router-dom";
 function CreatePosts() {
   const dispatch = useDispatch();
   const currentPost = useSelector((state) => state.posts.singlePost);
+  const [pushedSave, setPushedSave] = useState(false);
   const [posts, setPosts] = useState([]);
   const [drafts, setDrafts] = useState([]);
   const [activePosts, setActivePosts] = useState(false);
@@ -102,6 +103,7 @@ function CreatePosts() {
         draftId: draftById.id,
       };
       const editPosts = await dispatch(editPost(newPost));
+      setPosts(editPost);
       return editPosts;
     } else {
       const newPost = {
@@ -113,6 +115,7 @@ function CreatePosts() {
         draftId: draftById.id,
       };
       const newPosts = await dispatch(createPost(newPost));
+      setPosts(newPosts);
       return newPosts;
     }
   };
@@ -126,35 +129,59 @@ function CreatePosts() {
   };
 
   const onDeletePosts = async (postId) => {
-    console.log(postId)
     const deletePosts = await dispatch(deletePost(postId));
 
     
     setPosts(posts);
     return deletePosts;
   };
+let timer;
 
-  let timer;
+
+
+  
   const onUpdateDrafts = async (updatedDraft) => {
-    clearTimeout(timer);
-    timer = setTimeout(async () => {
-      const updateDraft = {
-        title: updatedDraft.title,
-        description: updatedDraft.description,
-        body: updatedDraft.body,
-        updatedAt: updatedDraft.updatedAt,
-        userId,
-      };
-      const updateDrafts = await dispatch(editDraft(updatedDraft));
-      const drafts = await dispatch(getAllDraftsByUser(userId));
-      setDrafts(drafts);
-      return updateDrafts;
-    }, 5000);
+    // console.log("updatedDraft", updatedDraft)
+    // console.log("pushedSave", pushedSave)
+
+    // if (pushedSave) { /// This will be needed for auto saving will come back to..... TODO
+
+      setTimeout(() => setPushedSave(false), 200);
+      // const updateDraft = {
+      //       title: updatedDraft.title,
+      //       description: updatedDraft.description,
+      //       body: updatedDraft.body,
+      //       updatedAt: updatedDraft.updatedAt,
+      //       userId,
+      //     };
+
+          const updatedDrafts = await dispatch(editDraft(updatedDraft));
+          const drafts = await dispatch(getAllDraftsByUser(userId));
+          setDrafts(drafts);
+          return updatedDrafts;
+    // }else { // Part of auto saving... TODO
+    // clearTimeout(timer);
+    // timer = setTimeout(async () => {
+    //   const updateDraft = {
+    //     title: updatedDraft.title,
+    //     description: updatedDraft.description,
+    //     body: updatedDraft.body,
+    //     updatedAt: updatedDraft.updatedAt,
+    //     userId,
+    //   };
+    //   const updateDrafts = await dispatch(editDraft(updatedDraft));
+    //   const drafts = await dispatch(getAllDraftsByUser(userId));
+    //   setDrafts(drafts);
+    //   return updateDrafts;
+    
+    // }, 5000);
+  // }
+    
   };
 
   const onUpdateImage = async (updatedImage) => {
-    clearTimeout(timer);
-    timer = setTimeout(async () => {
+    // clearTimeout(timer);
+    // timer = setTimeout(async () => {
       const updateImage = {
         draftId: updatedImage.draftId,
         url: updatedImage.img,
@@ -167,20 +194,20 @@ function CreatePosts() {
       const drafts = await dispatch(getAllDraftsByUser(userId));
       setDrafts(drafts);
       return updateImages;
-    }, 5000);
+    // }, 5000);
   };
 
-  const getActivePosts = () => {
-    let finalPosts;
-    let finalDrafts;
-    if (posts.posts?.length > 0) {
-      finalPosts = posts.find(({ id }) => id === activePosts);
-    }
-    if (drafts.drafts?.length > 0) {
-      finalDrafts = drafts.find(({ id }) => id === activeDrafts);
-    }
-    return finalPosts;
-  };
+  // const getActivePosts = () => {
+  //   let finalPosts;
+  //   let finalDrafts;
+  //   if (posts.posts?.length > 0) {
+  //     finalPosts = posts.find(({ id }) => id === activePosts);
+  //   }
+  //   if (drafts.drafts?.length > 0) {
+  //     finalDrafts = drafts.find(({ id }) => id === activeDrafts);
+  //   }
+  //   return finalPosts;
+  // };
 
   const getActiveDrafts = () => {
     let finalDrafts;
@@ -189,6 +216,7 @@ function CreatePosts() {
     }
     return finalDrafts;
   };
+
 
   return (
     <div className="create-posts">
@@ -211,6 +239,8 @@ function CreatePosts() {
         onUpdateImage={onUpdateImage}
         onAddPost={onAddPost}
         onDeletePosts={onDeletePosts}
+        pushedSave={pushedSave}
+        setPushedSave={setPushedSave}
       />
     </div>
   );

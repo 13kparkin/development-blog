@@ -6,6 +6,8 @@ import { getSinglePost, getAllPosts } from "../../../store/posts";
 import { useHistory, useParams } from "react-router-dom";
 import { timeConverter } from "../../../utils/time";
 import { getGptMessages } from "../../../store/gpt";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const SinglePost = () => {
   const dispatch = useDispatch();
@@ -16,6 +18,7 @@ const SinglePost = () => {
   const [question, setQuestion] = useState("");
   const [gptMessageHistory, setGptMessageHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [countDown, setCountDown] = useState(15);
   const [error, setError] = useState([]);
 
   const [gptAnswers, setGptAnswers] = useState("");
@@ -46,6 +49,7 @@ const SinglePost = () => {
       setQuestion("");
       setIsLoading(false);
     }, 15000);
+    
     const answers = await getGptMessagesData(articleString, question);
     setGptAnswers(answers);
     clearTimeout(timer);
@@ -68,7 +72,30 @@ const SinglePost = () => {
       const posts = await dispatch(getSinglePost(postId));
     };
     getSinglePostData();
-  }, [dispatch]);
+    let intervalId;
+    if (isLoading) {
+      intervalId = setInterval(() => {
+        if(countDown > 0){
+          setCountDown(countDown - 1);
+        }
+      }, 1000);
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [dispatch, countDown, isLoading, postId]);
+
+  useEffect(() => {
+    if (isLoading === false) {
+      setCountDown(15);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (error.length > 0) {
+      setIsLoading(false);
+    }
+  }, [error]);
 
 
 
@@ -90,6 +117,7 @@ const SinglePost = () => {
               disabled={gptPushed}
             >
               {isLoading ? <span className="loader"></span> : "Send"}
+              {isLoading && <span className="countdown">{countDown}</span>}
             </button>
           </div>
           <div className="single-post-chat-response">
@@ -99,12 +127,12 @@ const SinglePost = () => {
                   {error}
                 </div>
               ))}
-            {gptMessageHistory.map((message, index) => (
+            {gptMessageHistory?.map((message, index) => (
               <div key={index} className="single-post-chat-response-message">
                 <div className="single-post-chat-response-question">
-                  {message.question}
+                  {message?.question}
                 </div>
-                {message.answer.map((answer, index) => (
+                {message?.answer?.map((answer, index) => (
                   <div key={index} className="single-post-chat-response-answer">
                     <ReactMarkdown>{answer}</ReactMarkdown>
                   </div>
@@ -129,7 +157,28 @@ const SinglePost = () => {
           </div>
           <div className="single-post-title">{singlePostObj?.title}</div>
           <div className="single-post-body">
-            <ReactMarkdown>{singlePostObj?.body}</ReactMarkdown>
+            <ReactMarkdown
+                      className="home-markdown-preview"
+                      children={singlePostObj?.body}
+                      components={{
+                        code({ node, inline, className, children, ...props }) {
+                          const match = /language-(\w+)/.exec(className || "");
+                          return !inline && match ? (
+                            <SyntaxHighlighter
+                              children={String(children).replace(/\n$/, "")}
+                              style={atomDark} // theme
+                              language={match[1]}
+                              PreTag="section" // parent tag
+                              {...props}
+                            />
+                          ) : (
+                            <code className={className} {...props}>
+                              {children}
+                            </code>
+                          );
+                        },
+                      }}
+                    />
           </div>
         </div>
       </div>

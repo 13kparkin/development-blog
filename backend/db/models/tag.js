@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Tag.belongsTo(models.Post, { foreignKey: 'postId', onDelete: 'CASCADE' })
-      Tag.belongsTo(models.Draft, { foreignKey: 'draftId', onDelete: 'CASCADE' })
+      Tag.belongsToMany(models.Draft, { through: 'TagDraftPost' });
+      Tag.belongsToMany(models.Post, { through: 'TagDraftPost' });
     }
   }
   Tag.init({

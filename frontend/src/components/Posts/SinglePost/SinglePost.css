@@ -2,9 +2,9 @@
     border: 1px solid #2e2d3997;
     box-shadow: 0px 0px 10px 1px #64cabc21;
     background-color: var(--NavBarColor);
-    width: 70%;
-    max-width: 30rem;
-    min-width: 50%;
+    width: 50%;
+    max-width: 50rem;
+    min-width: 35rem;
     height: auto;
     margin: 5rem auto;
     margin-bottom: 1rem;
@@ -39,8 +39,12 @@
     margin-top: 1rem;
     font-weight: 900;
     font-size: 1.5em;
-    margin-left : 9%;
+    margin : 2rem auto;
     
+  }
+
+  .countdown {
+    margin-left: 1rem;
   }
   
   .single-post-body {
@@ -50,7 +54,7 @@
     font-size: 1em;
     font-weight: 400;
     padding-bottom: 1rem;
-    margin-left : 7%;
+    margin-left : 1rem;
   }
   
   .single-post-body img {
@@ -165,7 +169,7 @@
 
   }
 
-  @media screen and (max-width: 970px) {
+  @media screen and (max-width: 1150px) {
     .single-post-chat-container {
       display: none;
     }

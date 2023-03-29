@@ -1,9 +1,10 @@
-/* TODO Add site wide styles */
+/* Global Stylings */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 
 
 :root {
+    --Black: #000000;
     --Navy: #110b30;
     --LightNavy: #112240;
     --LightestNavy: #233554;
@@ -38,6 +39,38 @@
 
 
 }
+
+
+/* code {
+  display: block;
+  background-color: var(--Black);
+  border-radius: 5px;
+  margin: 1em 0;
+  padding: 1em;
+}
+
+code:before {
+  content: 'Code Snippet';
+  display: block;
+  font-weight: bold;
+  margin: -1.5em auto 1em;
+  padding: 0.25em 0.5em;
+  border-bottom: 1px solid var(--Green);
+  border-radius: 5px 5px 0 0;
+  margin-top: -.7rem;
+}
+
+code:hover {
+  background-image: var(--Black);
+}
+
+.token {
+  color: #0077c2;
+}
+.function {
+  color: #005cc5;
+} */
+
 
 button {
     font-size: 1.1em;

@@ -5,13 +5,15 @@ import { getSinglePost, getAllPosts } from "../../store/posts";
 import { createSearch, getSearchHistory } from "../../store/searches";
 import { useHistory } from "react-router-dom";
 import SearchResults from "../Search";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 import "./Home.css";
 
 const Home = () => {
   const wrapperRef = useRef(null);
   const [search, setSearch] = useState("");
-  const [newLimitedArray, setNewLimitedArray] = useState([]);
+  // const [newLimitedArray, setNewLimitedArray] = useState([]);
   const [counter, setCounter] = useState(0);
   const [searchHistoryActive, setSearchHistoryActive] = useState(false);
   const [searchesActive, setSearchesActive] = useState(false);
@@ -36,6 +38,17 @@ const Home = () => {
 
   const newestPost = newestPostFunction();
 
+  function newest5Posts() {
+    const newest5PostsArray = allPostsArray?.sort((a, b) => {
+      return new Date(b.updatedAt) - new Date(a.updatedAt);
+    });
+
+    return newest5PostsArray?.slice(0, 5);
+  }
+
+  const newLimitedArray = newest5Posts();
+
+
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
@@ -43,6 +56,7 @@ const Home = () => {
   useEffect(() => {
     const getAllPostsData = async () => {
       const posts = await dispatch(getAllPosts());
+      return posts;
     };
     getAllPostsData();
 
@@ -57,11 +71,13 @@ const Home = () => {
       setLoggedIn(false);
     }
 
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [wrapperRef, dispatch, user]);
+  }, [wrapperRef, dispatch, user, ]);
+
 
   const handleArticleClick = () => {
     return history.push(`/posts/${newestPost?.id}`);
@@ -90,9 +106,8 @@ const Home = () => {
       searchHistory: search,
       userId: user.id,
     };
-    setSearchHistoryActive(false)
+    setSearchHistoryActive(false);
     dispatch(createSearch(searchObj));
-
   };
 
   const date = new Date(newestPost?.updatedAt);
@@ -103,27 +118,29 @@ const Home = () => {
     return null;
   }
 
-  if (allPostsArray?.length > 6) {
-    const newPostArray = allPostsArray?.slice(0, 6);
-    setNewLimitedArray(...newPostArray);
-  }
+  // if (newLimitedArray?.length > 6) {
+  //   const newPostArray = allPostsArray?.slice(0, 6);
+  //   setNewLimitedArray([...newPostArray]);
+  // }
 
   const newPostArrayLength = newLimitedArray?.length;
   const limitedPostsView = newLimitedArray?.length + 6;
 
   // This function handles the click event for the "More Posts" button. It will slice the allPostsArray and return the next 6 posts. todo: need to add this
-  function handleMorePostsClick() {
-    const newPostArray = allPostsArray?.slice(
-      newPostArrayLength,
-      limitedPostsView
-    );
-    setNewLimitedArray(newPostArray, ...newPostArray);
-  }
+  // function handleMorePostsClick() {
+  //   const newPostArray = allPostsArray?.slice(
+  //     newPostArrayLength,
+  //     limitedPostsView
+  //   );
+  //   setNewLimitedArray(newPostArray, ...newPostArray);
+  // }
 
-  if (newLimitedArray?.length === 0 && counter < 5) {
-    setNewLimitedArray(allPostsArray);
-    setCounter(counter + 1);
-  }
+  
+
+  // if (newLimitedArray?.length === 0 && counter < 5) { // This is the reason the cards are not rerendering...
+  //   setNewLimitedArray(allPostsArray);
+  //   setCounter(counter + 1);
+  // }
 
   function handSearchHistoryOnclick(result) {
     return () => {
@@ -155,24 +172,25 @@ const Home = () => {
               onChange={handleSearchChange}
               onClick={(e) => handleClickSearch(e)}
             />
-            {searchHistoryActive && loggedIn && Object.values(searchHistoryArray)?.[0]?.history && (
-              <div ref={wrapperRef} className="search-history-container">
-                {Object.values(searchHistoryArray)?.map((result) => (
-                  
-                  <div
-                    key={`${result?.id}`}
-                    onClick={handSearchHistoryOnclick(result?.history)}
-                    className="search-history"
-                  >
-                    {result?.history && (
-                      <div className="search-history-text">
-                        {result?.history}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
+            {searchHistoryActive &&
+              loggedIn &&
+              Object.values(searchHistoryArray)?.[0]?.history && (
+                <div ref={wrapperRef} className="search-history-container">
+                  {Object.values(searchHistoryArray)?.map((result) => (
+                    <div
+                      key={`${result?.id}`}
+                      onClick={handSearchHistoryOnclick(result?.history)}
+                      className="search-history"
+                    >
+                      {result?.history && (
+                        <div className="search-history-text">
+                          {result?.history}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             <div className="searchResults">
               <SearchResults
                 setSearchesActive={setSearchesActive}
@@ -200,9 +218,30 @@ const Home = () => {
                 <div className="home-saved-date">{`Updated on ${month}, ${day}`}</div>
                 <h1 className="home-preview-title">{newestPost?.title}</h1>
                 <div className="home-markdown-preview-body">
-                  <ReactMarkdown className="home-markdown-preview">
-                    {newestPost?.body}
-                  </ReactMarkdown>
+                  <div className="home-markdown-preview-body">
+                    <ReactMarkdown
+                      className="home-markdown-preview-top-card"
+                      children={newestPost?.body}
+                      components={{
+                        code({ node, inline, className, children, ...props }) {
+                          const match = /language-(\w+)/.exec(className || "");
+                          return !inline && match ? (
+                            <SyntaxHighlighter
+                              children={String(children).replace(/\n$/, "")}
+                              style={atomDark} // theme
+                              language={match[1]}
+                              PreTag="section" // parent tag
+                              {...props}
+                            />
+                          ) : (
+                            <code className={className} {...props}>
+                              {children}
+                            </code>
+                          );
+                        },
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -227,7 +266,28 @@ const Home = () => {
                 <h1>{post?.title}</h1>
               </div>
               <div className="bottom-section-card-body">
-                <ReactMarkdown>{post?.body}</ReactMarkdown>
+                <ReactMarkdown
+                  className="home-markdown-preview-bottom-cards"
+                  children={post?.body}
+                  components={{
+                    code({ node, inline, className, children, ...props }) {
+                      const match = /language-(\w+)/.exec(className || "");
+                      return !inline && match ? (
+                        <SyntaxHighlighter
+                          children={String(children).replace(/\n$/, "")}
+                          style={atomDark} // theme
+                          language={match[1]}
+                          PreTag="section" // parent tag
+                          {...props}
+                        />
+                      ) : (
+                        <code className={className} {...props}>
+                          {children}
+                        </code>
+                      );
+                    },
+                  }}
+                />
               </div>
             </div>
           ))}

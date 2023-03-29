@@ -100,6 +100,7 @@ export const deleteDraft = (id) => async (dispatch) => {
 // Edit drafts /api/drafts/:id
 export const editDraft = (drafts) => async (dispatch) => {
   const { title, body, userId, description, id, updatedAt } = drafts;
+
   const response = await csrfFetch(`/api/drafts/${id}`, {
     method: "PUT",
     headers: {

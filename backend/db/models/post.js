@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       Post.belongsTo(models.User, { foreignKey: 'userId' })
       Post.hasMany(models.PostsImage, { foreignKey: 'postId', onDelete: 'CASCADE' })
       Post.belongsTo(models.Draft, { foreignKey: 'draftId', onDelete: 'CASCADE' })
-      Post.hasMany(models.Tag, { foreignKey: 'draftId', onDelete: 'CASCADE' })
+      Post.belongsToMany(models.Tag, { through: 'TagDraftPost' });
     }
   }
   Post.init({

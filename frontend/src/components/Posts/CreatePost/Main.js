@@ -10,6 +10,8 @@ import {
 } from "../../../store/drafts";
 import "./Main.css";
 import { wordWrap } from "../../../utils/wrapping";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const Main = ({
   activeDrafts,
@@ -17,12 +19,15 @@ const Main = ({
   onUpdateImage,
   onAddPost,
   postByDraftId,
-  onDeletePosts
+  onDeletePosts,
+  pushedSave,
+  setPushedSave,
 }) => {
-  const onEditField = (field, value) => {
+  const onEditTitleField = (titleField, bodyField, {title, body}) => {
     onUpdateDrafts({
       ...activeDrafts,
-      [field]: value,
+      [titleField]: title,
+      [bodyField]: body,
       updatedAt: Date.now(),
     });
   };
@@ -37,7 +42,8 @@ const Main = ({
 
   const [pushedPublished, setPushedPublished] = useState(false);
   const [pushedPublishedWithDelete, setPushedPublishedWithDelete] = useState(false);
-  const [pushedDelete, setPushedDelete] = useState({});
+  const [pushedDelete, setPushedDelete] = useState(false);
+  const [tag, setTag] = useState("");
   const user = useSelector((state) => state.session.user);
   const imageUrl = useSelector((state) => state.drafts);
   const userId = user?.id;
@@ -77,6 +83,30 @@ const Main = ({
     onDeletePosts(id);
   };
 
+
+
+  const handleSaveButtonClick = async (e) => {
+    setTitle(e.target.value);
+    setBody(e.target.value);
+    const savedDraft = {
+      title,
+      body,
+    }
+    setPushedSave(true);
+    
+    onEditTitleField("title", "body", savedDraft );
+
+    const markdown = convertImageUrlToMarkdown(url);
+
+
+    if (error.error) {
+      return;
+    } else {
+      await onEditImage("img", markdown);
+    }
+    
+  };
+
   if (!activeDrafts)
     return <div className="no-active-posts">No Active Articles</div>;
 
@@ -95,24 +125,28 @@ const Main = ({
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
-    onEditField("title", e.target.value);
+    // onEditField("title", e.target.value);
   };
   const handleBodyChange = (e) => {
     setBody(e.target.value);
-    onEditField("body", e.target.value);
+    // onEditField("body", e.target.value);
   };
 
   const handleUrlChange = (e) => {
     const imageUrl = e.target.value;
-    const markdown = convertImageUrlToMarkdown(imageUrl);
+    // const markdown = convertImageUrlToMarkdown(imageUrl);
     setUrl(imageUrl);
 
 
-    if (error.error) {
-      return;
-    } else {
-      onEditImage("img", markdown);
-    }
+    // if (error.error) {
+    //   return;
+    // } else {
+    //   onEditImage("img", markdown);
+    // }
+  };
+
+  const handleTagChange = (e) => {
+    setTag(e.target.value);
   };
 
   const date = new Date(activeDrafts.updatedAt);
@@ -146,15 +180,49 @@ const Main = ({
           value={body}
           onChange={handleBodyChange}
         />
+        <input
+          type="text"
+          className="tags"
+          id="tag"
+          placeholder="Tags"
+          value={tag}
+          onChange={handleTagChange}
+          autoFocus
+        />
       </div>
+      <button
+                className={pushedSave ? "pushed-saved" : "save-button"}
+                onClick={handleSaveButtonClick}
+              >
+                Save
+              </button>
       <div className="app-main-posts-preview">
         <ReactMarkdown className="preview-image">{url}</ReactMarkdown>
         <div className="preview-user">{user?.username}</div>
         <div className="saved-date">{`Updated on ${month}, ${day}`}</div>
         <h1 className="preview-title">{title}</h1>
-        <ReactMarkdown className="markdown-preview">
-          {body}
-        </ReactMarkdown>
+        <ReactMarkdown
+                      className="home-markdown-preview"
+                      children={body}
+                      components={{
+                        code({ node, inline, className, children, ...props }) {
+                          const match = /language-(\w+)/.exec(className || "");
+                          return !inline && match ? (
+                            <SyntaxHighlighter
+                              children={String(children).replace(/\n$/, "")}
+                              style={atomDark} // theme
+                              language={match[1]}
+                              PreTag="section" // parent tag
+                              {...props}
+                            />
+                          ) : (
+                            <code className={className} {...props}>
+                              {children}
+                            </code>
+                          );
+                        },
+                      }}
+                    />
         <>
           {postByDraftId?.postByDraftId?.length < 1 && (
             <button

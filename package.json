@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/13kparkin/development-blog/issues"
   },
-  "homepage": "https://github.com/13kparkin/development-blog#readme"
+  "homepage": "https://github.com/13kparkin/development-blog#readme",
+  "dependencies": {
+    "react-syntax-highlighter": "^15.5.0"
+  }
 }

@@ -102,6 +102,16 @@
     overflow: scroll;
   }
 
+  .home-markdown-preview-top-card{
+    padding: 0 2rem 0 2.5rem;
+    width: 36rem;
+    word-wrap: break-word;
+    line-height: 1rem;
+    font-size: .8rem;
+    font-weight: 400;
+    padding-bottom: 1rem;
+  }
+
   .top-section-right-card:hover{
     box-shadow: -13px -4px 15px 1px var(--LowLightUp);
     cursor: pointer;
@@ -153,9 +163,9 @@
   }
 
   
-  .home-markdown-preview {
+  .home-markdown-preview-top-card {
     padding: 0 2rem 0 2.5rem;
-    width: 26rem;
+    width: 25rem;
     word-wrap: break-word;
     line-height: 1rem;
     font-size: .8rem;
@@ -163,7 +173,7 @@
     padding-bottom: 1rem;
   }
 
-  .home-markdown-preview img {
+  .home-markdown-preview-top-card img {
     width: 25rem;
     height: 18rem;
     padding-top: 2rem;
@@ -220,6 +230,15 @@
     font-size: 1.2rem;
   }
   
+
+  .home-markdown-preview-bottom-cards {
+    font-size: .8rem;
+    font-weight: 400;
+    line-height: 1.5;
+    width: 15rem;
+    word-wrap: break-word;
+    color: var(--White);
+  }
   
 
   .bottom-section-card-body img {

@@ -101,6 +101,7 @@ const Main = ({
       const savedDraft = {
         title,
         body,
+        modifiedAt: Date.now(),
       };
       setSaving(true);
       setPushedSave(true);
@@ -121,6 +122,7 @@ const Main = ({
         const savedDraft = {
           title,
           body,
+          modifiedAt: Date.now(),
         };
         setSaving(true);
         setPushedSave(true);
@@ -262,9 +264,9 @@ const Main = ({
           {postByDraftId?.postByDraftId?.length < 1 && (
             <button
               className={pushedPublished ? "preview-publish-button-pushed" : "preview-publish-button-non-pushed"}
-              onClick={() => onAddPost(handlePublishButtonClick)}
+              onClick={handlePublishButtonClick}
             >
-              Publish
+              {pushedPublished ? "Publishing..." : "Publish"}
             </button>
           )}
           {postByDraftId?.postByDraftId?.length > 0 && (
@@ -273,14 +275,14 @@ const Main = ({
                 className={pushedDelete ? "preview-delete-button-pushed" : "preview-delete-button-non-pushed"}
                 onClick={() => onDeletePostsButton(postId)}
               >
-                Delete
+                {pushedDelete ? "Deleting..." : "Delete"}
               </button>
 
               <button
                 className={pushedPublished ? "preview-publish-button-pushed" : "preview-publish-button-non-pushed"}
                 onClick={handlePublishButtonClick}
               >
-                Publish
+                {pushedPublished ? "Publishing..." : "Publish"}
               </button>
             </>
           )}

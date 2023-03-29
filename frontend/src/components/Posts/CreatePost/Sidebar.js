@@ -23,6 +23,8 @@ const Sidebar = ({
   const [pushedDarft, setPushedDraft] = useState(false);
   const [pushed, setPushed] = useState(false);
   const [pushedDelete, setPushedDelete] = useState({});
+  const [activePostClicked, setActivePostClicked] = useState(false);
+  const [activePostId, setActivePostId] = useState(null);
 
   const handleDraftButtonClick = () => {
     setPushedDraft(true);
@@ -41,7 +43,10 @@ const Sidebar = ({
   };
   const pushedPosts = (id) => {
     setPushed(true);
+    setActivePostId(id);
+    setActivePostClicked(true);
     setTimeout(() => setPushed(false), 200);
+    setTimeout(() => setActivePostClicked(false), 200);
     setActiveDrafts(id)
   };
 
@@ -63,7 +68,7 @@ const Sidebar = ({
           <>
             <div
               key={i}
-              className={`app-sidebar-posts ${id === activePosts && "active"}`}
+              className={`app-sidebar-posts ${id === activePostId ? 'active' : ''} ${id === activePostId && activePostClicked ? 'pushed' : ''}`}
               onClick={() => pushedPosts(id)}
             >
               <span className="sidebar-posts-title">
@@ -85,7 +90,7 @@ const Sidebar = ({
               }
               onClick={(e) => onDeleteButton(id)}
             >
-              Delete
+              {pushedDelete[id] ? "Deleting..." : "Delete"}
             </button>
           </>
         ))}

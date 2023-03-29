@@ -198,9 +198,6 @@ textarea {
   transition: 0.05s ease;
 }
 
-.preview-publish-button-pushed {
-  animation: push-animation 0.06s;
-}
 
 .preview-publish-button-non-pushed {
   font-size: 1.1em;
@@ -255,6 +252,7 @@ textarea {
 
 
 /* animations */
+
 
 .pushed-saved {
   animation: push-animation 0.06s;

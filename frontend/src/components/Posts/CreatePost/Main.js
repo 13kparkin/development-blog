@@ -23,7 +23,7 @@ const Main = ({
   pushedSave,
   setPushedSave,
 }) => {
-  const onEditTitleField = (titleField, bodyField, {title, body}) => {
+  const onEditTitleField = (titleField, bodyField, { title, body }) => {
     onUpdateDrafts({
       ...activeDrafts,
       [titleField]: title,
@@ -39,9 +39,11 @@ const Main = ({
   };
 
   // console.log(Object.values(postsByDraftId).length);
-
+  const [isValidUrl, setIsValidUrl] = useState(false);
+  const [urlError, setUrlError] = useState([]);
   const [pushedPublished, setPushedPublished] = useState(false);
-  const [pushedPublishedWithDelete, setPushedPublishedWithDelete] = useState(false);
+  const [pushedPublishedWithDelete, setPushedPublishedWithDelete] =
+    useState(false);
   const [pushedDelete, setPushedDelete] = useState(false);
   const [tag, setTag] = useState("");
   const user = useSelector((state) => state.session.user);
@@ -52,8 +54,9 @@ const Main = ({
   const [url, setUrl] = useState("");
   const dispatch = useDispatch();
   const error = {};
+  let invalidUrl = [];
   let newImageUrl = imageUrl.singleDraft?.draft?.PostsImages?.[0].url;
-  const postId = postByDraftId?.postByDraftId?.[0]?.id
+  const postId = postByDraftId?.postByDraftId?.[0]?.id;
 
   useEffect(() => {
     const getDraftsById = async () => {
@@ -83,28 +86,38 @@ const Main = ({
     onDeletePosts(id);
   };
 
-
-
   const handleSaveButtonClick = async (e) => {
-    setTitle(e.target.value);
-    setBody(e.target.value);
-    const savedDraft = {
-      title,
-      body,
-    }
-    setPushedSave(true);
-    
-    onEditTitleField("title", "body", savedDraft );
-
     const markdown = convertImageUrlToMarkdown(url);
 
+    const img = new Image();
+    img.src = url;
 
-    if (error.error) {
+    img.onload = () => {
+      setIsValidUrl(true);
+      setUrlError([]);
+    };
+
+    img.onerror = () => {
+      setUrlError(['Please enter a valid image URL'])
+      console.log("error", urlError);
+      setIsValidUrl(false);
+    };
+
+    if (error.error || !isValidUrl) {
       return;
     } else {
+      console.log("success")
+      setTitle(e.target.value);
+      setBody(e.target.value);
+      const savedDraft = {
+        title,
+        body,
+      };
+      setPushedSave(true);
+      setUrlError([]);
+      onEditTitleField("title", "body", savedDraft);
       await onEditImage("img", markdown);
     }
-    
   };
 
   if (!activeDrafts)
@@ -132,12 +145,12 @@ const Main = ({
     // onEditField("body", e.target.value);
   };
 
+  function validImageChecker() {}
+
   const handleUrlChange = (e) => {
     const imageUrl = e.target.value;
     // const markdown = convertImageUrlToMarkdown(imageUrl);
     setUrl(imageUrl);
-
-
     // if (error.error) {
     //   return;
     // } else {
@@ -156,6 +169,10 @@ const Main = ({
   return (
     <div className="app-main">
       <div className="app-main-posts-edit">
+        {urlError &&
+          urlError.map((error) => (
+            <div className="error-message-url">{error}</div>
+          ))}
         <input
           type="text"
           className="img-url"
@@ -191,38 +208,38 @@ const Main = ({
         />
       </div>
       <button
-                className={pushedSave ? "pushed-saved" : "save-button"}
-                onClick={handleSaveButtonClick}
-              >
-                Save
-              </button>
+        className={pushedSave ? "pushed-saved" : "save-button"}
+        onClick={handleSaveButtonClick}
+      >
+        Save
+      </button>
       <div className="app-main-posts-preview">
         <ReactMarkdown className="preview-image">{url}</ReactMarkdown>
         <div className="preview-user">{user?.username}</div>
         <div className="saved-date">{`Updated on ${month}, ${day}`}</div>
         <h1 className="preview-title">{title}</h1>
         <ReactMarkdown
-                      className="home-markdown-preview"
-                      children={body}
-                      components={{
-                        code({ node, inline, className, children, ...props }) {
-                          const match = /language-(\w+)/.exec(className || "");
-                          return !inline && match ? (
-                            <SyntaxHighlighter
-                              children={String(children).replace(/\n$/, "")}
-                              style={atomDark} // theme
-                              language={match[1]}
-                              PreTag="section" // parent tag
-                              {...props}
-                            />
-                          ) : (
-                            <code className={className} {...props}>
-                              {children}
-                            </code>
-                          );
-                        },
-                      }}
-                    />
+          className="markdown-preview"
+          children={body}
+          components={{
+            code({ node, inline, className, children, ...props }) {
+              const match = /language-(\w+)/.exec(className || "");
+              return !inline && match ? (
+                <SyntaxHighlighter
+                  children={String(children).replace(/\n$/, "")}
+                  style={atomDark} // theme
+                  language={match[1]}
+                  PreTag="section" // parent tag
+                  {...props}
+                />
+              ) : (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
+            },
+          }}
+        />
         <>
           {postByDraftId?.postByDraftId?.length < 1 && (
             <button

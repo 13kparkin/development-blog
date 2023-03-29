@@ -13,7 +13,7 @@ import "./Home.css";
 const Home = () => {
   const wrapperRef = useRef(null);
   const [search, setSearch] = useState("");
-  const [newLimitedArray, setNewLimitedArray] = useState([]);
+  // const [newLimitedArray, setNewLimitedArray] = useState([]);
   const [counter, setCounter] = useState(0);
   const [searchHistoryActive, setSearchHistoryActive] = useState(false);
   const [searchesActive, setSearchesActive] = useState(false);
@@ -38,6 +38,17 @@ const Home = () => {
 
   const newestPost = newestPostFunction();
 
+  function newest5Posts() {
+    const newest5PostsArray = allPostsArray?.sort((a, b) => {
+      return new Date(b.updatedAt) - new Date(a.updatedAt);
+    });
+
+    return newest5PostsArray?.slice(0, 5);
+  }
+
+  const newLimitedArray = newest5Posts();
+
+
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
@@ -45,6 +56,7 @@ const Home = () => {
   useEffect(() => {
     const getAllPostsData = async () => {
       const posts = await dispatch(getAllPosts());
+      return posts;
     };
     getAllPostsData();
 
@@ -59,12 +71,13 @@ const Home = () => {
       setLoggedIn(false);
     }
 
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [wrapperRef, dispatch, user]);
+  }, [wrapperRef, dispatch, user, ]);
+
 
   const handleArticleClick = () => {
     return history.push(`/posts/${newestPost?.id}`);
@@ -105,27 +118,29 @@ const Home = () => {
     return null;
   }
 
-  if (newLimitedArray?.length > 6) {
-    const newPostArray = allPostsArray?.slice(0, 6);
-    setNewLimitedArray([...newPostArray]);
-  }
+  // if (newLimitedArray?.length > 6) {
+  //   const newPostArray = allPostsArray?.slice(0, 6);
+  //   setNewLimitedArray([...newPostArray]);
+  // }
 
   const newPostArrayLength = newLimitedArray?.length;
   const limitedPostsView = newLimitedArray?.length + 6;
 
   // This function handles the click event for the "More Posts" button. It will slice the allPostsArray and return the next 6 posts. todo: need to add this
-  function handleMorePostsClick() {
-    const newPostArray = allPostsArray?.slice(
-      newPostArrayLength,
-      limitedPostsView
-    );
-    setNewLimitedArray(newPostArray, ...newPostArray);
-  }
+  // function handleMorePostsClick() {
+  //   const newPostArray = allPostsArray?.slice(
+  //     newPostArrayLength,
+  //     limitedPostsView
+  //   );
+  //   setNewLimitedArray(newPostArray, ...newPostArray);
+  // }
 
-  if (newLimitedArray?.length === 0 && counter < 5) {
-    setNewLimitedArray(allPostsArray);
-    setCounter(counter + 1);
-  }
+  
+
+  // if (newLimitedArray?.length === 0 && counter < 5) { // This is the reason the cards are not rerendering...
+  //   setNewLimitedArray(allPostsArray);
+  //   setCounter(counter + 1);
+  // }
 
   function handSearchHistoryOnclick(result) {
     return () => {

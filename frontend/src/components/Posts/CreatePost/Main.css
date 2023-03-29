@@ -143,6 +143,13 @@ textarea {
   height: 20rem;
 }
 
+.error-message-url{
+  color: rgb(240, 18, 18);
+  position: absolute;
+  top: 4.5rem;
+  left: 26rem;
+}
+
 .save-button {
   margin-left: 50rem;
   margin-top: -1.2rem;
@@ -160,6 +167,15 @@ textarea {
   text-decoration: none;
   border: 2px solid var(--Green);
   cursor: pointer;
+}
+
+.no-active-posts{
+  color: var(--White);
+  font-size: 1.2rem;
+  position: absolute;
+  top: 15rem;
+  left: 33rem;
+
 }
 
 

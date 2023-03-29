@@ -71,6 +71,12 @@ code:hover {
   color: #005cc5;
 } */
 
+a {
+  color: var(--Green);
+  text-decoration: none;
+  transition: 0.05s ease;
+}
+
 
 button {
     font-size: 1.1em;

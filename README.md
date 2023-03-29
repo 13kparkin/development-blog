@@ -30,9 +30,9 @@ to answer the questions and uses the article data to train the AI's responses.
 ## Getting Started
 
 1. Clone the repository
-2. Install dependencies using `npm install`
-3. Create a `.env` file with the following variables:
-```
+2. Install dependencies using `npm install` in both frontend and backend directories
+
+
 
 ## Warning
 

@@ -181,7 +181,28 @@ textarea {
 
 /* main publish button styling */
 
-.app-main-posts-preview button {
+.preview-delete-button-non-pushed{
+  font-size: 1.1em;
+  color: var(--Green);
+  font-size: small;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  border-radius: 10px;
+  position: relative;
+  top: 1.7rem;
+  margin-left: 24.5rem;
+  background-color: var(--PurpleGradient);
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid var(--Green);
+  transition: 0.05s ease;
+}
+
+.preview-publish-button-pushed {
+  animation: push-animation 0.06s;
+}
+
+.preview-publish-button-non-pushed {
   font-size: 1.1em;
   color: var(--Green);
   font-size: small;
@@ -205,6 +226,33 @@ textarea {
   border: 2px solid var(--Green);
   cursor: pointer;
 }
+
+.preview-publish-button-pushed {
+  animation: push-animation 0.06s;
+  font-size: 1.1em;
+  color: var(--Green);
+  font-size: small;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  border-radius: 10px;
+  position: relative;
+  top: -1.5rem;
+  margin-left: 30rem;
+  background-color: var(--PurpleGradient);
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid var(--Green);
+  transition: 0.05s ease;
+}
+
+.preview-delete-button-pushed {
+  animation: push-animation 0.06s;
+  top: 1.7rem;
+  transition: 0.05s ease;
+}
+
+
+
 
 /* animations */
 

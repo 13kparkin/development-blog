@@ -126,10 +126,27 @@
 
   .gptPushed {
     display: none;
+    box-shadow: none;
+  }
+  .gptPushed:hover {
+    display: none;
+    box-shadow: none;
   }
 
   .loader {
     display: none;
+  }
+  .loader:hover {
+    display: none;
+    box-shadow: none;
+  }
+
+
+  .countdown{
+    position: absolute;
+    margin-left: -2rem;
+    margin-top: 1.5rem;
+    color: var(--Green);
   }
 
   .single-post-chat-response-error {

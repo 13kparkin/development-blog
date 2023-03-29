@@ -37,7 +37,6 @@ const SinglePost = () => {
     setError([]);
     setgptPushed(true);
     setIsLoading(true);
-    setTimeout(() => setgptPushed(false), 200);
     setQuestion(question);
     const articleString = ` ${singlePostObj?.title} \n ${singlePostObj?.body} \n ${singlePostObj?.User?.username}`;
 
@@ -47,10 +46,12 @@ const SinglePost = () => {
       const newMessage = { question, answer: answers?.final?.everythingFound };
       setGptMessageHistory([newMessage, ...gptMessageHistory]);
       setQuestion("");
+      setgptPushed(false);
       setIsLoading(false);
     }, 15000);
     
     const answers = await getGptMessagesData(articleString, question);
+    setgptPushed(false)
     setGptAnswers(answers);
     clearTimeout(timer);
     if (answers?.final?.everythingFound.length === 0) {
@@ -112,13 +113,13 @@ const SinglePost = () => {
               onChange={handleFieldChange}
             />
             <button
-              className={gptPushed ? "gptPushed" : ""}
+              className={gptPushed ? "gptPushed" : "gptbutton"}
               onClick={chatSendPushed}
               disabled={gptPushed}
             >
               {isLoading ? <span className="loader"></span> : "Send"}
-              {isLoading && <span className="countdown">{countDown}</span>}
             </button>
+            {isLoading && <span className="countdown">{countDown}</span>}
           </div>
           <div className="single-post-chat-response">
             {error &&

@@ -12,6 +12,8 @@ function ProfileButton({ user }) {
   const ulRef = useRef();
   
   const [pushedButton, setPushedButton] = useState(false);
+  const [pushedArticlePage, setPushedArticlePage] = useState(false);
+  const [pushedLogout, setPushedLogout] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [profilePushed, setProfilePushed] = useState(false);
   const [loggedInPushed, setLoggedInPushed] = useState(false);
@@ -69,13 +71,14 @@ function ProfileButton({ user }) {
 
 
   const loggedOutonButtonClick = (e) => {
-    setPushedButton(true);
+    setPushedLogout(true);
+    setTimeout(() => setPushedLogout(false), 200);
     logout(e);
-    setTimeout(() => setPushedButton(false), 100);
-    
   };
 
   const handleNewArticle = () => {
+    setPushedArticlePage(true);
+    setTimeout(() => setPushedArticlePage(false), 200);
     history.push('/posts/new');
   }
 
@@ -121,10 +124,10 @@ function ProfileButton({ user }) {
             <div className="profile-dropdown-username">@{user.username}</div>
            
             </div>
-            <div className="profile-dropdown-create-article">
+            <div className={pushedArticlePage ? "profile-dropdown-create-article-pushed" : "profile-dropdown-create-article"}>
             <button onClick={handleNewArticle}>Create Article</button>
             </div>
-            <div className="profile-dropdown-logout">
+            <div className={pushedLogout ? "profile-dropdown-logout-pushed" : "profile-dropdown-logout"}>
             <button onClick={loggedOutonButtonClick}>Log Out</button>
             </div>
           </div>

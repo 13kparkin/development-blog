@@ -89,11 +89,8 @@ const Main = ({
 
   const handleSaveButtonClick = async (e) => {
     const imageUrl = url
-  convertImageUrlToMarkdown(imageUrl, (markdown) => {
+    convertImageUrlToMarkdown(imageUrl, (markdown) => {
 
-    if (markdown === url) {
-      setUrlError(['Please enter a valid image URL']);
-    } else {
       setMarkdown(markdown);
       setUrlError([]);
       setTitle(e.target.value);
@@ -106,7 +103,6 @@ const Main = ({
       setUrlError([]);
       onEditTitleField("title", "body", savedDraft);
       onEditImage("img", markdown);
-    }
   });
   };
 
@@ -160,7 +156,7 @@ const Main = ({
   return (
     <div className="app-main">
       <div className="app-main-posts-edit">
-        {urlError.length &&
+        {urlError.length > 0 &&
           urlError.map((error) => (
             <div className="error-message-url">{error}</div>
           ))}

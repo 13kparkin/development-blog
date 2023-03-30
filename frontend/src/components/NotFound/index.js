@@ -25,12 +25,11 @@ function NotFound() {
     const forbiddenStatement = "ERROR 404!";
 
 
-
     if (
       notFound === triggerStatement && 
-      Object.values(error404).length <= 1
+      Object.values(error404).length <= 2
     ) {
-      console.log('test')
+      
       history.push("/");
     }
   }
@@ -41,7 +40,7 @@ function NotFound() {
   }, [error404, notFound]);
 
   return (
-    <div contenteditable="true" className="errors-html">
+    <div contentEditable="true" className="errors-html">
       <div className="error">
         <div className="wrap">
           <div className="404">

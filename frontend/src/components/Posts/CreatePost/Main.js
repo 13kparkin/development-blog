@@ -207,7 +207,6 @@ const Main = ({
   const month = date.toLocaleString("default", { month: "long" });
   const day = date.getDate();
 
-  console.log(publishButtonText)
 
 
   return (
@@ -325,7 +324,7 @@ const Main = ({
                     : "preview-publish-button-non-pushed"
                 }
                 onClick={handlePublishButtonClick}
-                disabled={publishedButtonState === "Published" || publishedButtonState === "Publishing..."}
+                disabled={publishButtonText === "Published" || publishButtonText === "Publishing..."}
               >
                 {publishButtonText}
               </button>

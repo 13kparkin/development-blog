@@ -18,14 +18,23 @@ const SinglePost = () => {
   const [question, setQuestion] = useState("");
   const [gptMessageHistory, setGptMessageHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [countDown, setCountDown] = useState(15);
+  const [countDown, setCountDown] = useState(20);
   const [error, setError] = useState([]);
+  const sampleMessages = [
+    "What is this article about?",
+    "What is a summary of this article?",
+    "What is the main idea of this article?",
+  ]
+  const [displaySampleQuestions, setDisplaySampleQuestions] = useState(true);
+  const [serverTimeout, setServerTimeout] = useState(false);
 
   const [gptAnswers, setGptAnswers] = useState("");
 
   const gptMessages = useSelector(
     (state) => state.getGptMessages?.getGptMessages
   );
+  const [activeQuestionId, setActiveQuestionId] = useState(null);
+  const [activeQuestionClicked, setActiveQuestionClicked] = useState(false);
 
   const getGptMessagesData = async (data, question) => {
     const gptMessages = await dispatch(getGptMessages(data, question));
@@ -39,18 +48,22 @@ const SinglePost = () => {
     setIsLoading(true);
     setQuestion(question);
     const articleString = ` ${singlePostObj?.title} \n ${singlePostObj?.body} \n ${singlePostObj?.User?.username}`;
+    setDisplaySampleQuestions(false);
 
     // Timeout for lagged server
     const timer = setTimeout(() => {
-      setError(["The server is taking too long to respond. Please try again."]);
-      const newMessage = { question, answer: answers?.final?.everythingFound };
-      setGptMessageHistory([newMessage, ...gptMessageHistory]);
       setQuestion("");
       setgptPushed(false);
       setIsLoading(false);
-    }, 15000);
+      setServerTimeout(true) 
+      setError(["The server is taking too long to respond. Please try again."]);setGptAnswers(error);
+      // const newMessage = { question, answer: answers?.final?.everythingFound };
+      setGptMessageHistory([...gptMessageHistory]);
+      
+    }, 20000);
     
     const answers = await getGptMessagesData(articleString, question);
+    if (serverTimeout === false) {
     setgptPushed(false)
     setGptAnswers(answers);
     clearTimeout(timer);
@@ -62,6 +75,7 @@ const SinglePost = () => {
     setGptMessageHistory([newMessage, ...gptMessageHistory]);
     setQuestion("");
     setIsLoading(false);
+    }
   };
 
   const handleFieldChange = (e) => {
@@ -88,7 +102,7 @@ const SinglePost = () => {
 
   useEffect(() => {
     if (isLoading === false) {
-      setCountDown(15);
+      setCountDown(20);
     }
   }, [isLoading]);
 
@@ -97,6 +111,12 @@ const SinglePost = () => {
       setIsLoading(false);
     }
   }, [error]);
+
+  const handleSamleQuestionsClick = (e, index) => {
+    setQuestion(e.target.innerText);
+    setActiveQuestionId(index);
+    setActiveQuestionClicked(true);
+  }
 
 
 
@@ -108,7 +128,7 @@ const SinglePost = () => {
           <div className="single-post-chat-input">
             <input
               type="text"
-              placeholder="Type your message here"
+              placeholder="Ask a question about this article"
               value={question}
               onChange={handleFieldChange}
             />
@@ -128,6 +148,18 @@ const SinglePost = () => {
                   {error}
                 </div>
               ))}
+            {displaySampleQuestions && (
+              <div className="single-post-chat-sample-messages">
+                <div className="single-post-chat-sample-message-title">
+                Here are some ideas you can ask:
+                </div>
+                {sampleMessages?.map((message, index) => (
+                  <div onClick={(e) => handleSamleQuestionsClick(e, index)} key={index} className={`single-post-chat-sample-message ${index === activeQuestionId ? 'active' : ''} ${index === activeQuestionId && activeQuestionClicked ? 'pushed': ''}`}>
+                    {message}  
+                </div>
+              ))}
+              </div>
+            )}
             {gptMessageHistory?.map((message, index) => (
               <div key={index} className="single-post-chat-response-message">
                 <div className="single-post-chat-response-question">

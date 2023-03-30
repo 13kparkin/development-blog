@@ -82,6 +82,38 @@
     overflow: scroll;
   }
 
+  .single-post-chat-sample-messages {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+  }
+
+  .single-post-chat-sample-message-title {
+    font-size: .9rem;
+    font-weight: 900;
+    color: var(--Green);
+    margin-bottom: 1rem;
+    padding-left: 1.1rem;
+  }
+
+  .single-post-chat-sample-message {
+    font-size: 0.8rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    width: 88%;
+    border: 1px solid var(--Green);
+    cursor: pointer;
+    padding: 1rem;
+  }
+
+  .single-post-chat-sample-message:hover{
+    color: var(--Green);
+  box-shadow: 1px 1px 0.8rem 1px var(--Slate);
+  text-decoration: none;
+  border: 2px solid var(--Green);
+  cursor: pointer;
+  }
+
   .single-post-chat-input input {
     background-image: var(--PurpleGradient);
     border-radius: 10px;

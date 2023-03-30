@@ -26,7 +26,7 @@ export const getGptMessages = (data, question) => async (dispatch) => {
     }),
   });
   const data1 = await response.json();
-  console.log(data1)
+
   if (response.ok) {
     dispatch(setGpt(data1));
     return data1;

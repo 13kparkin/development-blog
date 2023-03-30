@@ -44,6 +44,49 @@ export const getSingleTag = (id) => async (dispatch) => {
     }
 }
 
+// Create a tag /api/tags/ ///// Implement this in the future
+export const createTag = (tag) => async (dispatch) => {
+    const response = await csrfFetch('/api/tags/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(tag),
+    });
+    const data = await response.json();
+    if (response.ok) {
+        dispatch(setSingleTag(data));
+        return data;
+    }
+    else {
+        console.log('error', data)
+    }
+}
+
+// Update a tag /api/tags/:id
+export const updateTag = (tag) => async (dispatch) => {
+    const [tagId,  postId, draftId] = tag 
+    const response = await csrfFetch(`/api/tags/${tagId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            postId,
+            draftId,
+        }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+        dispatch(setSingleTag(data));
+        return data;
+    }
+    else {
+        console.log('error', data)
+    }
+}
+
+
 const initialState = { allTags: {}, singleTag: {} };
 
 const tagsReducer = (state = initialState, action) => {

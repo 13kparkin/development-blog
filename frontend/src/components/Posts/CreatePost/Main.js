@@ -2,14 +2,9 @@ import ReactMarkdown from "react-markdown";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  createDraft,
-  getAllDraftsByUser,
-  deleteDraft,
-  editDraft,
   getSingleDraft,
 } from "../../../store/drafts";
 import "./Main.css";
-import { wordWrap } from "../../../utils/wrapping";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
@@ -44,12 +39,9 @@ const Main = ({
     });
   };
 
-  // console.log(Object.values(postsByDraftId).length);
-  const [isValidUrl, setIsValidUrl] = useState(false);
+
   const [urlError, setUrlError] = useState([]);
   const [pushedPublished, setPushedPublished] = useState(false);
-  const [pushedPublishedWithDelete, setPushedPublishedWithDelete] =
-    useState(false);
   const [clickedSave, setClickedSave] = useState(false);
   const [pushedDelete, setPushedDelete] = useState(false);
   const [tag, setTag] = useState("");
@@ -61,8 +53,6 @@ const Main = ({
   const [url, setUrl] = useState("");
   const [markdown, setMarkdown] = useState("");
   const dispatch = useDispatch();
-  const error = {};
-  let invalidUrl = [];
   let newImageUrl = imageUrl.singleDraft?.draft?.PostsImages?.[0].url;
   const postId = postByDraftId?.postByDraftId?.[0]?.id;
   let publishButtonText;
@@ -191,13 +181,11 @@ const Main = ({
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
-    // onEditField("title", e.target.value);
     setSavedButtonState("unsaved");
     setPublishedButtonState("unpublished");
   };
   const handleBodyChange = (e) => {
     setBody(e.target.value);
-    // onEditField("body", e.target.value);
     setSavedButtonState("unsaved");
     setPublishedButtonState("unpublished");
   };
@@ -206,13 +194,9 @@ const Main = ({
     const imageUrl = e.target.value;
     setSavedButtonState("unsaved");
     setPublishedButtonState("unpublished");
-    // const markdown = convertImageUrlToMarkdown(imageUrl);
+
     setUrl(imageUrl);
-    // if (error.error) {
-    //   return;
-    // } else {
-    //   onEditImage("img", markdown);
-    // }
+
   };
 
   const handleTagChange = (e) => {

@@ -207,6 +207,8 @@ const Main = ({
   const month = date.toLocaleString("default", { month: "long" });
   const day = date.getDate();
 
+  console.log(saveButtonText)
+
   return (
     <div className="app-main">
       <div className="app-main-posts-edit">
@@ -254,7 +256,7 @@ const Main = ({
           clickedSave ? "loading-save" : ""
         }`}
         onClick={handleSaveButtonClick}
-        disabled={saveButtonText === "Saving..." || "Saved"}
+        // disabled={saveButtonText === "Saving..." || "Saved"}
       >
         <div className="save-button-loading">
           {saveButtonText}

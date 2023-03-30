@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
 import { getSinglePost, getAllPosts } from "../../store/posts";
-import { createSearch, getSearchHistory } from "../../store/searches";
+import { createSearch, getSearchHistory, getSearchHistoryByUser } from "../../store/searches";
 import { useHistory } from "react-router-dom";
 import SearchResults from "../Search";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -91,7 +91,7 @@ const Home = () => {
     e.preventDefault();
     setSearchHistoryActive(true);
     setSearchesActive(true);
-    dispatch(getSearchHistory());
+    dispatch(getSearchHistoryByUser(user.id));
   };
   function searchHistoryActiveFalse() {
     setSearchHistoryActive(false);

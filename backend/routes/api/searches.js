@@ -18,6 +18,23 @@ router.get("/", async (req, res) => {
     return res.json(limitedSearches);
 });
 
+// Get search history for a specific user limited to 5  api/searches/:userId
+router.get("/:userId", async (req, res) => {
+    const { userId } = req.params;
+    const searches = await Search.findAll({
+        where: {
+            userId
+        }
+    });
+
+    const sortedSearches = searches.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    const limitedSearches = sortedSearches.slice(0, 5);
+    return res.json(limitedSearches);
+});
+
 // Post a new search api/searches
 router.post("/", async (req, res) => {
     const { searchHistory, userId } = req.body;

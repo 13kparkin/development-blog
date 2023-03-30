@@ -14,6 +14,13 @@ export const getSearchHistory = () => async (dispatch) => {
     dispatch(setSearchHistory(searchHistory));
 }
 
+// get search history for a specific user
+export const getSearchHistoryByUser = (userId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/searches/${userId}`);
+    const searchHistory = await response.json();
+    dispatch(setSearchHistory(searchHistory));
+}
+
 export const createSearch = (search) => async (dispatch) => {
     const { userId, searchHistory } = search;
 

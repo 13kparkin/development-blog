@@ -207,6 +207,8 @@ const Main = ({
   const month = date.toLocaleString("default", { month: "long" });
   const day = date.getDate();
 
+  console.log(publishButtonText)
+
 
   return (
     <div className="app-main">
@@ -311,6 +313,7 @@ const Main = ({
                     : "preview-delete-button-non-pushed"
                 }
                 onClick={() => onDeletePostsButton(postId)}
+                disabled={publishedButtonState === "Published" || publishedButtonState === "Publishing..."}
               >
                 {pushedDelete ? "Deleting..." : "Delete"}
               </button>
@@ -322,7 +325,7 @@ const Main = ({
                     : "preview-publish-button-non-pushed"
                 }
                 onClick={handlePublishButtonClick}
-                disabled={publishedButtonState === "publishing" || "published"}
+                disabled={publishedButtonState === "Published" || publishedButtonState === "Publishing..."}
               >
                 {publishButtonText}
               </button>

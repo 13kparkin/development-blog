@@ -99,11 +99,52 @@ const Main = ({
       saveButtonText = "Save";
   }
 
-  const handlePublishButtonClick = () => {
+  const handlePublishButtonClick = (e) => {
     setPushedPublished(true);
     setPublishedButtonState("publishing");
     setTimeout(() => setPushedPublished(false), 200);
-    onAddPost();
+    const imageUrl = url;
+    setUrlError([]);
+    
+    if (imageUrl.startsWith("![Image](") && imageUrl.endsWith(")")) {
+      setMarkdown(imageUrl);
+      setSavedButtonState("saving");
+      setTitle(e.target.value);
+      setBody(e.target.value);
+      const savedDraft = {
+        title,
+        body,
+        modifiedAt: Date.now(),
+      };
+      setSaving(true);
+      setPushedSave(true);
+      setClickedSave(true);
+      setTimeout(() => {
+        setClickedSave(false);
+      }, 3000);
+      onEditTitleField("title", "body", savedDraft);
+      onEditImage("img", imageUrl);
+      onAddPost(savedDraft);
+      return;
+    }
+    convertImageUrlToMarkdown(imageUrl, (markdown) => {
+      if (urlError.length === 0) {
+        setMarkdown(markdown);
+        setTitle(e.target.value);
+        setBody(e.target.value);
+        const savedDraft = {
+          title,
+          body,
+          modifiedAt: Date.now(),
+        };
+        setSaving(true);
+        setPushedSave(true);
+        onEditTitleField("title", "body", savedDraft);
+        onEditImage("img", markdown);
+        onAddPost(savedDraft);
+      }
+    });
+    
 
     
     
@@ -298,7 +339,7 @@ const Main = ({
                   ? "preview-publish-button-pushed"
                   : "preview-publish-button-non-pushed"
               }
-              onClick={handlePublishButtonClick}
+              onClick={(e) => handlePublishButtonClick(e)}
             >
               {pushedPublished ? "Publishing..." : "Publish"}
             </button>
@@ -323,7 +364,7 @@ const Main = ({
                     ? "preview-publish-button-pushed"
                     : "preview-publish-button-non-pushed"
                 }
-                onClick={handlePublishButtonClick}
+                onClick={(e) => handlePublishButtonClick(e)}
                 disabled={publishButtonText === "Published" || publishButtonText === "Publishing..."}
               >
                 {publishButtonText}

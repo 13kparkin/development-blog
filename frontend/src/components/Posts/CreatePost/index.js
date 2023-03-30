@@ -90,7 +90,7 @@ function CreatePosts() {
     return newDrafts;
   };
 
-  const onAddPost = async () => {
+  const onAddPost = async (savedDraft) => {
     const drafts = await dispatch(getAllDraftsByUser(userId));
     const draftById = drafts.drafts.find(({ id }) => id === activeDrafts);
 
@@ -102,14 +102,14 @@ function CreatePosts() {
     if (postByDraftIds.postByDraftId.length > 0) {
       const newPost = {
         id: postByDraftIds.postByDraftId[0].id,
-        title: draftById.title,
-        description: draftById.description,
-        body: draftById.body,
+        title: savedDraft.title,
+        body: savedDraft.body,
         userId,
-        updatedAt: draftById.updatedAt,
+        updatedAt: savedDraft.modifiedAt,
         draftId: draftById.id,
       };
       const editPosts = await dispatch(editPost(newPost));
+
       setPosts(editPost);
       setPublishedButtonState("published");
       return editPosts;

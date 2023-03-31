@@ -66,7 +66,7 @@ const Sidebar = ({
           className={pushedDarft ? "pushed" : ""}
           onClick={handleDraftButtonClick}
         >
-          {createArticleButtonPushed ? "Creating..." : "Create Article"}
+          {createArticleButtonPushed ? "Creating..." : "Create Draft"}
         </button>
       </div>
       <div className="app-sidebar-posts-container">

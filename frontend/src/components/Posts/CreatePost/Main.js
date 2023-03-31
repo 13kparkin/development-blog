@@ -1,12 +1,11 @@
 import ReactMarkdown from "react-markdown";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getSingleDraft,
-} from "../../../store/drafts";
+import { getSingleDraft } from "../../../store/drafts";
 import "./Main.css";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { getAllTags, deleteTag } from "../../../store/tags";
 
 const Main = ({
   activeDrafts,
@@ -38,8 +37,8 @@ const Main = ({
       draftId: activeDrafts.id,
     });
   };
-
-
+  const disabled = true; // change this when ready to add tags
+  const wrapperRef = useRef(null);
   const [urlError, setUrlError] = useState([]);
   const [pushedPublished, setPushedPublished] = useState(false);
   const [clickedSave, setClickedSave] = useState(false);
@@ -52,6 +51,10 @@ const Main = ({
   const [body, setBody] = useState("");
   const [url, setUrl] = useState("");
   const [markdown, setMarkdown] = useState("");
+  const allTagsArray = useSelector((state) => state.tags.allTags.tags);
+  const [tagsActive, setTagsActive] = useState(false);
+  const [tags, setTags] = useState([]);
+  const [newTagArray, setNewTagArray] = useState([]);
   const dispatch = useDispatch();
   let newImageUrl = imageUrl.singleDraft?.draft?.PostsImages?.[0].url;
   const postId = postByDraftId?.postByDraftId?.[0]?.id;
@@ -67,9 +70,28 @@ const Main = ({
       return drafts;
     };
     getDraftsById();
+    const getTagsData = async () => {
+      const tags = await dispatch(getAllTags());
+      setNewTagArray(allTagsArray)
+      return tags;
+    };
+    getTagsData();
+
     setTitle(activeDrafts?.title);
     setBody(activeDrafts?.body);
   }, [activeDrafts, newImageUrl]);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setTagsActive(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef]);
 
   switch (publishedButtonState) {
     case "unpublished":
@@ -87,16 +109,16 @@ const Main = ({
 
   switch (savedButtonState) {
     case "unsaved":
-      saveButtonText = "Save";
+      saveButtonText = "Save as Draft";
       break;
     case "saving":
       saveButtonText = "Saving...";
       break;
     case "saved":
-      saveButtonText = "Saved";
+      saveButtonText = "Draft Saved";
       break;
     default:
-      saveButtonText = "Save";
+      saveButtonText = "Save as Draft";
   }
 
   const handlePublishButtonClick = (e) => {
@@ -105,7 +127,7 @@ const Main = ({
     setTimeout(() => setPushedPublished(false), 200);
     const imageUrl = url;
     setUrlError([]);
-    
+
     if (imageUrl.startsWith("![Image](") && imageUrl.endsWith(")")) {
       setMarkdown(imageUrl);
       setSavedButtonState("saving");
@@ -144,10 +166,6 @@ const Main = ({
         onAddPost(savedDraft);
       }
     });
-    
-
-    
-    
   };
 
   const onDeletePostsButton = (id) => {
@@ -163,6 +181,7 @@ const Main = ({
   const handleSaveButtonClick = async (e) => {
     const imageUrl = url;
     setUrlError([]);
+
     if (imageUrl.startsWith("![Image](") && imageUrl.endsWith(")")) {
       setMarkdown(imageUrl);
       setSavedButtonState("saving");
@@ -181,43 +200,47 @@ const Main = ({
       }, 3000);
       onEditTitleField("title", "body", savedDraft);
       onEditImage("img", imageUrl);
-
       return;
     }
-    convertImageUrlToMarkdown(imageUrl, (markdown) => {
-      if (urlError.length === 0) {
-        setMarkdown(markdown);
-        setTitle(e.target.value);
-        setBody(e.target.value);
-        const savedDraft = {
-          title,
-          body,
-          modifiedAt: Date.now(),
-        };
-        setSaving(true);
-        setPushedSave(true);
-        onEditTitleField("title", "body", savedDraft);
-        onEditImage("img", markdown);
-      }
-    });
+
+    try {
+      const markdown = await convertImageUrlToMarkdown(imageUrl);
+      setMarkdown(markdown);
+      setTitle(e.target.value);
+      setBody(e.target.value);
+      const savedDraft = {
+        title,
+        body,
+        modifiedAt: Date.now(),
+      };
+      setSaving(true);
+      setPushedSave(true);
+      onEditTitleField("title", "body", savedDraft);
+      onEditImage("img", markdown);
+    } catch (error) {
+      setUrlError([error]);
+    }
   };
 
   if (!activeDrafts)
     return <div className="no-active-posts">No Active Articles</div>;
 
-  const convertImageUrlToMarkdown = (url, callback) => {
-    const img = new Image();
-    img.src = url;
+  const convertImageUrlToMarkdown = async (url) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = url;
 
-    img.onerror = () => {
-      callback(url);
-      setUrlError(["Please enter a valid image URL"]);
-    };
+      img.onerror = () => {
+        setUrlError(["Please enter a valid image URL"]);
+        reject("Please enter a valid image URL");
+      };
 
-    img.onload = () => {
-      const validUrl = `![Image](${url})`;
-      callback(validUrl);
-    };
+      img.onload = () => {
+        const validUrl = `![Image](${url})`;
+        setUrlError([]);
+        resolve(validUrl);
+      };
+    });
   };
 
   const handleTitleChange = (e) => {
@@ -237,7 +260,6 @@ const Main = ({
     setPublishedButtonState("unpublished");
 
     setUrl(imageUrl);
-
   };
 
   const handleTagChange = (e) => {
@@ -248,7 +270,14 @@ const Main = ({
   const month = date.toLocaleString("default", { month: "long" });
   const day = date.getDate();
 
+  const handleTagfieldClick = () => {
+    setTagsActive(true);
+  };
 
+  const handleTagClick = async (tag) => {
+    setTag((prevTag) => prevTag + (prevTag ? ', ' : '') + tag.tag);
+    setNewTagArray((prevArray) => prevArray.filter((t) => t.tag !== tag.tag));
+  };
 
   return (
     <div className="app-main">
@@ -285,24 +314,85 @@ const Main = ({
           type="text"
           className="tags"
           id="tag"
-          placeholder="Tags"
+          placeholder={disabled ? "Tags coming soon" : "Add Tags"}
           value={tag}
           onChange={handleTagChange}
+          onClick={handleTagfieldClick}
+          disabled={true}
           autoFocus
         />
+        {tagsActive && newTagArray.length > 0 && (
+          <div ref={wrapperRef} className="tags-container">
+            {newTagArray.map((tags) => (
+              <div
+                key={`${tags?.id}`}
+                onClick={(e) => handleTagClick(tags)}
+                className="tags-text"
+              >
+                #{tags?.tag}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-
       <button
         className={`save-button ${pushedSave ? "pushed-saved" : ""} ${
           clickedSave ? "loading-save" : ""
         }`}
         onClick={handleSaveButtonClick}
-        disabled={saveButtonText === "Saving..." || saveButtonText == "Saved"}
+        disabled={
+          saveButtonText === "Saving..." || saveButtonText == "Draft Saved"
+        }
       >
-        <div className="save-button-loading">
-          {saveButtonText}
-        </div>
+        <div className="save-button-loading">{saveButtonText}</div>
       </button>
+      <>
+        {postByDraftId?.postByDraftId?.length < 1 && (
+          <button
+            className={
+              pushedPublished
+                ? "preview-publish-button-non-pushed"
+                : "preview-publish-button-non-pushed"
+            }
+            onClick={(e) => handlePublishButtonClick(e)}
+          >
+            {pushedPublished ? "Publishing..." : "Publish"}
+          </button>
+        )}
+        {postByDraftId?.postByDraftId?.length > 0 && (
+          <>
+            <button
+              className={
+                pushedDelete
+                  ? "preview-delete-button-pushed"
+                  : "preview-delete-button-non-pushed"
+              }
+              onClick={() => onDeletePostsButton(postId)}
+              disabled={
+                publishedButtonState === "Published" ||
+                publishedButtonState === "Publishing..."
+              }
+            >
+              {pushedDelete ? "Setting..." : "Set to Private"}
+            </button>
+
+            <button
+              className={
+                pushedPublished
+                  ? "preview-publish-button-pushed"
+                  : "preview-publish-button-pushed"
+              }
+              onClick={(e) => handlePublishButtonClick(e)}
+              disabled={
+                publishButtonText === "Published" ||
+                publishButtonText === "Publishing..."
+              }
+            >
+              {publishButtonText}
+            </button>
+          </>
+        )}
+      </>
 
       <div className="app-main-posts-preview">
         <ReactMarkdown className="preview-image">{url}</ReactMarkdown>
@@ -331,50 +421,13 @@ const Main = ({
             },
           }}
         />
-        <>
-          {postByDraftId?.postByDraftId?.length < 1 && (
-            <button
-              className={
-                pushedPublished
-                  ? "preview-publish-button-pushed"
-                  : "preview-publish-button-non-pushed"
-              }
-              onClick={(e) => handlePublishButtonClick(e)}
-            >
-              {pushedPublished ? "Publishing..." : "Publish"}
-            </button>
-          )}
-          {postByDraftId?.postByDraftId?.length > 0 && (
-            <>
-              <button
-                className={
-                  pushedDelete
-                    ? "preview-delete-button-pushed"
-                    : "preview-delete-button-non-pushed"
-                }
-                onClick={() => onDeletePostsButton(postId)}
-                disabled={publishedButtonState === "Published" || publishedButtonState === "Publishing..."}
-              >
-                {pushedDelete ? "Deleting..." : "Delete"}
-              </button>
-
-              <button
-                className={
-                  pushedPublished
-                    ? "preview-publish-button-pushed"
-                    : "preview-publish-button-non-pushed"
-                }
-                onClick={(e) => handlePublishButtonClick(e)}
-                disabled={publishButtonText === "Published" || publishButtonText === "Publishing..."}
-              >
-                {publishButtonText}
-              </button>
-            </>
-          )}
-        </>
       </div>
     </div>
   );
 };
 
 export default Main;
+
+
+
+

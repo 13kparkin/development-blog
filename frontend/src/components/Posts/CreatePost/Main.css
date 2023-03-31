@@ -63,6 +63,13 @@ textarea {
   border: 1px solid #ddd;
 }
 
+.tags:disabled {
+  opacity: .5;
+  /* background-image: none; */
+  cursor: not-allowed;
+  
+}
+
 .tags:focus {
   outline: none;
 }
@@ -186,12 +193,27 @@ textarea {
   color: var(--Green);
   font-size: small;
   padding: 0.5rem 1rem;
-  margin-top: 1rem;
+  margin-top: -15.5rem;
   border-radius: 10px;
-  position: relative;
-  top: 1.7rem;
-  margin-left: 24.5rem;
-  background-color: var(--PurpleGradient);
+  position: absolute;
+  margin-left: 56.5rem;
+  background-image: var(--BackgroundColor);
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid var(--Green);
+  transition: 0.05s ease;
+}
+
+.preview-delete-button-pushed{
+  font-size: 1.1em;
+  color: var(--Green);
+  font-size: small;
+  padding: 0.5rem 1rem;
+  margin-top: -15.5rem;
+  border-radius: 10px;
+  position: absolute;
+  margin-left: 56.5rem;
+  background-image: var(--BackgroundColor);
   text-decoration: none;
   font-weight: bold;
   border: 2px solid var(--Green);
@@ -200,20 +222,21 @@ textarea {
 
 
 .preview-publish-button-non-pushed {
+  animation: push-animation 0.06s;
   font-size: 1.1em;
   color: var(--Green);
   font-size: small;
   padding: 0.5rem 1rem;
   margin-top: 1rem;
   border-radius: 10px;
-  position: relative;
-  top: -1.5rem;
-  margin-left: 30rem;
-  background-color: var(--PurpleGradient);
+  position: absolute;
+  margin-left: 56.5rem;
+  margin-top: -18.7rem;
+  background-image: var(--BackgroundColor);
   text-decoration: none;
   font-weight: bold;
   border: 2px solid var(--Green);
-  transition: 0.05s ease;
+
 }
 
 .app-main-posts-preview button:hover {
@@ -225,21 +248,20 @@ textarea {
 }
 
 .preview-publish-button-pushed {
-  animation: push-animation 0.06s;
+ animation: push-animation 0.06s;
   font-size: 1.1em;
   color: var(--Green);
   font-size: small;
   padding: 0.5rem 1rem;
   margin-top: 1rem;
   border-radius: 10px;
-  position: relative;
-  top: -1.5rem;
-  margin-left: 30rem;
-  background-color: var(--PurpleGradient);
+  position: absolute;
+  margin-left: 56.5rem;
+  margin-top: -18.7rem;
+  background-image: var(--BackgroundColor);
   text-decoration: none;
   font-weight: bold;
   border: 2px solid var(--Green);
-  transition: 0.05s ease;
 }
 
 .preview-delete-button-pushed {
@@ -267,71 +289,42 @@ textarea {
 
 
 .save-button {
-  margin-left: 50rem;
-  margin-top: -1.2rem;
+  margin-left: 56.4rem;
+  margin-top: -21.8rem;
   position: absolute;
-  background-color: var(--PurpleGradient);
+  background-image: var(--BackgroundColor);
   text-decoration: none;
   font-weight: bold;
   border: 2px solid var(--Green);
 }
 
-.save-button::after {
-  content: "";
-  display: block;
+.tags-container {
+  border: 1px solid var(--Green);
+  box-shadow: 0px 0px 10px 1px #64cabc21;
+  background-color: #151843;
+  width: 10.8rem;
   position: absolute;
-  margin-left: -1rem;
-  margin-top: -1.4rem;
-  border-radius: 5px;
-  width: 0;
-  height: 100%;
-  background: var(--Green);
-  animation: load 3s forwards;
-  overflow: hidden;
+  overflow: scroll;
+  margin-left: 25.5rem;
+  margin-top: 1rem;
+  border-radius: 10px;
+  height: 10rem;
+  max-height: 90%;
+  z-index: 1;
 }
 
-.save-button.loading-save::after {
-  animation-play-state: running;
-}
-
-
-@keyframes load {
-  0% {
-    width: 0;
-  }
-  10% {
-    width: 5%;
-  }
-  20% {
-    width: 15%;
-  }
-  30% {
-    width: 25%;
-  }
-  40% {
-    width: 30%;
-  }
-  50% {
-    width: 44%;
-  }
-  60% {
-    width: 50%;
-  }
-  70% {
-    width: 72%;
-  }
-  80% {
-    width: 84%;
-  }
-  90% {
-    width: 92%;
-  }
-  100% {
-    width: 100%;
-  }
-  100% {
-    width: 0%;
-  }
+.tags-text {
+  color: var(--White);
+  font-size: 0.8rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  /* margin-left: 0.5rem; */
+  position: relative;
+  font-weight: var(--FontWeightBody);
+  border: 1px solid var(--Green);
+  box-shadow: 0px 0px 10px 1px #64cabc21;
+  background-color: #151843;
+  cursor: pointer;
 }
 
 

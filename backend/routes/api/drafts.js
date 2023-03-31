@@ -147,4 +147,19 @@ router.post("/:id/images", async (req, res) => {
   }
 });
 
+// Add a tag to a draft /api/drafts/:id/tags
+router.post("/:id/tags", async (req, res) => {
+  try {
+    const { tagId } = req.body;
+    const newTag = await TagDraftPost.create({
+      tagId,
+      draftId: req.params.id,
+    });
+    return res.status(200).json({ newTag });
+  }
+  catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;

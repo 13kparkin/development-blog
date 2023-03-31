@@ -63,11 +63,13 @@ const Main = ({
 
   useEffect(() => {
     const getDraftsById = async () => {
+      if (activeDrafts){
       const drafts = await dispatch(getSingleDraft(activeDrafts?.id));
 
       setUrl(newImageUrl);
 
       return drafts;
+      }
     };
     getDraftsById();
     const getTagsData = async () => {
@@ -127,8 +129,14 @@ const Main = ({
     setTimeout(() => setPushedPublished(false), 200);
     const imageUrl = url;
     setUrlError([]);
+    if (!imageUrl.startsWith("![Image](") && !imageUrl.endsWith(")")) {
+      console.log('[test')
+      setUrlError(["Please make sure image is in markdown format or click save to draft to auto convert ie. ![Image](https://i.imgur.com/1J2J3X4.png)"]);
+      return;
+    }
 
     if (imageUrl.startsWith("![Image](") && imageUrl.endsWith(")")) {
+
       setMarkdown(imageUrl);
       setSavedButtonState("saving");
       setTitle(e.target.value);
@@ -217,6 +225,7 @@ const Main = ({
       setPushedSave(true);
       onEditTitleField("title", "body", savedDraft);
       onEditImage("img", markdown);
+      return;
     } catch (error) {
       setUrlError([error]);
     }

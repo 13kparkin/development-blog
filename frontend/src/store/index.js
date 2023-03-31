@@ -7,6 +7,7 @@ import imagesReducer from './images';
 import gptReducer from './gpt';
 import searchesReducer  from "./searches";
 import tagsReducer from "./tags";
+import tagsDraftsReducer from "./tagsDrafts";
 
 
 const rootReducer = combineReducers({
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   images: imagesReducer,
   getGptMessages: gptReducer,
   searches: searchesReducer,
-  tags: tagsReducer
+  tags: tagsReducer,
+  tagsDrafts: tagsDraftsReducer
 });
 
 let enhancer;

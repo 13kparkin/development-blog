@@ -14,9 +14,11 @@ const setSingleTag = (tag) => ({
     payload: tag,
 });
 
-const removeTag = () => ({
+const removeTag = (tag) => ({
     type: REMOVE_TAG,
+    payload: tag,
 });
+
 
 // Get all tags
 export const getAllTags = () => async (dispatch) => {
@@ -86,6 +88,11 @@ export const updateTag = (tag) => async (dispatch) => {
     }
 }
 
+// remove tag 
+export const deleteTag = (tag) => async (dispatch) => {
+    dispatch(removeTag(tag));
+}
+
 
 const initialState = { allTags: {}, singleTag: {} };
 
@@ -96,7 +103,7 @@ const tagsReducer = (state = initialState, action) => {
         case SET_SINGLE_TAG:
             return {...state, singleTag: action.payload}
         case REMOVE_TAG:
-            return {...state, singleTag: {}}
+            return {...state, singleTag: {}, allTags: {...state.allTags, [action.payload.id]:action.payload}}
         default:
             return state;
     }

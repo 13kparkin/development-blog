@@ -56,7 +56,8 @@ const SinglePost = () => {
       setgptPushed(false);
       setIsLoading(false);
       setServerTimeout(true) 
-      setError(["The server is taking too long to respond. Please try again."]);setGptAnswers(error);
+      setError(["The server is taking too long to respond. Please try again."]);
+      setGptAnswers(error);
       // const newMessage = { question, answer: answers?.final?.everythingFound };
       setGptMessageHistory([...gptMessageHistory]);
       

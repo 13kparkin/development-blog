@@ -146,6 +146,7 @@ animation: push-animation 0.06s;
   text-align: left;
   margin-top: -1rem;
   padding-left: .1rem;
+  position: relative;
   border-bottom: 0.1px solid rgb(79, 79, 79);
 }
 

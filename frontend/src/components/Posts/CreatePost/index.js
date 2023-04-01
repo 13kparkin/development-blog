@@ -40,9 +40,14 @@ function CreatePosts() {
   const [ createArticleButtonPushed, setCreateArticleButtonPushed ] = useState(false);
   const [ publishedButtonState, setPublishedButtonState ] = useState("unpublished");
   const [ savedButtonState, setSavedButtonState ] = useState("unsaved");
+  const admin = (user.username === "13kparkin")
 
 
   if (!user) {
+    history.push("/");
+  }
+
+  if (!adimin) {
     history.push("/");
   }
 

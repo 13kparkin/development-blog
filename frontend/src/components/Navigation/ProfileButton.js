@@ -19,6 +19,8 @@ function ProfileButton({ user }) {
   const [loggedInPushed, setLoggedInPushed] = useState(false);
   const [signupPushed, setSignupPushed] = useState(false);
   const history = useHistory();
+  const admin = (user.username === "13kparkin")
+
 
   const openMenu = () => {
     if (showMenu) return;
@@ -124,9 +126,11 @@ function ProfileButton({ user }) {
             <div className="profile-dropdown-username">@{user.username}</div>
            
             </div>
+            {admin && (
             <div className={pushedArticlePage ? "profile-dropdown-create-article-pushed" : "profile-dropdown-create-article"}>
             <button onClick={handleNewArticle}>Create Article</button>
             </div>
+            )}
             <div className={pushedLogout ? "profile-dropdown-logout-pushed" : "profile-dropdown-logout"}>
             <button onClick={loggedOutonButtonClick}>Log Out</button>
             </div>

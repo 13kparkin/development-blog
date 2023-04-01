@@ -47,7 +47,7 @@ function CreatePosts() {
     history.push("/");
   }
 
-  if (!adimin) {
+  if (!admin) {
     history.push("/");
   }
 

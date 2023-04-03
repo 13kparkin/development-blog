@@ -19,7 +19,7 @@ function ProfileButton({ user }) {
   const [loggedInPushed, setLoggedInPushed] = useState(false);
   const [signupPushed, setSignupPushed] = useState(false);
   const history = useHistory();
-  const admin = (user.username === "13kparkin")
+  const admin = (user?.username === "13kparkin")
 
 
   const openMenu = () => {

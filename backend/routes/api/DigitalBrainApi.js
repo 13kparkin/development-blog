@@ -8,6 +8,8 @@ router.post("/", async (req, res) => {
 
         const digitalBrainApiKey = process.env.DIGITAL_BRAIN_API_KEY;
 
+        console.log(digitalBrainApiKey)
+
         const response = await fetch("https://your-digital-brain-production.up.railway.app/api/mainAnswer/", {
             method: "POST",
             headers: {

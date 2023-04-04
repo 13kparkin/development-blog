@@ -28,7 +28,7 @@ const SinglePost = () => {
   ];
   const [displaySampleQuestions, setDisplaySampleQuestions] = useState(true);
   const [serverTimeout, setServerTimeout] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState('');
 
   const [gptAnswers, setGptAnswers] = useState("");
 
@@ -63,18 +63,38 @@ const SinglePost = () => {
     let textToHighlightBody = singlePostObj?.body;
     const ratings = {};
 
+    // Slice a string starting at a quotation mark
+    const sliceString = (str, char) => {
+      const index = str.indexOf(char);
+      return str.slice(index + 1);
+    };
+
+    const slicedString = sliceString(searchResults, '"')
+
     if (gptMessageHistory?.[0]?.answer?.length > 0) {
-      gptMessageHistory.forEach((message) => {
-        const regExp = generateRegExp(message.answer[0]);
-        textToHighlightBody = textToHighlightBody.replace(
-          regExp,
-          (match) => {
-            const word = match.toLowerCase();
-            ratings[word] = (ratings[word] || 0) + 1;
-            return `<mark>${match}</mark>`;
-          }
-        );
-      });
+      // gptMessageHistory.forEach((message) => {
+      //   const regExp = generateRegExp(message.answer[0]);
+      //   textToHighlightBody = textToHighlightBody.replace(
+      //     regExp,
+      //     (match) => {
+      //       const word = match.toLowerCase();
+      //       ratings[word] = (ratings[word] || 0) + 1;
+      //       return `<mark>${match}</mark>`;
+      //     }
+      //   );
+      // });
+
+      console.log('slicedString', slicedString)
+
+      const regExp = generateRegExp(slicedString);
+      textToHighlightBody = textToHighlightBody.replace(
+        regExp,
+        (match) => {
+          const word = match.toLowerCase();
+          ratings[word] = (ratings[word] || 0) + 1;
+          return `<mark>${match}</mark>`;
+        }
+      );
 
       setHighlightedTextBody(textToHighlightBody);
     }
@@ -108,7 +128,9 @@ const SinglePost = () => {
 
     const answers = await getGptMessagesData(articleString, question);
 
+
     if (serverTimeout === false) {
+      setSearchResults(answers?.openAiResponse)
       setgptPushed(false);
       setGptAnswers(answers);
       clearTimeout(timer);
@@ -121,6 +143,7 @@ const SinglePost = () => {
       setQuestion("");
       setIsLoading(false);
     }
+    setServerTimeout(false);
   };
 
   const handleFieldChange = (e) => {

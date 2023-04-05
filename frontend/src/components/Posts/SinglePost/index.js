@@ -28,7 +28,7 @@ const SinglePost = () => {
   ];
   const [displaySampleQuestions, setDisplaySampleQuestions] = useState(true);
   const [serverTimeout, setServerTimeout] = useState(false);
-  const [searchResults, setSearchResults] = useState('');
+  const [searchResults, setSearchResults] = useState("");
 
   const [gptAnswers, setGptAnswers] = useState("");
 
@@ -43,92 +43,53 @@ const SinglePost = () => {
   );
 
   useEffect(() => {
-
     const sliceString = (str, char) => {
       const index = str.indexOf(char);
       return str.slice(index + 1);
     };
 
-    const slicedString = sliceString(searchResults, '"')
+    const slicedString = sliceString(searchResults, '"');
+    const bodyArray = singlePostObj?.body.split(" ");
 
-    const slicedStringArray = slicedString.split(' ');
-    const bodyArray = singlePostObj?.body.split(' ');
 
-    const bodySentenceArray = singlePostObj?.body.split('.');
-
-    let bestMatch = { numberMatchWords: 0, sentence: '', startIndex: 0, endIndex: 0}
-    let adjacentWordsString;
-    let proposedStartIndex;
-
-  
-
+    let bestMatch = {
+      numberMatchWords: 0,
+      sentence: "",
+      startIndex: 0,
+      endIndex: 0,
+    };
+    let adjacentWordsString = "";
+    let proposedStartIndex = 0;
 
     if (gptMessageHistory?.[0]?.answer?.length > 0) {
       let numberMatchWords = 0;
-      bodyArray?.forEach((word, index) => {
-        debugger
+      bodyArray.forEach((word, index) => {
         if (numberMatchWords === 0) {
           proposedStartIndex = index;
         }
-        if (slicedStringArray.includes(word)) {
-          numberMatchWords += 1;
-          adjacentWordsString += word + ' ';
+
+        if (~slicedString.toLowerCase().indexOf(word.toLowerCase().trim())) {
+          numberMatchWords++;
+          adjacentWordsString += `${word} `;
         } else {
-          if (numberMatchWords > bestMatch.numberMatchWords) {
-            bestMatch.numberMatchWords = numberMatchWords;
-            bestMatch.sentence = adjacentWordsString;
-            bestMatch.endIndex = index;
-            bestMatch.startIndex = proposedStartIndex;
-          }
           numberMatchWords = 0;
-          adjacentWordsString = '';
+          adjacentWordsString = "";
         }
+
         if (numberMatchWords > bestMatch.numberMatchWords) {
           bestMatch.numberMatchWords = numberMatchWords;
           bestMatch.sentence = adjacentWordsString;
           bestMatch.endIndex = index;
           bestMatch.startIndex = proposedStartIndex;
         }
-      })
-      
+      });
+      let newBodyArray = bodyArray.map((a, i) => {
 
-      console.log("sliceString", slicedString)
-    console.log('bestMatch', bestMatch)
-    }
-
-    const generateRegExp = (term) => {
-      const words = term.split(" ");
-      const escapedWords = words.map((word) =>
-        word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-      );
-      const excludedWords = ["the", "and", "is", "a", "as", "be", "an", "in", "of", "on", "to", "with", "this"];
-      const filteredWords = escapedWords.filter(word => !excludedWords.includes(word.toLowerCase()));
-      const wordRegexps = filteredWords.map((word) => new RegExp(word, "gi"));
-      const combinedRegexp = new RegExp(
-        wordRegexps.map((r) => r.source).join("|"),
-        "gi"
-      );
-      return combinedRegexp;
-    };
-
-    let textToHighlightBody = singlePostObj?.body;
-    const ratings = {};
-    
-
-
-    if (gptMessageHistory?.[0]?.answer?.length > 0) {
-     
-
-      const regExp = generateRegExp(slicedString);
-      textToHighlightBody = textToHighlightBody.replace(
-        regExp,
-        (match) => {
-          const word = match.toLowerCase();
-          ratings[word] = (ratings[word] || 0) + 1;
-          return `<mark>${match}</mark>`;
-        }
-      );
-
+        if (i === bestMatch.startIndex) return "<mark>" + a;
+        else if (i === bestMatch.endIndex) return "</mark>" + a;
+        else return a;
+      });
+      let textToHighlightBody = newBodyArray.join(" ");
       setHighlightedTextBody(textToHighlightBody);
     }
   }, [singlePostObj, gptMessageHistory]);
@@ -161,9 +122,8 @@ const SinglePost = () => {
 
     const answers = await getGptMessagesData(articleString, question);
 
-
     if (serverTimeout === false) {
-      setSearchResults(answers?.openAiResponse)
+      setSearchResults(answers?.openAiResponse);
       setgptPushed(false);
       setGptAnswers(answers);
       clearTimeout(timer);

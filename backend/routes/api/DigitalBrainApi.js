@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
         { role: "system", content: data },
         {
           role: "user",
-          content: `where is the following answer: ${answer} found in the above data. Quote the paragraph`,
+          content: `Quote the words in the data where the following answer: ${answer} is found in the above data.`,
         },
       ],
       temperature: 0,

@@ -8,6 +8,7 @@ import { timeConverter } from "../../../utils/time";
 import { getGptMessages } from "../../../store/gpt";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import rehypeRaw from "rehype-raw";
 
 const SinglePost = () => {
   const dispatch = useDispatch();
@@ -24,9 +25,10 @@ const SinglePost = () => {
     "What is this article about?",
     "What is a summary of this article?",
     "What is the main idea of this article?",
-  ]
+  ];
   const [displaySampleQuestions, setDisplaySampleQuestions] = useState(true);
   const [serverTimeout, setServerTimeout] = useState(false);
+  const [searchResults, setSearchResults] = useState("");
 
   const [gptAnswers, setGptAnswers] = useState("");
 
@@ -35,6 +37,62 @@ const SinglePost = () => {
   );
   const [activeQuestionId, setActiveQuestionId] = useState(null);
   const [activeQuestionClicked, setActiveQuestionClicked] = useState(false);
+
+  const [highlightedTextBody, setHighlightedTextBody] = useState(
+    singlePostObj?.body
+  );
+
+  useEffect(() => {
+    const sliceString = (str, char) => {
+      const index = str.indexOf(char);
+      return str.slice(index + 1);
+    };
+
+    const slicedString = sliceString(searchResults, '"');
+    const bodyArray = singlePostObj?.body.split(" ");
+
+
+    let bestMatch = {
+      numberMatchWords: 0,
+      sentence: "",
+      startIndex: 0,
+      endIndex: 0,
+    };
+    let adjacentWordsString = "";
+    let proposedStartIndex = 0;
+
+    if (gptMessageHistory?.[0]?.answer?.length > 0) {
+      let numberMatchWords = 0;
+      bodyArray.forEach((word, index) => {
+        if (numberMatchWords === 0) {
+          proposedStartIndex = index;
+        }
+
+        if (~slicedString.toLowerCase().indexOf(word.toLowerCase().trim())) {
+          numberMatchWords++;
+          adjacentWordsString += `${word} `;
+        } else {
+          numberMatchWords = 0;
+          adjacentWordsString = "";
+        }
+
+        if (numberMatchWords > bestMatch.numberMatchWords) {
+          bestMatch.numberMatchWords = numberMatchWords;
+          bestMatch.sentence = adjacentWordsString;
+          bestMatch.endIndex = index;
+          bestMatch.startIndex = proposedStartIndex;
+        }
+      });
+      let newBodyArray = bodyArray.map((a, i) => {
+
+        if (i === bestMatch.startIndex) return "<mark>" + a;
+        else if (i === bestMatch.endIndex) return "</mark>" + a;
+        else return a;
+      });
+      let textToHighlightBody = newBodyArray.join(" ");
+      setHighlightedTextBody(textToHighlightBody);
+    }
+  }, [singlePostObj, gptMessageHistory]);
 
   const getGptMessagesData = async (data, question) => {
     const gptMessages = await dispatch(getGptMessages(data, question));
@@ -55,28 +113,30 @@ const SinglePost = () => {
       setQuestion("");
       setgptPushed(false);
       setIsLoading(false);
-      setServerTimeout(true) 
+      setServerTimeout(true);
       setError(["The server is taking too long to respond. Please try again."]);
       setGptAnswers(error);
       // const newMessage = { question, answer: answers?.final?.everythingFound };
       setGptMessageHistory([...gptMessageHistory]);
-      
     }, 20000);
-    
+
     const answers = await getGptMessagesData(articleString, question);
+
     if (serverTimeout === false) {
-    setgptPushed(false)
-    setGptAnswers(answers);
-    clearTimeout(timer);
-    if (answers?.final?.everythingFound.length === 0) {
-      setError(["No answer found. Please try again."]);
+      setSearchResults(answers?.openAiResponse);
+      setgptPushed(false);
+      setGptAnswers(answers);
+      clearTimeout(timer);
+      if (answers?.final?.everythingFound.length === 0) {
+        setError(["No answer found. Please try again."]);
+      }
+      // Update message history state with new question and answer
+      const newMessage = { question, answer: answers?.final?.everythingFound };
+      setGptMessageHistory([newMessage, ...gptMessageHistory]);
+      setQuestion("");
+      setIsLoading(false);
     }
-    // Update message history state with new question and answer
-    const newMessage = { question, answer: answers?.final?.everythingFound };
-    setGptMessageHistory([newMessage, ...gptMessageHistory]);
-    setQuestion("");
-    setIsLoading(false);
-    }
+    setServerTimeout(false);
   };
 
   const handleFieldChange = (e) => {
@@ -86,12 +146,14 @@ const SinglePost = () => {
   useEffect(() => {
     const getSinglePostData = async () => {
       const posts = await dispatch(getSinglePost(postId));
+
+      setHighlightedTextBody(posts?.post?.body);
     };
     getSinglePostData();
     let intervalId;
     if (isLoading) {
       intervalId = setInterval(() => {
-        if(countDown > 0){
+        if (countDown > 0) {
           setCountDown(countDown - 1);
         }
       }, 1000);
@@ -117,9 +179,7 @@ const SinglePost = () => {
     setQuestion(e.target.innerText);
     setActiveQuestionId(index);
     setActiveQuestionClicked(true);
-  }
-
-
+  };
 
   return (
     <>
@@ -152,13 +212,23 @@ const SinglePost = () => {
             {displaySampleQuestions && (
               <div className="single-post-chat-sample-messages">
                 <div className="single-post-chat-sample-message-title">
-                Here are some ideas you can ask:
+                  Here are some ideas you can ask:
                 </div>
                 {sampleMessages?.map((message, index) => (
-                  <div onClick={(e) => handleSamleQuestionsClick(e, index)} key={index} className={`single-post-chat-sample-message ${index === activeQuestionId ? 'active' : ''} ${index === activeQuestionId && activeQuestionClicked ? 'pushed': ''}`}>
-                    {message}  
-                </div>
-              ))}
+                  <div
+                    onClick={(e) => handleSamleQuestionsClick(e, index)}
+                    key={index}
+                    className={`single-post-chat-sample-message ${
+                      index === activeQuestionId ? "active" : ""
+                    } ${
+                      index === activeQuestionId && activeQuestionClicked
+                        ? "pushed"
+                        : ""
+                    }`}
+                  >
+                    {message}
+                  </div>
+                ))}
               </div>
             )}
             {gptMessageHistory?.map((message, index) => (
@@ -192,27 +262,28 @@ const SinglePost = () => {
           <div className="single-post-title">{singlePostObj?.title}</div>
           <div className="single-post-body">
             <ReactMarkdown
-                      className="single-post-body"
-                      children={singlePostObj?.body}
-                      components={{
-                        code({ node, inline, className, children, ...props }) {
-                          const match = /language-(\w+)/.exec(className || "");
-                          return !inline && match ? (
-                            <SyntaxHighlighter
-                              children={String(children).replace(/\n$/, "")}
-                              style={atomDark} // theme
-                              language={match[1]}
-                              PreTag="section" // parent tag
-                              {...props}
-                            />
-                          ) : (
-                            <code className={className} {...props}>
-                              {children}
-                            </code>
-                          );
-                        },
-                      }}
+              className="single-post-body"
+              rehypePlugins={[rehypeRaw]}
+              children={highlightedTextBody}
+              components={{
+                code({ node, inline, className, children, ...props }) {
+                  const match = /language-(\w+)/.exec(className || "");
+                  return !inline && match ? (
+                    <SyntaxHighlighter
+                      children={String(children).replace(/\n$/, "")}
+                      style={atomDark} // theme
+                      language={match[1]}
+                      PreTag="section" // parent tag
+                      {...props}
                     />
+                  ) : (
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  );
+                },
+              }}
+            />
           </div>
         </div>
       </div>

@@ -112,7 +112,13 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+mark {
+  background-color: var(--Green);
+  color: var(--Black);
+  padding: 0.1rem;
+  border-radius: 3px;
 
+}
 
 
 

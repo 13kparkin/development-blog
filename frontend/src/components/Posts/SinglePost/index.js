@@ -43,7 +43,58 @@ const SinglePost = () => {
   );
 
   useEffect(() => {
-   
+
+    const sliceString = (str, char) => {
+      const index = str.indexOf(char);
+      return str.slice(index + 1);
+    };
+
+    const slicedString = sliceString(searchResults, '"')
+
+    const slicedStringArray = slicedString.split(' ');
+    const bodyArray = singlePostObj?.body.split(' ');
+
+    const bodySentenceArray = singlePostObj?.body.split('.');
+
+    let bestMatch = { numberMatchWords: 0, sentence: '', startIndex: 0, endIndex: 0}
+    let adjacentWordsString;
+    let proposedStartIndex;
+
+  
+
+
+    if (gptMessageHistory?.[0]?.answer?.length > 0) {
+      let numberMatchWords = 0;
+      bodyArray?.forEach((word, index) => {
+        debugger
+        if (numberMatchWords === 0) {
+          proposedStartIndex = index;
+        }
+        if (slicedStringArray.includes(word)) {
+          numberMatchWords += 1;
+          adjacentWordsString += word + ' ';
+        } else {
+          if (numberMatchWords > bestMatch.numberMatchWords) {
+            bestMatch.numberMatchWords = numberMatchWords;
+            bestMatch.sentence = adjacentWordsString;
+            bestMatch.endIndex = index;
+            bestMatch.startIndex = proposedStartIndex;
+          }
+          numberMatchWords = 0;
+          adjacentWordsString = '';
+        }
+        if (numberMatchWords > bestMatch.numberMatchWords) {
+          bestMatch.numberMatchWords = numberMatchWords;
+          bestMatch.sentence = adjacentWordsString;
+          bestMatch.endIndex = index;
+          bestMatch.startIndex = proposedStartIndex;
+        }
+      })
+      
+
+      console.log("sliceString", slicedString)
+    console.log('bestMatch', bestMatch)
+    }
 
     const generateRegExp = (term) => {
       const words = term.split(" ");
@@ -62,29 +113,11 @@ const SinglePost = () => {
 
     let textToHighlightBody = singlePostObj?.body;
     const ratings = {};
+    
 
-    // Slice a string starting at a quotation mark
-    const sliceString = (str, char) => {
-      const index = str.indexOf(char);
-      return str.slice(index + 1);
-    };
-
-    const slicedString = sliceString(searchResults, '"')
 
     if (gptMessageHistory?.[0]?.answer?.length > 0) {
-      // gptMessageHistory.forEach((message) => {
-      //   const regExp = generateRegExp(message.answer[0]);
-      //   textToHighlightBody = textToHighlightBody.replace(
-      //     regExp,
-      //     (match) => {
-      //       const word = match.toLowerCase();
-      //       ratings[word] = (ratings[word] || 0) + 1;
-      //       return `<mark>${match}</mark>`;
-      //     }
-      //   );
-      // });
-
-      console.log('slicedString', slicedString)
+     
 
       const regExp = generateRegExp(slicedString);
       textToHighlightBody = textToHighlightBody.replace(

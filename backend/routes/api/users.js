@@ -2,9 +2,10 @@
 const express = require("express");
 const router = express.Router();
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
-const { User } = require("../../db/models");
+// const { User } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
+const User = require("../../mongoDB/models/user");
 
 const validateSignup = [
   check("firstName")
@@ -35,6 +36,7 @@ const validateSignup = [
 router.post("/", validateSignup, async (req, res) => {
   const { firstName, lastName, email, password, username } = req.body;
   const user = await User.signup({ firstName, lastName, email, username, password });
+
 
   await setTokenCookie(res, user);
 

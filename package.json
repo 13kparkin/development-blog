@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/13kparkin/development-blog#readme",
   "dependencies": {
+    "mongoose": "^7.0.3",
     "react-syntax-highlighter": "^15.5.0"
   }
 }

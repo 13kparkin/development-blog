@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
 import { getSinglePost, getAllPosts } from "../../../store/posts";
-import { useHistory, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import { timeConverter } from "../../../utils/time";
 import { getGptMessages } from "../../../store/gpt";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -13,7 +13,6 @@ import rehypeRaw from "rehype-raw";
 const SinglePost = () => {
   const dispatch = useDispatch();
   const singlePostObj = useSelector((state) => state.posts?.singlePost?.post);
-  const history = useHistory();
   const { postId } = useParams();
   const [gptPushed, setgptPushed] = useState(false);
   const [question, setQuestion] = useState("");

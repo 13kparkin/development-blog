@@ -32,7 +32,6 @@ router.post("/", async (req, res) => {
       }
     );
     const data1 = await response.json();
-    console.log("asldkfjas;ldkfja;sldkfjas;ldkfdj", data1)
 
     if (response.ok) {
       return res.status(200).json(data1);

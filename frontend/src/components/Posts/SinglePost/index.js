@@ -41,6 +41,8 @@ const SinglePost = () => {
     singlePostObj?.body
   );
 
+  // todo: this is a to highlight the search results in the body of the article
+
   // useEffect(() => {
   //   const sliceString = (str, char) => {
   //     const index = str?.indexOf(char);

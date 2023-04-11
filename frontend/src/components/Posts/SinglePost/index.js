@@ -41,57 +41,57 @@ const SinglePost = () => {
     singlePostObj?.body
   );
 
-  useEffect(() => {
-    const sliceString = (str, char) => {
-      const index = str.indexOf(char);
-      return str.slice(index + 1);
-    };
+  // useEffect(() => {
+  //   const sliceString = (str, char) => {
+  //     const index = str?.indexOf(char);
+  //     return str?.slice(index + 1);
+  //   };
 
-    const slicedString = sliceString(searchResults, '"');
-    const bodyArray = singlePostObj?.body.split(" ");
+  //   const slicedString = sliceString(searchResults, '"');
+  //   const bodyArray = singlePostObj?.body.split(" ");
 
 
-    let bestMatch = {
-      numberMatchWords: 0,
-      sentence: "",
-      startIndex: 0,
-      endIndex: 0,
-    };
-    let adjacentWordsString = "";
-    let proposedStartIndex = 0;
+  //   let bestMatch = {
+  //     numberMatchWords: 0,
+  //     sentence: "",
+  //     startIndex: 0,
+  //     endIndex: 0,
+  //   };
+  //   let adjacentWordsString = "";
+  //   let proposedStartIndex = 0;
 
-    if (gptMessageHistory?.[0]?.answer?.length > 0) {
-      let numberMatchWords = 0;
-      bodyArray.forEach((word, index) => {
-        if (numberMatchWords === 0) {
-          proposedStartIndex = index;
-        }
+  //   if (gptMessageHistory?.[0]?.answer?.length > 0) {
+  //     let numberMatchWords = 0;
+  //     bodyArray.forEach((word, index) => {
+  //       if (numberMatchWords === 0) {
+  //         proposedStartIndex = index;
+  //       }
 
-        if (~slicedString.toLowerCase().indexOf(word.toLowerCase().trim())) {
-          numberMatchWords++;
-          adjacentWordsString += `${word} `;
-        } else {
-          numberMatchWords = 0;
-          adjacentWordsString = "";
-        }
+  //       if (~slicedString.toLowerCase().indexOf(word.toLowerCase().trim())) {
+  //         numberMatchWords++;
+  //         adjacentWordsString += `${word} `;
+  //       } else {
+  //         numberMatchWords = 0;
+  //         adjacentWordsString = "";
+  //       }
 
-        if (numberMatchWords > bestMatch.numberMatchWords) {
-          bestMatch.numberMatchWords = numberMatchWords;
-          bestMatch.sentence = adjacentWordsString;
-          bestMatch.endIndex = index;
-          bestMatch.startIndex = proposedStartIndex;
-        }
-      });
-      let newBodyArray = bodyArray.map((a, i) => {
+  //       if (numberMatchWords > bestMatch.numberMatchWords) {
+  //         bestMatch.numberMatchWords = numberMatchWords;
+  //         bestMatch.sentence = adjacentWordsString;
+  //         bestMatch.endIndex = index;
+  //         bestMatch.startIndex = proposedStartIndex;
+  //       }
+  //     });
+  //     let newBodyArray = bodyArray.map((a, i) => {
 
-        if (i === bestMatch.startIndex) return "<mark>" + a;
-        else if (i === bestMatch.endIndex) return "</mark>" + a;
-        else return a;
-      });
-      let textToHighlightBody = newBodyArray.join(" ");
-      setHighlightedTextBody(textToHighlightBody);
-    }
-  }, [singlePostObj, gptMessageHistory]);
+  //       if (i === bestMatch.startIndex) return "<mark>" + a;
+  //       else if (i === bestMatch.endIndex) return "</mark>" + a;
+  //       else return a;
+  //     });
+  //     let textToHighlightBody = newBodyArray.join(" ");
+  //     setHighlightedTextBody(textToHighlightBody);
+  //   }
+  // }, [singlePostObj, gptMessageHistory]);
 
   const getGptMessagesData = async (data, question) => {
     const gptMessages = await dispatch(getGptMessages(data, question));
@@ -120,6 +120,8 @@ const SinglePost = () => {
     }, 20000);
 
     const answers = await getGptMessagesData(articleString, question);
+
+    console.log(answers)
 
     if (serverTimeout === false) {
       setSearchResults(answers?.openAiResponse);

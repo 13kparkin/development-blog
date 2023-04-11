@@ -10,10 +10,12 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 router.post("/", async (req, res) => {
+  
   try {
     const { data, question } = req.body;
 
     const digitalBrainApiKey = process.env.DIGITAL_BRAIN_API_KEY;
+
 
     const response = await fetch(
       "https://your-digital-brain-production.up.railway.app/api/mainAnswer/",
@@ -30,32 +32,10 @@ router.post("/", async (req, res) => {
       }
     );
     const data1 = await response.json();
-
-    const answer = data1.final?.everythingFound;
-
-    const openAiResponse = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: data },
-        {
-          role: "user",
-          content: `Quote the words in the data where the following answer: ${answer} is found in the above data.`,
-        },
-      ],
-      temperature: 0,
-    });
-
-
-    console.log("openAiResponse2", openAiResponse.data.choices[0].message.content);
-
-    const newData = {
-        ...data1,
-        openAiResponse: openAiResponse.data.choices[0].message.content
-    }
-
+    console.log("asldkfjas;ldkfja;sldkfjas;ldkfdj", data1)
 
     if (response.ok) {
-      return res.status(200).json(newData);
+      return res.status(200).json(data1);
     } else {
       res.status(400);
       console.log("error", data1);

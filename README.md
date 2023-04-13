@@ -4,7 +4,7 @@
 
 
 
-Personal Live Link Live Tech-Demo:
+Personal Live Link Live:
 https://development-blog-production.up.railway.app/
 
 Live Link for demoing features:

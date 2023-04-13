@@ -4,7 +4,7 @@
 
 
 
-Personal Live Link:
+Personal Live Link Live Tech-Demo:
 https://development-blog-production.up.railway.app/
 
 Live Link for demoing features:
@@ -43,6 +43,10 @@ to answer the questions and uses the article data to train the AI's responses.
 2. Install dependencies using `npm install` in both frontend and backend directories
 3. Navigate into the backend and run `npm start`
 4. Navigate into the frontend and run `npm start`
+
+## Note
+
+Branches are different. If you want to play around with the live tech demo then install main branch. If you want to work play around with what I am working off of in the live verstion then clone the railway-main. 
 
 
 ## Warning

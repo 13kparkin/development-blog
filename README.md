@@ -39,6 +39,8 @@ to answer the questions and uses the article data to train the AI's responses.
 
 ## Getting Started
 
+### Create a .env file in the backend directory with the following values
+
 ```
 PORT=8000
 JWT_SECRET=4zDQXwUMtkLKlA==

@@ -39,6 +39,13 @@ to answer the questions and uses the article data to train the AI's responses.
 
 ## Getting Started
 
+```
+PORT=8000
+JWT_SECRET=4zDQXwUMtkLKlA==
+JWT_EXPIRES_IN=604800
+SCHEMA=my_schema
+DIGITAL_BRAIN_API_KEY="your_API_key_from_openAI"
+```
 
 1. Clone the repository
 2. Install dependencies using `npm install` in both frontend and backend directories

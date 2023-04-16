@@ -39,13 +39,7 @@ to answer the questions and uses the article data to train the AI's responses.
 
 ## Getting Started
 
-### Create a .env file in the frontend directory with the following values:
-```
-PORT=8000
-JWT_SECRET=4zDQXwUMtkLKlA==
-JWT_EXPIRES_IN=604800
-SCHEMA=my_gatherly_schema
-```
+
 1. Clone the repository
 2. Install dependencies using `npm install` in both frontend and backend directories
 3. Navigate into the backend and run `npm start`

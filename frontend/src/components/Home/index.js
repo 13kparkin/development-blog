@@ -155,7 +155,7 @@ const Home = () => {
           <div className="top-section-left-header">
             <h1>
               Welcome to Dev Domain, <br />
-              Find all things software development.
+              Follow Kyle's Development Journey.
             </h1>
             <p>
               Here, you'll find the documentation on projects, tips, and

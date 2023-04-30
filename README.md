@@ -7,9 +7,6 @@
 Personal Live Link Live:
 https://development-blog-production.up.railway.app/
 
-Live Link for demoing features:
-https://developer-blog-njn5.onrender.com
-
 
 ## Summary
 

@@ -4,9 +4,6 @@
 
 
 
-Personal Live Link Live:
-https://development-blog-production.up.railway.app/
-
 
 ## Summary
 

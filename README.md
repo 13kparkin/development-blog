@@ -52,7 +52,7 @@ This project assumes you have PostgreSQL setup and running on your machine. If y
 
 ## Note
 
-Branches are different. If you want to play around with the live tech demo then install main branch. If you want to work play around with what I am working off of in the live verstion then clone the railway-main. 
+Branches are different. If you want to play around with the live tech demo then install main branch. If you want to work play around with what I am working off of in the live version then clone the railway-main. 
 
 
 ## Warning
